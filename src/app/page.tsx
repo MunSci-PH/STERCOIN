@@ -13,7 +13,7 @@ export default function Home() {
               </p>
             </span>
           </div>
-          <p className="mt-3 md:text-2xl text-white text-center md:text-left font-medium">
+          <p className="mt-3 md:text-2xl text-center md:text-left font-medium">
             Student Emergency Release Contact Information for Muntinlupa Science
             High School.
           </p>
