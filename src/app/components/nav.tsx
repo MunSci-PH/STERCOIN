@@ -29,7 +29,9 @@ const Nav = () => {
               <Link href="/info-reg">Information Registration</Link>
             </li>
             <li>
-              <Link href="/about">About</Link>
+              <Link className="pointer-events-none" href="/about">
+                About
+              </Link>
             </li>
           </ul>
         </div>
@@ -43,12 +45,17 @@ const Nav = () => {
             <Link href="/info-reg">Information Registration</Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
+            <Link
+              className="cursor-not-allowed pointer-events-none"
+              href="/about"
+            >
+              About
+            </Link>
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn" href={""}>
+        <Link className="btn pointer-events-none" href="/dashboard">
           Dashboard
         </Link>
       </div>
