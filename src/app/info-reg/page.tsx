@@ -1,6 +1,48 @@
-import Image from "next/image";
+"use client";
+import { FormEvent, useState } from "react";
 
 export default function Home() {
+  const [lrn, setLRN] = useState("");
+  const [fname, setFname] = useState("");
+  const [mname, setMname] = useState("");
+  const [lname, setLname] = useState("");
+  const [grade, setGrade] = useState("");
+  const [section, setSection] = useState("");
+  const [sectionDisable, setDisable] = useState(true);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault() // Prevent the redirect
+
+    alert(`LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade}`)
+  }
+
+  function handleChange(e: any) {
+    setGrade(e);
+
+    if (e == "7") {
+      console.log("we7");
+      setDisable(false);
+    } else if (e == "8") {
+      console.log("we8");
+      setDisable(false);
+    } else if (e == "9") {
+      console.log("we9");
+      setDisable(false);
+    } else if (e == "10") {
+      console.log("we10");
+      setDisable(false);
+    } else if (e == "11") {
+      console.log("we11");
+      setDisable(false);
+    } else if (e == "12") {
+      console.log("we12");
+      setDisable(false);
+    } else if (e == "none") {
+      console.log("none");
+      setDisable(true);
+    }
+  }
+
   return (
     <>
       <main className="flex-1 flex container mx-auto text-center px-4">
@@ -10,8 +52,8 @@ export default function Home() {
               Information Registration
             </p>
             <form
-              action="/api/info-reg"
-              method="post"
+              onSubmit={handleSubmit}
+              method="POST"
               className="form-control space-y-4"
             >
               <div>
@@ -26,6 +68,7 @@ export default function Home() {
                   title="Only accepts digits (0-9) and only 12 characters."
                   id="lrn"
                   name="lrn"
+                  onChange={e => setLRN(e.target.value)}
                   required
                 />
               </div>
@@ -44,6 +87,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="fname"
                     name="fname"
+                    onChange={e => setFname(e.target.value)}
                     required
                   />
                 </div>
@@ -59,6 +103,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="mname"
                     name="mname"
+                    onChange={e => setMname(e.target.value)}
                     required
                   />
                 </div>
@@ -74,6 +119,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="lname"
                     name="lname"
+                    onChange={e => setLname(e.target.value)}
                     required
                   />
                 </div>
@@ -84,7 +130,8 @@ export default function Home() {
                     className="select select-bordered w-full max-w-xs"
                     id="grade"
                     name="grade"
-                    defaultValue="Grade"
+                    defaultValue="none"
+                    onChange={e => handleChange(e.target.value)}
                     required
                   >
                     <option value="none" disabled>
@@ -104,7 +151,8 @@ export default function Home() {
                     id="section"
                     name="section"
                     defaultValue="Section"
-                    disabled
+                    disabled={sectionDisable}
+                    onChange={e => setSection(e.target.value)}
                     required
                   >
                     <option disabled>Section</option>
@@ -116,8 +164,8 @@ export default function Home() {
               </button>
             </form>
           </div>
-        </div>
-      </main>
+        </div >
+      </main >
     </>
   );
 }
