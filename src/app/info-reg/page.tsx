@@ -11,9 +11,9 @@ export default function Home() {
   const [sectionDisable, setDisable] = useState(true);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault() // Prevent the redirect
+    e.preventDefault();
 
-    alert(`LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade}`)
+    alert(`LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade} Section: ${section}`)
   }
 
   function handleChange(e: any) {
@@ -155,7 +155,8 @@ export default function Home() {
                     onChange={e => setSection(e.target.value)}
                     required
                   >
-                    <option disabled>Section</option>
+                    <option value="none" disabled>Section</option>
+                    <option value="Example">Example</option>
                   </select>
                 </div>
               </div>
