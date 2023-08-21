@@ -1,7 +1,8 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import supabase from "@/utils/supabase";
 
-export default function Home() {
+export default function Home({ serverList }: { serverList: any }) {
   const [lrn, setLRN] = useState("");
   const [fname, setFname] = useState("");
   const [mname, setMname] = useState("");
@@ -13,14 +14,16 @@ export default function Home() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    alert(`LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade} Section: ${section}`)
-  }
+    alert(
+      `LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade} Section: ${section}`
+    );
+  };
 
   function handleChange(e: any) {
     setGrade(e);
 
     if (e == "7") {
-      console.log("we7");
+      console.log(sectionList);
       setDisable(false);
     } else if (e == "8") {
       console.log("we8");
@@ -68,7 +71,7 @@ export default function Home() {
                   title="Only accepts digits (0-9) and only 12 characters."
                   id="lrn"
                   name="lrn"
-                  onChange={e => setLRN(e.target.value)}
+                  onChange={(e) => setLRN(e.target.value)}
                   required
                 />
               </div>
@@ -87,7 +90,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="fname"
                     name="fname"
-                    onChange={e => setFname(e.target.value)}
+                    onChange={(e) => setFname(e.target.value)}
                     required
                   />
                 </div>
@@ -103,7 +106,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="mname"
                     name="mname"
-                    onChange={e => setMname(e.target.value)}
+                    onChange={(e) => setMname(e.target.value)}
                     required
                   />
                 </div>
@@ -119,7 +122,7 @@ export default function Home() {
                     title="Only accepts alphabet letters."
                     id="lname"
                     name="lname"
-                    onChange={e => setLname(e.target.value)}
+                    onChange={(e) => setLname(e.target.value)}
                     required
                   />
                 </div>
@@ -131,7 +134,7 @@ export default function Home() {
                     id="grade"
                     name="grade"
                     defaultValue="none"
-                    onChange={e => handleChange(e.target.value)}
+                    onChange={(e) => handleChange(e.target.value)}
                     required
                   >
                     <option value="none" disabled>
@@ -152,11 +155,13 @@ export default function Home() {
                     name="section"
                     defaultValue="Section"
                     disabled={sectionDisable}
-                    onChange={e => setSection(e.target.value)}
+                    onChange={(e) => setSection(e.target.value)}
                     required
                   >
-                    <option value="none" disabled>Section</option>
-                    <option value="Example">Example</option>
+                    <option value="none" disabled>
+                      Section
+                    </option>
+                    <option value=""></option>
                   </select>
                 </div>
               </div>
@@ -165,8 +170,8 @@ export default function Home() {
               </button>
             </form>
           </div>
-        </div >
-      </main >
+        </div>
+      </main>
     </>
   );
 }
