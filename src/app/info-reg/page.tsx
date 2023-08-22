@@ -1,50 +1,20 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
-import supabase from "@/utils/supabase";
 
-export default function Home({ serverList }: { serverList: any }) {
-  const [lrn, setLRN] = useState("");
-  const [fname, setFname] = useState("");
-  const [mname, setMname] = useState("");
-  const [lname, setLname] = useState("");
-  const [grade, setGrade] = useState("");
-  const [section, setSection] = useState("");
-  const [sectionDisable, setDisable] = useState(true);
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+export default function infoReg() {
+  const handleSubmit = (formData: FormData) => {
+    const data = {
+      lrn: formData.get("lrn"),
+      fname: formData.get("fname"),
+      mname: formData.get("mname"),
+      lname: formData.get("lname"),
+      grade: formData.get("grade"),
+      section: formData.get("section"),
+    };
 
     alert(
-      `LRN: ${lrn} Name: ${fname} ${mname} ${lname} Grade: ${grade} Section: ${section}`
+      `LRN: ${data.lrn} Name: ${data.fname} ${data.mname} ${data.lname} Grade: ${data.grade} Section: ${data.section}`
     );
   };
-
-  function handleChange(e: any) {
-    setGrade(e);
-
-    if (e == "7") {
-      console.log(sectionList);
-      setDisable(false);
-    } else if (e == "8") {
-      console.log("we8");
-      setDisable(false);
-    } else if (e == "9") {
-      console.log("we9");
-      setDisable(false);
-    } else if (e == "10") {
-      console.log("we10");
-      setDisable(false);
-    } else if (e == "11") {
-      console.log("we11");
-      setDisable(false);
-    } else if (e == "12") {
-      console.log("we12");
-      setDisable(false);
-    } else if (e == "none") {
-      console.log("none");
-      setDisable(true);
-    }
-  }
 
   return (
     <>
@@ -55,7 +25,7 @@ export default function Home({ serverList }: { serverList: any }) {
               Information Registration
             </p>
             <form
-              onSubmit={handleSubmit}
+              action={handleSubmit}
               method="POST"
               className="form-control space-y-4"
             >
@@ -71,7 +41,6 @@ export default function Home({ serverList }: { serverList: any }) {
                   title="Only accepts digits (0-9) and only 12 characters."
                   id="lrn"
                   name="lrn"
-                  onChange={(e) => setLRN(e.target.value)}
                   required
                 />
               </div>
@@ -90,7 +59,6 @@ export default function Home({ serverList }: { serverList: any }) {
                     title="Only accepts alphabet letters."
                     id="fname"
                     name="fname"
-                    onChange={(e) => setFname(e.target.value)}
                     required
                   />
                 </div>
@@ -106,7 +74,6 @@ export default function Home({ serverList }: { serverList: any }) {
                     title="Only accepts alphabet letters."
                     id="mname"
                     name="mname"
-                    onChange={(e) => setMname(e.target.value)}
                     required
                   />
                 </div>
@@ -122,7 +89,6 @@ export default function Home({ serverList }: { serverList: any }) {
                     title="Only accepts alphabet letters."
                     id="lname"
                     name="lname"
-                    onChange={(e) => setLname(e.target.value)}
                     required
                   />
                 </div>
@@ -134,7 +100,6 @@ export default function Home({ serverList }: { serverList: any }) {
                     id="grade"
                     name="grade"
                     defaultValue="none"
-                    onChange={(e) => handleChange(e.target.value)}
                     required
                   >
                     <option value="none" disabled>
@@ -154,8 +119,7 @@ export default function Home({ serverList }: { serverList: any }) {
                     id="section"
                     name="section"
                     defaultValue="Section"
-                    disabled={sectionDisable}
-                    onChange={(e) => setSection(e.target.value)}
+                    disabled
                     required
                   >
                     <option value="none" disabled>
@@ -165,6 +129,7 @@ export default function Home({ serverList }: { serverList: any }) {
                   </select>
                 </div>
               </div>
+              {/**hi */}
               <button className="btn" type="submit">
                 Submit
               </button>
