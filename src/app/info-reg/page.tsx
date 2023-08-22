@@ -24,11 +24,7 @@ export default function infoReg() {
             <p className="text-center text-4xl font-sans font-bold mb-8">
               Information Registration
             </p>
-            <form
-              action={handleSubmit}
-              method="POST"
-              className="form-control space-y-4"
-            >
+            <form action={handleSubmit} className="form-control space-y-4">
               <div>
                 <label htmlFor="lrn" className="label">
                   <span className="text-base label-text">LRN</span>
