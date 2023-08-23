@@ -1,6 +1,13 @@
 "use client";
 
-export default function infoReg() {
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
+import { useState } from "react";
+
+export default function InfoReg() {
+  const [isDisable, setDisable] = useState(true);
+  const supabase = createClientComponentClient();
+
   const handleSubmit = (formData: FormData) => {
     const data = {
       lrn: formData.get("lrn"),
@@ -14,6 +21,19 @@ export default function infoReg() {
     alert(
       `LRN: ${data.lrn} Name: ${data.fname} ${data.mname} ${data.lname} Grade: ${data.grade} Section: ${data.section}`
     );
+  };
+
+  const handleChange = async (e: any) => {
+    if (e.target.value >= 7) {
+      setDisable(false);
+    }
+
+    const { data: sections } = await supabase
+      .from("sections")
+      .select()
+      .eq("grade", e.target.value);
+
+    console.log(sections?.map((e) => e.sectionName));
   };
 
   return (
@@ -96,6 +116,7 @@ export default function infoReg() {
                     id="grade"
                     name="grade"
                     defaultValue="none"
+                    onChange={handleChange}
                     required
                   >
                     <option value="none" disabled>
@@ -115,7 +136,7 @@ export default function infoReg() {
                     id="section"
                     name="section"
                     defaultValue="Section"
-                    disabled
+                    disabled={isDisable}
                     required
                   >
                     <option value="none" disabled>
