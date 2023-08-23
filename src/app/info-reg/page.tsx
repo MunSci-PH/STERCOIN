@@ -1,11 +1,11 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
 
 export default function InfoReg() {
   const [isDisable, setDisable] = useState(true);
+  const [sectionList, setList] = useState<any>();
   const supabase = createClientComponentClient();
 
   const handleSubmit = (formData: FormData) => {
@@ -24,16 +24,17 @@ export default function InfoReg() {
   };
 
   const handleChange = async (e: any) => {
-    if (e.target.value >= 7) {
-      setDisable(false);
-    }
-
     const { data: sections } = await supabase
       .from("sections")
       .select()
       .eq("grade", e.target.value);
+    const list = sections?.map((e) => e.sectionName);
 
-    console.log(sections?.map((e) => e.sectionName));
+    setList(list);
+
+    if (e.target.value >= 7) {
+      setDisable(false);
+    }
   };
 
   return (
@@ -142,7 +143,6 @@ export default function InfoReg() {
                     <option value="none" disabled>
                       Section
                     </option>
-                    <option value=""></option>
                   </select>
                 </div>
               </div>
