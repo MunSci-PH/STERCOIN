@@ -143,6 +143,9 @@ export default function InfoReg() {
                     <option value="none" disabled>
                       Section
                     </option>
+                    {sectionList.map(s, i => (
+                      <option key={i} value={s}>{s}</option>
+                    ))}
                   </select>
                 </div>
               </div>
