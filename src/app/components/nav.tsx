@@ -44,14 +44,6 @@ const Nav = () => {
           <li>
             <Link href="/info-reg">Information Registration</Link>
           </li>
-          <li>
-            <Link
-              className="cursor-not-allowed pointer-events-none"
-              href="/about"
-            >
-              About
-            </Link>
-          </li>
         </ul>
       </div>
       <div className="navbar-end">
