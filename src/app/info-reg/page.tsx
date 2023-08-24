@@ -1,11 +1,17 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
+import {
+  JSXElementConstructor,
+  PromiseLikeOfReactNode,
+  ReactElement,
+  ReactNode,
+  useState,
+} from "react";
 
 export default function InfoReg() {
   const [isDisable, setDisable] = useState(true);
-  const [sectionList, setList] = useState<any>();
+  const [selectedSections, setList] = useState<string[]>([]);
   const supabase = createClientComponentClient();
 
   const handleSubmit = (formData: FormData) => {
@@ -30,6 +36,7 @@ export default function InfoReg() {
       .eq("grade", e.target.value);
     const list = sections?.map((e) => e.sectionName);
 
+    //@ts-expect-error
     setList(list);
 
     if (e.target.value >= 7) {
@@ -72,7 +79,7 @@ export default function InfoReg() {
                     type="text"
                     placeholder="Juan JR"
                     className="input input-bordered w-full max-w-xs"
-                    pattern="{1,15}"
+                    pattern=".{1,15}"
                     title="Only accepts alphabet letters."
                     id="fname"
                     name="fname"
@@ -87,7 +94,7 @@ export default function InfoReg() {
                     type="text"
                     placeholder="Martinez"
                     className="input input-bordered w-full max-w-xs"
-                    pattern="{1,15}"
+                    pattern=".{1,15}"
                     title="Only accepts alphabet letters."
                     id="mname"
                     name="mname"
@@ -102,7 +109,7 @@ export default function InfoReg() {
                     type="text"
                     placeholder="Dela Cruz"
                     className="input input-bordered w-full max-w-xs"
-                    pattern="{1,15}"
+                    pattern=".{1,15}"
                     title="Only accepts alphabet letters."
                     id="lname"
                     name="lname"
@@ -143,13 +150,14 @@ export default function InfoReg() {
                     <option value="none" disabled>
                       Section
                     </option>
-                    {sectionList.map(s, index => (
-                      <option key={index} value={s}>{s}</option>
+                    {selectedSections.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
-              {/**hi */}
               <button className="btn" type="submit">
                 Submit
               </button>
