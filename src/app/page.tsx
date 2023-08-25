@@ -48,9 +48,9 @@ export default function Home() {
             </span>
           </div>
           <p className="mt-3 md:text-2xl text-center md:text-left font-medium">
-            STERCOIN. An abbreviation stands for &quot;Students Emergency
-            Release Contact Information&quot;. A developed web application with
-            student’s information that can be used for easy accessibility to
+            STERCOIN. An abbreviation that stands for &quot;Students Emergency
+            Release Contact Information&quot;. A web application with student’s
+            information that can be used for easy accessibility to
             parent’s/guardian’s contact information in case of
             disaster/emergency happen to child at school.
           </p>
