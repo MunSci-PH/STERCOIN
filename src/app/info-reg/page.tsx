@@ -31,6 +31,7 @@ export default function InfoReg() {
       lname: formData.get("lname"),
       grade: formData.get("grade"),
       section: formData.get("section"),
+      pwd: formData.get("pwd"),
       birthday: formData.get("bday"),
       address: formData.get("address"),
       e1Name: formData.get("ec1name"),
@@ -169,10 +170,10 @@ export default function InfoReg() {
                   />
                 </div>
               </div>
-              <div className="flex w-full">
-                <div>
+              <div className="flex justify-around w-full">
+                <div className="flex justify-around">
                   <select
-                    className="select select-bordered w-full max-w-xs"
+                    className="select select-bordered w-full max-w-s"
                     id="grade"
                     name="grade"
                     defaultValue="none"
@@ -189,8 +190,6 @@ export default function InfoReg() {
                     <option value="11">Grade 11</option>
                     <option value="12">Grade 12</option>
                   </select>
-                </div>
-                <div>
                   <select
                     className="select select-bordered w-full max-w-xs"
                     id="section"
@@ -208,6 +207,15 @@ export default function InfoReg() {
                       </option>
                     ))}
                   </select>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    name="pwd"
+                    id="pwd"
+                    className="checkbox"
+                  />
+                  <p>Are you a person with a disability?</p>
                 </div>
               </div>
               <div>
