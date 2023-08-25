@@ -1,14 +1,21 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export default function Home() {
-  let accepted = false;
+  const [accepted, setAccepted] = useState<boolean>(false);
 
-  if (localStorage.getItem("disclaimer") === null) {
-    accepted = true;
-  }
+  useEffect(() => {
+    if (localStorage.getItem("disclaimer") === null) {
+      setAccepted(true);
+    } else {
+      setAccepted(false);
+    }
+  }, []);
 
-  const handleAccept = (accepted: string) => {
-    localStorage.setItem("disclaimer", accepted);
+  const handleAccept = (acceptedVal: string) => {
+    localStorage.setItem("disclaimer", acceptedVal);
+    setAccepted(false);
   };
 
   return (

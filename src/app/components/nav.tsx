@@ -28,11 +28,6 @@ const Nav = () => {
             <li>
               <Link href="/info-reg">Information Registration</Link>
             </li>
-            <li>
-              <Link className="pointer-events-none" href="/about">
-                About
-              </Link>
-            </li>
           </ul>
         </div>
         <Link className="btn btn-ghost normal-case text-xl" href="/">
