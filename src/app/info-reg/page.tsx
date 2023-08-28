@@ -126,7 +126,7 @@ export default function InfoReg() {
                   </label>
                   <input
                     type="text"
-                    placeholder="Juan JR"
+                    placeholder="Juan Jr."
                     className="input input-bordered w-full max-w-xs"
                     pattern=".{1,15}"
                     title="Only accepts alphabet letters."
@@ -215,7 +215,11 @@ export default function InfoReg() {
                     id="pwd"
                     className="checkbox"
                   />
-                  <p>Are you a person with a disability?</p>
+                  <label htmlFor="pwd" className="label">
+                    <span className="text-base label-text">
+                      Are you a person with a disability?
+                    </span>
+                  </label>
                 </div>
               </div>
               <div>
