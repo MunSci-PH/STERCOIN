@@ -2,7 +2,6 @@ import { createClient } from "@/utils/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Database } from "../../supabase.types";
 
 const supabase = createClient();
 
@@ -46,7 +45,7 @@ const Form = () => {
     }
   }, []);
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     if (formData.grade === null) {
       console.error("Grade cannot be null.");
       toast("Grade cannot be empty.", {
@@ -68,12 +67,48 @@ const Form = () => {
       return;
     }
 
-    toast("Successfully submitted.", {
-      theme: isDarkTheme ? "dark" : "light",
-      autoClose: 2000,
-      type: "success",
-    });
-    console.log(formData);
+    const { data, error } = await supabase
+      .from("studentData")
+      .insert([
+        {
+          lrn: formData.lrn,
+          firstname: formData.fname,
+          middlename: formData.mname,
+          lastname: formData.lname,
+          grade: formData.grade,
+          section: formData.section,
+          birthday: formData.birthday,
+          address: formData.address,
+          ecname1: formData.e1Name,
+          ecfb1: formData.e1FB,
+          ecnum1: formData.e1Num,
+          ecname2: formData.e2Name,
+          ecfb2: formData.e2FB,
+          ecnum2: formData.e2Num,
+          ecname3: formData.e3Name,
+          ecfb3: formData.e3FB,
+          ecnum3: formData.e3Num,
+          pwd: formData.pwd,
+        },
+      ])
+      .select();
+
+    if (error) {
+      toast(`Error: ${error.code}. ${error.details}`, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      console.log(error);
+    } else {
+      toast("Successfully submitted.", {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "success",
+      });
+    }
+
+    console.log(formData, data);
   };
 
   const handleChange = async (e: { target: { value: number } }) => {
@@ -145,7 +180,7 @@ const Form = () => {
             title="Only accepts alphabet letters."
             id="mname"
             required
-            {...register("fname", { required: true })}
+            {...register("mname", { required: true })}
           />
         </div>
         <div>

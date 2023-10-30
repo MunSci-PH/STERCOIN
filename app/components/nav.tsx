@@ -42,7 +42,7 @@ const Nav = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <Link className="btn pointer-events-none" href="/dashboard">
+        <Link className="btn" href="/dashboard">
           Dashboard
         </Link>
       </div>
