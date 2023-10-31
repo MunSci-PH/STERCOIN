@@ -31,7 +31,7 @@ const Form = () => {
   const [selectedSections, setList] = useState<string[]>([]);
   const [isError, setError] = useState(false);
   const [isDarkTheme, setTheme] = useState(false);
-  const { register, handleSubmit, watch } = useForm<FormData>();
+  const { register, handleSubmit } = useForm<FormData>();
 
   useEffect(() => {
     if (
