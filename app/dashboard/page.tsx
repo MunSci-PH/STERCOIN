@@ -2,11 +2,13 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Dashboard | STERCOIN",
   description: "Student Emergency Release Contact Information",
 };
+
 export default async function Dashboard() {
   const cookieStore = cookies();
   const supabase = createServerClient(
@@ -30,18 +32,58 @@ export default async function Dashboard() {
   return (
     <>
       <main className="flex-1 flex container mx-auto text-center px-4">
-        <div className="m-auto">
-          <div className="flex flex-col items-center my-12 bg-base-100 p-10 rounded">
-            <p className="text-center text-4xl font-sans font-bold mb-8">
-              Home
-            </p>
-            <form
-              action="/api/auth/logout"
-              method="post"
-              className="form-control space-y-4"
-            >
-              <button className="btn">Log out</button>
-            </form>
+        <div className="w-full">
+          <div className="flex flex-col items-center my-12">
+            <div className="w-full flex flex-nowrap justify-between">
+              <p className="text-left text-4xl font-sans font-bold inline w-fit">
+                Home
+              </p>
+              <form
+                action="/api/auth/logout"
+                method="post"
+                className="form-control space-y-4 inline w-fit"
+              >
+                <button className="btn">Log out</button>
+              </form>
+            </div>
+            <div className="my-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+              <Link
+                href="/dashboard/view/grade/7"
+                className="p-12 text-2xl md:p-20 bg-green-600 rounded-xl"
+              >
+                <span>Grade 7</span>
+              </Link>
+              <Link
+                href="/dashboard/view/grade/8"
+                className="p-12 text-2xl md:p-20 bg-yellow-600 rounded-xl"
+              >
+                <span>Grade 8</span>
+              </Link>
+              <Link
+                href="/dashboard/view/grade/9"
+                className="p-12 text-2xl md:p-20 bg-red-600 rounded-xl"
+              >
+                <span>Grade 9</span>
+              </Link>
+              <Link
+                href="/dashboard/view/grade/10"
+                className="p-12 text-2xl md:p-20 bg-cyan-600 rounded-xl"
+              >
+                <span>Grade 10</span>
+              </Link>
+              <Link
+                href="/dashboard/view/grade/11"
+                className="p-12 text-2xl md:p-20 bg-blue-600 rounded-xl"
+              >
+                <span>Grade 11</span>
+              </Link>
+              <Link
+                href="/dashboard/view/grade/12"
+                className="p-12 text-2xl md:p-20 bg-orange-600 rounded-xl"
+              >
+                <span>Grade 12</span>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
