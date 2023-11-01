@@ -1,0 +1,13 @@
+const NotFound = () => {
+  return (
+    <div className="flex-1 flex container mx-auto text-center px-4">
+      <div className="m-auto">
+        <p className="ml-2 text-3xl text-red-600 font-bold">404</p>
+        <p className="mt-3 text-2xl text-white text-left font-medium">
+          This page could not be found.
+        </p>
+      </div>
+    </div>
+  );
+};
+export default NotFound;
