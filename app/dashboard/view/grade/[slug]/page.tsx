@@ -4,7 +4,7 @@ import { createClient } from "@/utils/client";
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 
-export default function Page({ params }: { params: { slug: number } }) {
+export default function Grade({ params }: { params: { slug: number } }) {
   const supabase = createClient();
   const [sectionList, setList] = useState<string[]>([]);
 
@@ -50,7 +50,7 @@ export default function Page({ params }: { params: { slug: number } }) {
                 {sectionList.map((option) => (
                   <div
                     key={option}
-                    className="flex flex-nowrap justify-between align-middle border border-white p-5 rounded my-2"
+                    className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
                   >
                     <p className="text-xl my-auto">{option}</p>
                     <Link
