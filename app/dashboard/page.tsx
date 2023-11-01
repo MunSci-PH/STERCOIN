@@ -31,7 +31,7 @@ export default async function Dashboard() {
 
   return (
     <main className="flex-1 flex container mx-auto text-center px-4">
-      <div className="w-full">
+      <div className="w-full md:w-4/5 mx-auto">
         <div className="flex flex-col items-center my-12">
           <div className="w-full flex flex-nowrap justify-between">
             <p className="text-left text-4xl font-sans font-bold inline w-fit">
@@ -42,7 +42,7 @@ export default async function Dashboard() {
               method="post"
               className="form-control space-y-4 inline w-fit"
             >
-              <button className="btn">Log out</button>
+              <button className="btn btn-primary">Log out</button>
             </form>
           </div>
           <div className="my-10 grid grid-cols-2 md:grid-cols-3 gap-4">

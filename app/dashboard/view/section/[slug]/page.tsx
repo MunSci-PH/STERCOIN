@@ -3,6 +3,7 @@ import NotFound from "@/components/not-found";
 import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   JSXElementConstructor,
   Key,
@@ -39,9 +40,11 @@ interface studentDataFormat<Array> {
 
 export default function Section({ params }: { params: { slug: string } }) {
   const supabase = createClient();
+  const router = useRouter();
   //@ts-expect-error
   const [studentList, setList] = useState<studentDataFormat | null>();
   const [sectionList, setSectionList] = useState<string[]>([]);
+  const [isLoading, setLoad] = useState<Boolean>(true);
 
   useEffect(() => {
     async function getStudents(section: string) {
@@ -74,27 +77,29 @@ export default function Section({ params }: { params: { slug: string } }) {
 
       //@ts-expect-error
       setSectionList(list);
+      setLoad(false);
     }
 
     getSections();
   }, [params.slug, supabase]);
 
-  if (sectionList.includes(params.slug)) {
+  if (isLoading) {
+    return <Loading></Loading>;
+  } else if (sectionList.includes(params.slug)) {
     return (
       <main className="flex-1 flex container mx-auto text-center px-4">
-        <div className="w-full">
+        <div className="w-full md:w-4/5 mx-auto">
           <div className="flex flex-col items-center my-12">
             <div className="w-full flex flex-nowrap justify-between">
               <p className="text-left text-4xl font-sans font-bold inline w-fit">
                 {params.slug}
               </p>
-              <form
-                action="/api/auth/logout"
-                method="post"
-                className="form-control space-y-4 inline w-fit"
+              <button
+                className="btn space-y-4 inline w-fit"
+                onClick={() => router.back()}
               >
-                <button className="btn">Log out</button>
-              </form>
+                Back
+              </button>
             </div>
             <Suspense
               fallback={<span className="loading loading-spinner"></span>}
@@ -134,7 +139,7 @@ export default function Section({ params }: { params: { slug: string } }) {
                         {student.middlename.charAt(0)}.
                       </p>
                       <Link
-                        href={`/dashboard/view/section/${student.lrn}`}
+                        href={`/dashboard/view/student/${student.lrn}`}
                         className="btn btn-primary"
                       >
                         View
@@ -148,7 +153,7 @@ export default function Section({ params }: { params: { slug: string } }) {
         </div>
       </main>
     );
-  } else if (sectionList) {
-    return <Loading></Loading>;
+  } else {
+    return <NotFound></NotFound>;
   }
 }
