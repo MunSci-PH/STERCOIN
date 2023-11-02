@@ -3,7 +3,7 @@ import NotFound from "@/components/not-found";
 import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   JSXElementConstructor,
   Key,
@@ -45,6 +45,18 @@ export default function Section({ params }: { params: { slug: string } }) {
   const [studentList, setList] = useState<studentDataFormat | null>();
   const [sectionList, setSectionList] = useState<string[]>([]);
   const [isLoading, setLoad] = useState<Boolean>(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.push("/dashboard/login");
+      }
+    };
+
+    checkAuth();
+  }, [router, supabase.auth]);
 
   useEffect(() => {
     async function getStudents(section: string) {

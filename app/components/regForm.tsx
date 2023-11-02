@@ -31,7 +31,7 @@ const Form = () => {
   const [selectedSections, setList] = useState<string[]>([]);
   const [isError, setError] = useState(false);
   const [isDarkTheme, setTheme] = useState(false);
-  const { register, handleSubmit } = useForm<FormData>();
+  const { reset, register, handleSubmit } = useForm<FormData>();
 
   useEffect(() => {
     if (
@@ -106,6 +106,7 @@ const Form = () => {
         autoClose: 2000,
         type: "success",
       });
+      reset();
     }
 
     console.log(formData, data);

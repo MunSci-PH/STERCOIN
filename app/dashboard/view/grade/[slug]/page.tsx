@@ -1,14 +1,28 @@
 "use client";
 import NotFound from "@/components/not-found";
+import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
 export default function Grade({ params }: { params: { slug: number } }) {
   const router = useRouter();
   const supabase = createClient();
   const [sectionList, setList] = useState<string[]>([]);
+  const [isLoaded, setLoadState] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.push("/dashboard/login");
+      }
+    };
+
+    checkAuth();
+  }, [router, supabase.auth]);
 
   useEffect(() => {
     async function getSections(grade: number) {
@@ -23,12 +37,15 @@ export default function Grade({ params }: { params: { slug: number } }) {
       }
       //@ts-expect-error
       setList(list);
+      setLoadState(true);
     }
 
     getSections(params.slug);
   }, [params.slug, supabase]);
 
-  if (params.slug >= 7 && params.slug <= 12) {
+  if (!isLoaded) {
+    return <Loading></Loading>;
+  } else if (params.slug >= 7 && params.slug <= 12) {
     return (
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="w-full md:w-4/5 mx-auto">
