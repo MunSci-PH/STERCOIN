@@ -15,6 +15,8 @@ import {
   useEffect,
   useState,
 } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+
 
 interface studentDataFormat<Array> {
   address: string | null;
@@ -98,7 +100,7 @@ export default function Section({ params }: { params: { slug: number } }) {
                   className="btn space-y-4 inline w-fit"
                   onClick={() => router.back()}
                 >
-                  Back
+                  <AiOutlineArrowLeft />               
                 </button>
               </div>
               <div className="w-full my-1">
@@ -112,8 +114,7 @@ export default function Section({ params }: { params: { slug: number } }) {
                       <p className="text-left">LRN</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
-                        {info.lastname}, {info.firstname} {info.middlename}
-                      </p>
+                        {info.lastname}, {info.firstname} {info.middlename}                     </p>
                       <p className="text-left">Full Name</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
