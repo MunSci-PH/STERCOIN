@@ -15,6 +15,7 @@ import {
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
+import { AiOutlineArrowLeft, AiOutlineRight } from "react-icons/ai";
 
 interface studentDataFormat<Array> {
   address: string | null;
@@ -125,7 +126,7 @@ export default function Section() {
                 className="btn space-y-4 inline w-fit"
                 onClick={() => router.back()}
               >
-                Back
+                <AiOutlineArrowLeft />
               </button>
             </div>
             {isSearching ? (
@@ -169,7 +170,7 @@ export default function Section() {
                         href={`/dashboard/view/student/${student.lrn}`}
                         className="btn btn-primary"
                       >
-                        View
+                        <AiOutlineRight />
                       </Link>
                     </div>
                   )
