@@ -51,7 +51,7 @@ const LoginForm = () => {
         className="input input-bordered w-full max-w-xs"
         {...register("password", { required: true })}
       />
-      <button className="btn bg-blue-700">Sign In</button>
+      <button className="btn btn-info">Sign In</button>
     </form>
   );
 };
