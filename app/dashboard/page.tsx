@@ -3,7 +3,11 @@ import { redirect } from "next/navigation";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { AiOutlineSearch } from "react-icons/ai";
+import {
+  AiOutlineLogout,
+  AiOutlineSearch,
+  AiOutlineSetting,
+} from "react-icons/ai";
 
 export const metadata: Metadata = {
   title: "Dashboard | STERCOIN",
@@ -38,7 +42,10 @@ export default async function Dashboard() {
             <p className="text-left text-4xl font-sans font-bold inline w-fit my-auto">
               Home
             </p>
-            <div className="grid grid-cols-2 my-auto">
+            <div className="grid grid-cols-3 my-auto gap-2">
+              <Link href="/dashboard/settings" className="btn mx-auto">
+                <AiOutlineSetting />
+              </Link>
               <Link href="/dashboard/search" className="btn mx-auto">
                 <AiOutlineSearch />
               </Link>
@@ -47,11 +54,13 @@ export default async function Dashboard() {
                 method="post"
                 className="form-control flex flex-nowrap justify-between"
               >
-                <button className="btn btn-primary">Log out</button>
+                <button className="btn btn-primary">
+                  <AiOutlineLogout />
+                </button>
               </form>
             </div>
           </div>
-          <div className="my-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="my-10 grid grid-cols-2 md:grid-cols-3 gap-4 text-white">
             <Link
               href="/dashboard/view/grade/7"
               className="p-12 text-2xl md:p-20 bg-green-600 rounded-xl"

@@ -64,7 +64,9 @@ export default function Section({ params }: { params: { slug: string } }) {
         .from("studentData")
         .select()
         .eq("section", section);
-      const list = studentList?.map((e) => e);
+      const list = studentList
+        ?.map((e) => e)
+        .sort((a, b) => a.lastname.localeCompare(b.lastname));
       console.log(list);
       if (error) {
         console.error(error);
