@@ -5,6 +5,8 @@ import { createClient } from "@/utils/client";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { AiOutlineArrowLeft, AiOutlineRight } from "react-icons/ai";
+
 
 export default function Grade({ params }: { params: { slug: number } }) {
   const router = useRouter();
@@ -58,7 +60,7 @@ export default function Grade({ params }: { params: { slug: number } }) {
                 className="btn space-y-4 inline w-fit"
                 onClick={() => router.back()}
               >
-                Back
+                <AiOutlineArrowLeft />
               </button>
             </div>
             <Suspense
@@ -75,7 +77,7 @@ export default function Grade({ params }: { params: { slug: number } }) {
                       href={`/dashboard/view/section/${option}`}
                       className="btn btn-primary"
                     >
-                      View
+                      <AiOutlineRight />
                     </Link>
                   </div>
                 ))}
