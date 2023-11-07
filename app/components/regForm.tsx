@@ -452,8 +452,8 @@ const Form = () => {
         Submit
       </button>
       <p className="prose text-xs text-center mx-auto">
-        If you are experiencing trouble registering, please contact Sulpicio
-        Demontaño IV on Messenger.
+        If you are experiencing trouble registering, please contact the App Developers, Sulpicio
+        Demontaño IV and Addy Suarnaba on Messenger.
       </p>
     </form>
   );
