@@ -1,6 +1,5 @@
 "use client";
 import Form from "@/components/regForm";
-import { Metadata } from "next";
 
 export default function InfoReg() {
   return (

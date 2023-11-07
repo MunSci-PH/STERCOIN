@@ -1,9 +1,8 @@
 "use client";
-import NotFound from "@/components/not-found";
 import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   JSXElementConstructor,
   Key,
