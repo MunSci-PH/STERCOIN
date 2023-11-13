@@ -31,7 +31,9 @@ export default function Grade({ params }: { params: { slug: number } }) {
         .from("sections")
         .select()
         .eq("grade", grade);
-      const list = sectionList?.map((e) => e.sectionName);
+      const list = sectionList
+        ?.map((e) => e.sectionName)
+        .sort((a, b) => a.localeCompare(b));
       console.log(sectionList);
       if (error) {
         console.error(error);

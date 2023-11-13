@@ -64,7 +64,9 @@ export default function Section() {
       const { data: studentList, error } = await supabase
         .from("studentData")
         .select("*");
-      const list = studentList?.map((e) => e);
+      const list = studentList
+        ?.map((e) => e)
+        .sort((a, b) => a.lastname.localeCompare(b.lastname));
       console.log(list);
       if (error) {
         console.error(error);
@@ -74,13 +76,12 @@ export default function Section() {
     getStudents();
 
     setLoad(false);
-  }, [studentInfo, supabase]);
+  }, [supabase]);
 
   const getStudents = async (e: string) => {
     const { data: studentList, error } = await supabase
       .from("studentData")
-      .select()
-      .ilike("firstname", e);
+      .select();
     const list = studentList?.map((e) => e);
     console.log(list);
     if (error) {
@@ -93,6 +94,7 @@ export default function Section() {
   const handleChange = async (e: string) => {
     setLoadState(true);
     const results = await getStudents(e);
+    console.log(results);
 
     setList(results);
     setLoadState(false);
