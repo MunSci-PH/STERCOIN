@@ -261,6 +261,18 @@ const Form = () => {
         </div>
       </div>
       <div>
+        <label htmlFor="address" className="label">
+          <span className="text-base label-text">
+            ID Picture
+            <span className="text-red-600">*</span>
+          </span>
+        </label>
+        <input
+          type="file"
+          className="file-input file-input-bordered w-full max-w-xs"
+        />
+      </div>
+      <div>
         <label htmlFor="bday" className="label">
           <span className="text-base label-text">
             Birthday <span className="text-red-600">*</span>
