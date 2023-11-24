@@ -117,7 +117,9 @@ const Form = () => {
       .from("sections")
       .select()
       .eq("grade", e.target.value);
-    const list = sections?.map((e) => e.sectionName);
+    const list = sections
+      ?.map((e) => e.sectionName)
+      .sort((a, b) => a.localeCompare(b));
 
     console.log(e.target.value, list);
     //@ts-expect-error
@@ -452,8 +454,8 @@ const Form = () => {
         Submit
       </button>
       <p className="prose text-xs text-center mx-auto">
-        If you are experiencing trouble registering, please contact the App Developers, Sulpicio
-        Demontaño IV and Addy Suarnaba on Messenger.
+        If you are experiencing trouble registering, please contact the App
+        Developers, Sulpicio Demontaño IV and Addy Suarnaba on Messenger.
       </p>
     </form>
   );

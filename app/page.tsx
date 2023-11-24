@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
@@ -25,10 +26,10 @@ export default function Home() {
           <h3 className="font-bold text-lg">Disclaimer</h3>
           <p className="py-4">
             Muntinlupa Science High School is bound by the law under RA 10173
-            “Data Privacy Act of 2012” All information save on this application
-            would be deemed confidential, and only the school’s authorities are
-            authorized to share information. Such information would be shared
-            for legal and legitimate purposes only.
+            “Data Privacy Act of 2012” All information save on this web
+            application would be deemed confidential, and only the school’s
+            authorities are authorized to share information. Such information
+            would be shared for legal and legitimate purposes only.
           </p>
           <div className="modal-action">
             <button className="btn" onClick={() => handleAccept("false")}>
@@ -39,7 +40,14 @@ export default function Home() {
       </dialog>
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="m-auto">
-          <div className="flex flex-row text-3xl md:text-6xl font-sans font-semibold justify-center md:justify-start">
+          <Image
+            src="/logo.png"
+            width={310}
+            height={310}
+            alt={""}
+            className="mx-auto"
+          />
+          <div className="flex flex-row text-3xl md:text-6xl font-sans font-semibold justify-center">
             <span className="inline-flex flex-row items-center">
               Welcome to
               <p className="ml-3 bg-clip-text text-transparent bg-gradient-to-r to-green-600 from-emerald-600 font-bold py-3">
@@ -47,9 +55,9 @@ export default function Home() {
               </p>
             </span>
           </div>
-          <p className="mt-3 md:text-2xl text-center md:text-left font-medium">
-            A web application with student&apos;s information that can be used
-            for easy accessibility to parent&apos;s/guardian&apos;s contact
+          <p className="mt-3 md:text-2xl text-center font-medium">
+            A web application with every student&apos;s information that can be
+            used for easy accessibility to parent&apos;s/guardian&apos;s contact
             information in case of disaster/emergency happen to child at school.
           </p>
         </div>
