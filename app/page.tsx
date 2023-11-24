@@ -56,9 +56,10 @@ export default function Home() {
             </span>
           </div>
           <p className="mt-3 md:text-2xl text-center font-medium">
-            A web application with every student&apos;s information that can be
-            used for easy accessibility to parent&apos;s/guardian&apos;s contact
-            information in case of disaster/emergency happen to child at school.
+            A web application that stores every student&apos;s information that
+            serves as an easy access to the student&apos;s emergency contacts
+            information in case of disaster/emergency that may happen to the
+            MunScian at school.
           </p>
         </div>
       </main>
