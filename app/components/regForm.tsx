@@ -2,6 +2,9 @@ import { createClient } from "@/utils/client";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import LRNInput from "./regForm/lrn";
+import NameInput from "./regForm/name";
+import GradeInput from "./regForm/grade";
 
 const supabase = createClient();
 
@@ -13,6 +16,7 @@ export type FormData = {
   grade: string;
   section: string;
   pwd: boolean;
+  idpic: File;
   birthday: Date;
   address: string;
   e1Name: string;
@@ -132,134 +136,15 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-control space-y-4">
-      <div>
-        <label htmlFor="lrn" className="label">
-          <span className="text-base label-text">
-            LRN <span className="text-red-600">*</span>
-          </span>
-        </label>
-        <input
-          type="text"
-          placeholder="305469••••••"
-          className="input input-bordered w-full"
-          pattern="[0-9]{12}"
-          title="Only accepts digits (0-9) and only 12 characters."
-          id="lrn"
-          required
-          {...register("lrn", { required: true })}
-        />
-      </div>
+      <LRNInput registerFunc={register}></LRNInput>
       <hr />
-      <div className="flex items-end">
-        <div>
-          <label htmlFor="fname" className="label">
-            <span className="label-text text-sm md:text-base">
-              First Name (With Extension){" "}
-              <span className="text-red-600">*</span>
-            </span>
-          </label>
-          <input
-            type="text"
-            placeholder="Juan Jr."
-            className="input input-bordered w-full max-w-xs"
-            pattern=".{1,15}"
-            title="Only accepts alphabet letters."
-            id="fname"
-            required
-            {...register("fname", { required: true })}
-          />
-        </div>
-        <div>
-          <label htmlFor="mname" className="label">
-            <span className="text-base label-text">
-              Middle Name <span className="text-red-600">*</span>
-            </span>
-          </label>
-          <input
-            type="text"
-            placeholder="Martinez"
-            className="input input-bordered w-full max-w-xs"
-            pattern=".{1,15}"
-            title="Only accepts alphabet letters."
-            id="mname"
-            required
-            {...register("mname", { required: true })}
-          />
-        </div>
-        <div>
-          <label htmlFor="lname" className="label">
-            <span className="text-base label-text">
-              Last Name <span className="text-red-600">*</span>
-            </span>
-          </label>
-          <input
-            type="text"
-            placeholder="Dela Cruz"
-            className="input input-bordered w-full max-w-xs"
-            pattern=".{1,15}"
-            title="Only accepts alphabet letters."
-            id="lname"
-            required
-            {...register("lname", { required: true })}
-          />
-        </div>
-      </div>
-      <div className="flex justify-around w-full">
-        <div className="flex justify-around">
-          <select
-            className="select select-bordered w-full max-w-s"
-            id="grade"
-            defaultValue="none"
-            required
-            {...register("grade", {
-              onChange: (e) => {
-                handleChange(e);
-              },
-              required: true,
-            })}
-          >
-            <option value="none" disabled>
-              Grade
-            </option>
-            <option value="7">Grade 7</option>
-            <option value="8">Grade 8</option>
-            <option value="9">Grade 9</option>
-            <option value="10">Grade 10</option>
-            <option value="11">Grade 11</option>
-            <option value="12">Grade 12</option>
-          </select>
-          <select
-            className="select select-bordered w-full max-w-xs"
-            id="section"
-            defaultValue="none"
-            disabled={isDisable}
-            required
-            {...register("section", { required: true })}
-          >
-            <option value="none" disabled>
-              Section
-            </option>
-            {selectedSections.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="pwd"
-            className="checkbox"
-            {...register("pwd")}
-          />
-          <label htmlFor="pwd" className="label">
-            <span className="text-base label-text">
-              Are you a person with a disability?
-            </span>
-          </label>
-        </div>
-      </div>
+      <NameInput registerFunc={register}></NameInput>
+      <GradeInput
+        registerFunc={register}
+        onChange={handleChange}
+        disabled={isDisable}
+        selectedSections={selectedSections}
+      ></GradeInput>
       <div>
         <label htmlFor="address" className="label">
           <span className="text-base label-text">
@@ -270,6 +155,8 @@ const Form = () => {
         <input
           type="file"
           className="file-input file-input-bordered w-full max-w-xs"
+          accept="image/png, image/jpeg"
+          {...register("idpic", { required: true })}
         />
       </div>
       <div>
