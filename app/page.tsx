@@ -55,6 +55,9 @@ export default function Home() {
               </p>
             </span>
           </div>
+          <p className="mt-3 md:text-xl text-center font-semibold text-neutral-content">
+            STUDENT EMERGENCY RELEASE CONTACT INFORMATION
+          </p>
           <p className="mt-3 md:text-2xl text-center font-medium">
             A web application that stores every student&apos;s information that
             serves as an easy access to the student&apos;s emergency contacts

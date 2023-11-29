@@ -2,9 +2,12 @@
 import NotFound from "@/components/not-found";
 import Loading from "@/loading";
 import { createClient } from "@/utils/client";
+import { storageClient } from "@/utils/storage";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 interface studentDataFormat<Array> {
   address: string | null;
@@ -38,6 +41,20 @@ export default function Section({ params }: { params: { slug: number } }) {
   const [studentInfo, setList] = useState<studentDataFormat | null>();
   const [studentLRN, setLRN] = useState<any>();
   const [isLoading, setLoad] = useState<Boolean>(true);
+  const [picture, setPic] = useState<string>();
+  const [isDarkTheme, setTheme] = useState(false);
+
+  useEffect(() => {
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -71,6 +88,17 @@ export default function Section({ params }: { params: { slug: number } }) {
     getStudent(params.slug);
   }, [params.slug, supabase]);
 
+  useEffect(() => {
+    async function getPic() {
+      const { data } = await storageClient
+        .from("idpics")
+        .getPublicUrl(params.slug.toString());
+
+      setPic(`${data.publicUrl}.png`);
+    }
+    getPic();
+  }, [isDarkTheme, params.slug]);
+
   if (isLoading) {
     return <Loading></Loading>;
   } else if (!isLoading && studentLRN.length == 0) {
@@ -101,22 +129,28 @@ export default function Section({ params }: { params: { slug: number } }) {
                       key={info.lrn}
                       className=" align-middle p-5 rounded my-2"
                     >
+                      {picture ? (
+                        <Image src={picture} width={128} height={128} alt="" />
+                      ) : (
+                        <div className="skeleton w-32 h-32"></div>
+                      )}
+                      <div className="divider"></div>
                       <p className="text-xl text-left">{info.lrn}</p>
                       <p className="text-left font-bold">LRN</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">
                         {info.lastname}, {info.firstname} {info.middlename}{" "}
                       </p>
                       <p className="text-left font-bold">Full Name</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">
                         {info.grade} - {info.section}
                       </p>
                       <p className="text-left font-bold">Grade & Section</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">{info.address}</p>
                       <p className="text-left font-bold">Address</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">{info.birthday}</p>
                       <p className="text-left font-bold">
                         Date of Birth{" "}
@@ -124,7 +158,7 @@ export default function Section({ params }: { params: { slug: number } }) {
                           (YYYY-MM-DD)
                         </span>
                       </p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">
                         {new Date(Date.parse(info.created_at)).toLocaleString(
                           "en-us",
@@ -140,19 +174,19 @@ export default function Section({ params }: { params: { slug: number } }) {
                         )}
                       </p>
                       <p className="text-left font-bold">Registered at</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">
                         {info.ecname1} ({info.ecfb1} - {info.ecres1})
                       </p>
                       <p className="text-lg text-left">{info.ecnum1}</p>
                       <p className="text-left font-bold">Emergency Contact 1</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       <p className="text-xl text-left">
                         {info.ecname2} ({info.ecfb2} - {info.ecres2})
                       </p>
                       <p className="text-lg text-left">{info.ecnum2}</p>
                       <p className="text-left font-bold">Emergency Contact 2</p>
-                      <hr className="my-2" />
+                      <div className="divider"></div>
                       {info.ecname3 != "" && (
                         <>
                           <p className="text-xl text-left">
@@ -162,7 +196,7 @@ export default function Section({ params }: { params: { slug: number } }) {
                           <p className="text-left font-bold">
                             Emergency Contact 3
                           </p>
-                          <hr className="my-2" />
+                          <div className="divider"></div>
                         </>
                       )}
                     </div>

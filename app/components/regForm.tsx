@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import LRNInput from "./regForm/lrn";
 import NameInput from "./regForm/name";
 import GradeInput from "./regForm/grade";
+import { storageClient } from "@/utils/storage";
 
 const supabase = createClient();
 
@@ -74,6 +75,8 @@ const Form = () => {
       return;
     }
 
+    await uploadPicture(formData);
+
     const { data, error } = await supabase
       .from("studentData")
       .insert([
@@ -101,7 +104,7 @@ const Form = () => {
       .select();
 
     if (error) {
-      toast(`Error: ${error.code}. ${error.details}`, {
+      toast(`Error Submitting Form: ${error.code}. ${error.details}`, {
         theme: isDarkTheme ? "dark" : "light",
         autoClose: 2000,
         type: "error",
@@ -117,6 +120,26 @@ const Form = () => {
     }
 
     console.log(formData, data);
+  };
+
+  const uploadPicture = async (formData: FormData) => {
+    var re = /(?:\.([^.]+))?$/;
+
+    const { data, error } = await storageClient
+      .from("idpics")
+      .upload(
+        `${formData.lrn}.${re.exec(formData.idpic.name)}`,
+        formData.idpic
+      );
+
+    if (error) {
+      toast(`Error Uploading Image: ${error.message}.`, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      console.log(error);
+    }
   };
 
   const handleChange = async (e: { target: { value: number } }) => {
@@ -140,7 +163,7 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-control space-y-4">
       <LRNInput registerFunc={register}></LRNInput>
-      <hr />
+      <div className="divider"></div>
       <NameInput registerFunc={register}></NameInput>
       <GradeInput
         registerFunc={register}
@@ -194,7 +217,7 @@ const Form = () => {
           {...register("address", { required: true })}
         />
       </div>
-      <hr />
+      <div className="divider"></div>
       <div>
         <p className="text-l text-left prose">
           Emergency Contact 1 <span className="text-red-600">*</span>
@@ -265,7 +288,7 @@ const Form = () => {
           </select>
         </div>
       </div>
-      <hr />
+      <div className="divider"></div>
       <div>
         <p className="text-l text-left prose">
           Emergency Contact 2 <span className="text-red-600">*</span>
@@ -336,7 +359,7 @@ const Form = () => {
           </select>
         </div>
       </div>
-      <hr />
+      <div className="divider"></div>
       <div>
         <p className="text-l text-left prose">Emergency Contact 3 (Optional)</p>
         <div>
@@ -402,7 +425,7 @@ const Form = () => {
           </select>
         </div>
       </div>
-      <hr />
+      <div className="divider"></div>
       <button
         className={isError ? "btn bg-red-700" : "btn bg-blue-700"}
         type="submit"
