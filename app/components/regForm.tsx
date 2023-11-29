@@ -162,6 +162,12 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-control space-y-4">
+      <p className="text-left max-w-screen-md">
+        Disclaimer: This form is hosted on a secure server and can only be
+        viewed by the school authority. Please feel confident in filling out
+        this form, as all of your information will be kept safe with every step
+        of the process. This web application respects confidentiality agreement.
+      </p>
       <LRNInput registerFunc={register}></LRNInput>
       <div className="divider"></div>
       <NameInput registerFunc={register}></NameInput>
@@ -173,10 +179,17 @@ const Form = () => {
       ></GradeInput>
       <div>
         <label htmlFor="address" className="label">
-          <span className="text-base label-text">
+          <span className="text-base label-text text-left">
             ID Picture
             <span className="text-red-600">*</span>
+            <p className="text-left">
+              - The photo must have a plain white background. <br />- The photo
+              must be taken recently <br /> - The student must wear decent
+              attire. Ex. Uniform <br /> - The student must not be wearing
+              eyeglasses.
+            </p>
           </span>
+          <div></div>
         </label>
         <input
           type="file"
@@ -262,8 +275,8 @@ const Form = () => {
             type="text"
             placeholder="Facebook Name"
             className="input input-bordered w-full"
-            pattern=".{1,30}"
-            title="Only accepts up to 30 characters."
+            pattern=".{1,90}"
+            title="Only accepts up to 90 characters."
             id="ec1fb"
             required
             {...register("e1FB", { required: true })}
@@ -283,6 +296,7 @@ const Form = () => {
             {...register("e1Res", { required: true })}
           >
             <option value="Parent">Parent</option>
+            <option value="Legal Guardian">Legal Guardian</option>
             <option value="Relative">Relative</option>
             <option value="Other">Other</option>
           </select>
@@ -333,8 +347,8 @@ const Form = () => {
             type="text"
             placeholder="Facebook Name"
             className="input input-bordered w-full"
-            pattern=".{1,30}"
-            title="Only accepts up to 30 characters."
+            pattern=".{1,90}"
+            title="Only accepts up to 90 characters."
             id="ec2fb"
             required
             {...register("e2FB", { required: true })}
@@ -400,8 +414,8 @@ const Form = () => {
             type="text"
             placeholder="Facebook Name"
             className="input input-bordered w-full"
-            pattern=".{1,30}"
-            title="Only accepts up to 30 characters."
+            pattern=".{1,90}"
+            title="Only accepts up to 90 characters."
             id="ec3fb"
             {...register("e3FB")}
           />
