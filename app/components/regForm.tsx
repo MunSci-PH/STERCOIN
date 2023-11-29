@@ -22,12 +22,15 @@ export type FormData = {
   e1Name: string;
   e1Num: number;
   e1FB: string;
+  e1Res: string;
   e2Name: string;
   e2Num: number;
   e2FB: string;
+  e2Res: string;
   e3Name: string;
   e3Num: number;
   e3FB: string;
+  e3Res: string;
 };
 
 const Form = () => {
@@ -243,6 +246,24 @@ const Form = () => {
             {...register("e1FB", { required: true })}
           />
         </div>
+        <div>
+          <label htmlFor="ec1res" className="label">
+            <span className="text-base label-text">
+              Relationship with Emergency Contact
+            </span>
+          </label>
+          <select
+            className="select select-bordered w-full max-w-s"
+            id="ec1res"
+            defaultValue="parent"
+            required
+            {...register("e1Res", { required: true })}
+          >
+            <option value="Parent">Parent</option>
+            <option value="Relative">Relative</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
       <hr />
       <div>
@@ -296,6 +317,24 @@ const Form = () => {
             {...register("e2FB", { required: true })}
           />
         </div>
+        <div>
+          <label htmlFor="ec2res" className="label">
+            <span className="text-base label-text">
+              Relationship with Emergency Contact
+            </span>
+          </label>
+          <select
+            className="select select-bordered w-full max-w-s"
+            id="ec2res"
+            defaultValue="parent"
+            required
+            {...register("e2Res", { required: true })}
+          >
+            <option value="Parent">Parent</option>
+            <option value="Relative">Relative</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
       <hr />
       <div>
@@ -343,6 +382,24 @@ const Form = () => {
             id="ec3fb"
             {...register("e3FB")}
           />
+        </div>
+        <div>
+          <label htmlFor="ec3res" className="label">
+            <span className="text-base label-text">
+              Relationship with Emergency Contact
+            </span>
+          </label>
+          <select
+            className="select select-bordered w-full max-w-s"
+            id="ec3res"
+            defaultValue="parent"
+            required
+            {...register("e3Res", { required: true })}
+          >
+            <option value="Parent">Parent</option>
+            <option value="Relative">Relative</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
       </div>
       <hr />

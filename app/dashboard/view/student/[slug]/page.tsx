@@ -10,6 +10,9 @@ interface studentDataFormat<Array> {
   address: string | null;
   birthday: string;
   created_at: string;
+  ecres1: string;
+  ecres2: string;
+  ecres3: string | null;
   ecfb1: string;
   ecfb2: string;
   ecfb3: string | null;
@@ -99,23 +102,23 @@ export default function Section({ params }: { params: { slug: number } }) {
                       className=" align-middle p-5 rounded my-2"
                     >
                       <p className="text-xl text-left">{info.lrn}</p>
-                      <p className="text-left">LRN</p>
+                      <p className="text-left font-bold">LRN</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
                         {info.lastname}, {info.firstname} {info.middlename}{" "}
                       </p>
-                      <p className="text-left">Full Name</p>
+                      <p className="text-left font-bold">Full Name</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
                         {info.grade} - {info.section}
                       </p>
-                      <p className="text-left">Grade & Section</p>
+                      <p className="text-left font-bold">Grade & Section</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">{info.address}</p>
-                      <p className="text-left">Address</p>
+                      <p className="text-left font-bold">Address</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">{info.birthday}</p>
-                      <p className="text-left">
+                      <p className="text-left font-bold">
                         Date of Birth{" "}
                         <span className="text-neutral-content text-sm">
                           (YYYY-MM-DD)
@@ -136,27 +139,29 @@ export default function Section({ params }: { params: { slug: number } }) {
                           }
                         )}
                       </p>
-                      <p className="text-left">Registered at</p>
+                      <p className="text-left font-bold">Registered at</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
-                        {info.ecname1} ({info.ecfb1})
+                        {info.ecname1} ({info.ecfb1} - {info.ecres1})
                       </p>
                       <p className="text-lg text-left">{info.ecnum1}</p>
-                      <p className="text-left">Emergency Contact 1</p>
+                      <p className="text-left font-bold">Emergency Contact 1</p>
                       <hr className="my-2" />
                       <p className="text-xl text-left">
-                        {info.ecname2} ({info.ecfb2})
+                        {info.ecname2} ({info.ecfb2} - {info.ecres2})
                       </p>
                       <p className="text-lg text-left">{info.ecnum2}</p>
-                      <p className="text-left">Emergency Contact 2</p>
+                      <p className="text-left font-bold">Emergency Contact 2</p>
                       <hr className="my-2" />
                       {info.ecname3 != "" && (
                         <>
                           <p className="text-xl text-left">
-                            {info.ecname3} ({info.ecfb3})
+                            {info.ecname3} ({info.ecfb3} - {info.ecres3})
                           </p>
                           <p className="text-lg text-left">{info.ecnum3}</p>
-                          <p className="text-left">Emergency Contact 3</p>
+                          <p className="text-left font-bold">
+                            Emergency Contact 3
+                          </p>
                           <hr className="my-2" />
                         </>
                       )}
