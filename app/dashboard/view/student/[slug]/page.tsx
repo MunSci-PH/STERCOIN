@@ -4,10 +4,11 @@ import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import { storageClient } from "@/utils/storage";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { toast } from "react-toastify";
+import { FaPhone } from "react-icons/fa";
 
 interface studentDataFormat<Array> {
   address: string | null;
@@ -178,13 +179,23 @@ export default function Section({ params }: { params: { slug: number } }) {
                       <p className="text-xl text-left">
                         {info.ecname1} ({info.ecfb1} - {info.ecres1})
                       </p>
-                      <p className="text-lg text-left">{info.ecnum1}</p>
+                      <p className="text-lg text-left">
+                        {info.ecnum1}{" "}
+                        <Link href={`tel: ${info.ecnum1}`} className="btn">
+                          <FaPhone />
+                        </Link>
+                      </p>
                       <p className="text-left font-bold">Emergency Contact 1</p>
                       <div className="divider"></div>
                       <p className="text-xl text-left">
                         {info.ecname2} ({info.ecfb2} - {info.ecres2})
                       </p>
-                      <p className="text-lg text-left">{info.ecnum2}</p>
+                      <p className="text-lg text-left">
+                        {info.ecnum2}
+                        <Link href={`tel: ${info.ecnum2}`} className="btn">
+                          <FaPhone />
+                        </Link>
+                      </p>
                       <p className="text-left font-bold">Emergency Contact 2</p>
                       <div className="divider"></div>
                       {info.ecname3 != "" && (
@@ -192,7 +203,12 @@ export default function Section({ params }: { params: { slug: number } }) {
                           <p className="text-xl text-left">
                             {info.ecname3} ({info.ecfb3} - {info.ecres3})
                           </p>
-                          <p className="text-lg text-left">{info.ecnum3}</p>
+                          <p className="text-lg text-left">
+                            {info.ecnum3}
+                            <Link href={`tel: ${info.ecnum3}`} className="btn">
+                              <FaPhone />
+                            </Link>
+                          </p>
                           <p className="text-left font-bold">
                             Emergency Contact 3
                           </p>
