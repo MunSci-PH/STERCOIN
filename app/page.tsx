@@ -55,7 +55,7 @@ export default function Home() {
               </p>
             </span>
           </div>
-          <p className="mt-3 md:text-xl text-center font-semibold text-info">
+          <p className="mt-3 md:text-xl text-center bg-clip-text text-transparent font-semibold bg-gradient-to-r to-cyan-600 from-sky-600">
             STUDENT EMERGENCY RELEASE CONTACT INFORMATION
           </p>
           <p className="mt-3 md:text-2xl text-center font-medium">
