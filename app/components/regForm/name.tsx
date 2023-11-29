@@ -15,7 +15,7 @@ const NameInput: React.FC<IContainerProps> = (props) => {
           type="text"
           placeholder="Juan Jr."
           className="input input-bordered w-full max-w-xs"
-          pattern=".{1,15}"
+          pattern=".{1,30}"
           title="Only accepts alphabet letters."
           id="fname"
           required
