@@ -26,8 +26,8 @@ export default function Home() {
           <h3 className="font-bold text-lg">Disclaimer</h3>
           <p className="py-4">
             Muntinlupa Science High School is bound by the law under RA 10173
-            “Data Privacy Act of 2012” All information save on this web
-            application would be deemed confidential, and only the school’s
+            “Data Privacy Act of 2012” All information saved on this web
+            application would be deemed confidential, and only the school&#39;s
             authorities are authorized to share information. Such information
             would be shared for legal and legitimate purposes only.
           </p>
