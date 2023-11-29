@@ -177,6 +177,7 @@ const Form = () => {
         disabled={isDisable}
         selectedSections={selectedSections}
       ></GradeInput>
+      <div className="divider"></div>
       <div>
         <label htmlFor="address" className="label">
           <span className="text-base label-text text-left">
@@ -198,6 +199,7 @@ const Form = () => {
           {...register("idpic", { required: true })}
         />
       </div>
+      <div className="divider"></div>
       <div>
         <label htmlFor="bday" className="label">
           <span className="text-base label-text">
