@@ -165,7 +165,8 @@ export default function Section() {
                     >
                       <p className="text-xl my-auto">
                         {student.lastname}, {student.firstname}{" "}
-                        {student.middlename.charAt(0)}.
+                        {student.middlename.charAt(0)}
+                        {student.middlename ? "." : ""}
                       </p>
                       <Link
                         href={`/dashboard/view/student/${student.lrn}`}
