@@ -24,9 +24,7 @@ const NameInput: React.FC<IContainerProps> = (props) => {
       </div>
       <div>
         <label htmlFor="mname" className="label">
-          <span className="text-base label-text">
-            Middle Name <span className="text-red-600">*</span>
-          </span>
+          <span className="text-base label-text">Middle Name</span>
         </label>
         <input
           type="text"
@@ -35,8 +33,7 @@ const NameInput: React.FC<IContainerProps> = (props) => {
           pattern=".{1,30}"
           title="Only accepts alphabet letters."
           id="mname"
-          required
-          {...props.registerFunc("mname", { required: true })}
+          {...props.registerFunc("mname")}
         />
       </div>
       <div>

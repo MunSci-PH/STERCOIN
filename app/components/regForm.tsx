@@ -17,7 +17,7 @@ export type FormData = {
   grade: string;
   section: string;
   pwd: boolean;
-  idpic: File;
+  idpic: FileList;
   birthday: Date;
   address: string;
   e1Name: string;
@@ -87,6 +87,7 @@ const Form = () => {
           lastname: formData.lname,
           grade: formData.grade,
           section: formData.section,
+          idpicfile: formData.idpic.item(0)!.name,
           birthday: formData.birthday,
           address: formData.address,
           ecname1: formData.e1Name,
@@ -123,13 +124,11 @@ const Form = () => {
   };
 
   const uploadPicture = async (formData: FormData) => {
-    var re = /(?:\.([^.]+))?$/;
-
     const { data, error } = await storageClient
       .from("idpics")
       .upload(
-        `${formData.lrn}.${re.exec(formData.idpic.name)}`,
-        formData.idpic
+        `${formData.lrn}/${formData.idpic.item(0)!.name}`,
+        formData.idpic.item(0)!
       );
 
     if (error) {

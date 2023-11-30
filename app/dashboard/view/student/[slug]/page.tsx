@@ -11,6 +11,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { FaPhone } from "react-icons/fa";
 
 interface studentDataFormat<Array> {
+  idpicfile: string | null;
   address: string | null;
   birthday: string;
   created_at: string;
@@ -44,6 +45,24 @@ export default function Section({ params }: { params: { slug: number } }) {
   const [isLoading, setLoad] = useState<Boolean>(true);
   const [picture, setPic] = useState<string>();
   const [isDarkTheme, setTheme] = useState(false);
+  const shimmer = (w: number, h: number) => `
+<svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="g">
+      <stop stop-color="#333" offset="20%" />
+      <stop stop-color="#222" offset="50%" />
+      <stop stop-color="#333" offset="70%" />
+    </linearGradient>
+  </defs>
+  <rect width="${w}" height="${h}" fill="#333" />
+  <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
+  <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+</svg>`;
+
+  const toBase64 = (str: string) =>
+    typeof window === "undefined"
+      ? Buffer.from(str).toString("base64")
+      : window.btoa(str);
 
   useEffect(() => {
     if (
@@ -83,22 +102,19 @@ export default function Section({ params }: { params: { slug: number } }) {
 
       setList(list!);
       setLRN(list?.map((e) => e.LRN));
+
       setLoad(false);
+
+      const { data } = await storageClient
+        .from("idpics")
+        .getPublicUrl(
+          `${params.slug.toString()}/${list?.map((e) => e.idpicfile)}`
+        );
+      setPic(`${data.publicUrl}`);
     }
 
     getStudent(params.slug);
   }, [params.slug, supabase]);
-
-  useEffect(() => {
-    async function getPic() {
-      const { data } = await storageClient
-        .from("idpics")
-        .getPublicUrl(params.slug.toString());
-
-      setPic(`${data.publicUrl}.png`);
-    }
-    getPic();
-  }, [isDarkTheme, params.slug]);
 
   if (isLoading) {
     return <Loading></Loading>;
@@ -131,7 +147,15 @@ export default function Section({ params }: { params: { slug: number } }) {
                       className=" align-middle p-5 rounded my-2"
                     >
                       {picture ? (
-                        <Image src={picture} width={128} height={128} alt="" />
+                        <Image
+                          src={picture}
+                          width={128}
+                          height={128}
+                          alt=""
+                          placeholder={`data:image/svg+xml;base64,${toBase64(
+                            shimmer(700, 475)
+                          )}`}
+                        />
                       ) : (
                         <div className="skeleton w-32 h-32"></div>
                       )}
