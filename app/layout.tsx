@@ -14,6 +14,29 @@ const lato = Lato({
 export const metadata: Metadata = {
   title: "STERCOIN",
   description: "Student Emergency Release Contact Information",
+  metadataBase: new URL("https://stercoin.vercel.app"),
+  openGraph: {
+    title: "STERCOIN",
+    description: "Student Emergency Release Contact Information",
+    url: "https://stercoin.vercel.app",
+    siteName: "STERCOIN",
+    images: [
+      {
+        url: "/logo.png",
+        width: 477,
+        height: 446,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "STERCOIN",
+    description: "Student Emergency Release Contact Information",
+    creator: "@sappy_why",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({
