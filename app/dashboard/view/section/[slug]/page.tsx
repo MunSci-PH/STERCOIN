@@ -107,7 +107,7 @@ export default function Section({ params }: { params: { slug: string } }) {
           <div className="flex flex-col items-center my-12">
             <div className="w-full flex flex-nowrap justify-between">
               <p className="text-left text-4xl font-sans font-bold inline w-fit">
-                {params.slug}
+                {params.slug} - {studentList?.length} Records found.
               </p>
               <button
                 className="btn space-y-4 inline w-fit"
