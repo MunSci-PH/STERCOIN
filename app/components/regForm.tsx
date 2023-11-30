@@ -371,6 +371,7 @@ const Form = () => {
             {...register("e2Res", { required: true })}
           >
             <option value="Parent">Parent</option>
+            <option value="Legal Guardian">Legal Guardian</option>
             <option value="Relative">Relative</option>
             <option value="Other">Other</option>
           </select>
@@ -437,6 +438,7 @@ const Form = () => {
             {...register("e3Res", { required: true })}
           >
             <option value="Parent">Parent</option>
+            <option value="Legal Guardian">Legal Guardian</option>
             <option value="Relative">Relative</option>
             <option value="Other">Other</option>
           </select>
@@ -444,7 +446,9 @@ const Form = () => {
       </div>
       <div className="divider"></div>
       <button
-        className={isError ? "btn bg-red-700" : "btn bg-blue-700"}
+        className={
+          isError ? "btn text-white bg-error" : "btn text-white bg-info"
+        }
         type="submit"
       >
         Submit
