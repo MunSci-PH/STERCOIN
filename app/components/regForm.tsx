@@ -183,8 +183,7 @@ const Form = () => {
       <div>
         <label htmlFor="address" className="label">
           <span className="text-base label-text text-left">
-            ID Picture
-            <span className="text-red-600">*</span>
+            ID Picture <span className="text-red-600">*</span>
             <p className="text-left">
               - The photo must have a plain white background. <br />- The photo
               must be taken recently <br /> - The student must wear decent
