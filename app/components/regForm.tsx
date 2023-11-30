@@ -186,9 +186,9 @@ const Form = () => {
             ID Picture <span className="text-red-600">*</span>
             <p className="text-left">
               - The photo must have a plain white background. <br />- The photo
-              must be taken recently <br /> - The student must wear decent
-              attire. Ex. Uniform <br /> - The student must not be wearing
-              eyeglasses.
+              must be taken recently <br /> - The photo must be in a 1:1 aspect
+              ratio (square) <br /> - The student must wear decent attire. Ex.
+              Uniform <br /> - The student must not be wearing eyeglasses.
             </p>
           </span>
           <div></div>
