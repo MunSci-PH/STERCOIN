@@ -153,8 +153,9 @@ export default function Section({ params }: { params: { slug: number } }) {
                           height={128}
                           alt=""
                           placeholder={`data:image/svg+xml;base64,${toBase64(
-                            shimmer(700, 475)
+                            shimmer(128, 128)
                           )}`}
+                          className="rounded avatar w-32 h-32"
                         />
                       ) : (
                         <div className="skeleton w-32 h-32"></div>
