@@ -13,11 +13,13 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: "STERCOIN",
-  description: "Student Emergency Release Contact Information",
+  description:
+    "A web application that stores every student's information that serves as an easy access to the student's emergency contacts information in case of disaster/emergency that may happen to the MunScian at school.",
   metadataBase: new URL("https://stercoin.vercel.app"),
   openGraph: {
     title: "STERCOIN",
-    description: "Student Emergency Release Contact Information",
+    description:
+      "A web application that stores every student's information that serves as an easy access to the student's emergency contacts information in case of disaster/emergency that may happen to the MunScian at school.",
     url: "https://stercoin.vercel.app",
     siteName: "STERCOIN",
     images: [
@@ -33,7 +35,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "STERCOIN",
-    description: "Student Emergency Release Contact Information",
+    description:
+      "A web application that stores every student's information that serves as an easy access to the student's emergency contacts information in case of disaster/emergency that may happen to the MunScian at school.",
     creator: "@sappy_why",
     images: ["/logo.png"],
   },
