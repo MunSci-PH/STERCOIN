@@ -92,12 +92,15 @@ const Form = () => {
           address: formData.address,
           ecname1: formData.e1Name,
           ecfb1: formData.e1FB,
+          ecres1: formData.e1Res,
           ecnum1: formData.e1Num,
           ecname2: formData.e2Name,
           ecfb2: formData.e2FB,
+          ecres2: formData.e2Res,
           ecnum2: formData.e2Num,
           ecname3: formData.e3Name,
           ecfb3: formData.e3FB,
+          ecres3: formData.e3Res,
           ecnum3: formData.e3Num,
           pwd: formData.pwd,
         },
@@ -176,6 +179,7 @@ const Form = () => {
         disabled={isDisable}
         selectedSections={selectedSections}
       ></GradeInput>
+      <div className="divider"></div>
       <div>
         <label htmlFor="address" className="label">
           <span className="text-base label-text text-left">
@@ -197,6 +201,7 @@ const Form = () => {
           {...register("idpic", { required: true })}
         />
       </div>
+      <div className="divider"></div>
       <div>
         <label htmlFor="bday" className="label">
           <span className="text-base label-text">
