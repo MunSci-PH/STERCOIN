@@ -1,14 +1,18 @@
 "use client";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export type loginData = {
   email: string;
   password: string;
+  captchaToken: string;
 };
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm<loginData>();
+  const [captchaToken, setCaptchaToken] = useState<string>();
 
   const tryLogin = (e: loginData) => {
     fetch("/api/auth/login", {
@@ -52,6 +56,12 @@ const LoginForm = () => {
         {...register("password", { required: true })}
       />
       <button className="btn btn-info">Sign In</button>
+      <Turnstile
+        siteKey="0x4AAAAAAAOMOy_l-B3ae-Jg"
+        onSuccess={(token) => {
+          setCaptchaToken(token);
+        }}
+      />
     </form>
   );
 };

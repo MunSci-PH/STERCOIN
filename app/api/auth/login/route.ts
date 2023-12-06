@@ -5,7 +5,7 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const cookieStore = cookies();
   const requestUrl = new URL(req.url);
-  const { email, password } = await req.json();
+  const { email, password, captchaToken } = await req.json();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
+    options: { captchaToken },
   });
 
   if (error) {
