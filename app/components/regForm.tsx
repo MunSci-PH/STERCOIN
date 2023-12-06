@@ -6,6 +6,7 @@ import LRNInput from "./regForm/lrn";
 import NameInput from "./regForm/name";
 import GradeInput from "./regForm/grade";
 import { storageClient } from "@/utils/storage";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const supabase = createClient();
 
@@ -40,6 +41,7 @@ const Form = () => {
   const [isError, setError] = useState(false);
   const [isDarkTheme, setTheme] = useState(false);
   const [isLoading, setLoading] = useState(0);
+  const [captchaToken, setCaptchaToken] = useState<string>();
   const { reset, register, handleSubmit } = useForm<FormData>();
 
   useEffect(() => {
@@ -56,6 +58,44 @@ const Form = () => {
 
   const onSubmit = async (formData: FormData) => {
     setLoading(1);
+
+    if (!(await verifyCaptcha())) {
+      console.error("Captcha is invalid.");
+      toast("Captcha is invalid.", {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      setError(true);
+      return;
+    }
+
+    setLoading(15);
+
+    const formDataFormatted = {
+      lrn: formData.lrn,
+      firstname: formData.fname.trim(),
+      middlename: formData.mname.trim(),
+      lastname: formData.lname.trim(),
+      grade: formData.grade,
+      section: formData.section,
+      idpicfile: formData.idpic.item(0)!.name,
+      birthday: formData.birthday,
+      address: formData.address.trim(),
+      ecname1: formData.e1Name.trim(),
+      ecfb1: formData.e1FB.trim(),
+      ecres1: formData.e1Res.trim(),
+      ecnum1: formData.e1Num,
+      ecname2: formData.e2Name.trim(),
+      ecfb2: formData.e2FB.trim(),
+      ecres2: formData.e2Res.trim(),
+      ecnum2: formData.e2Num,
+      ecname3: formData.e3Name.trim(),
+      ecfb3: formData.e3FB.trim(),
+      ecres3: formData.e3Res.trim(),
+      ecnum3: formData.e3Num,
+      pwd: formData.pwd,
+    };
 
     if (formData.grade === null) {
       console.error("Grade cannot be null.");
@@ -77,39 +117,14 @@ const Form = () => {
       setError(true);
       return;
     }
-    setLoading(15);
+    setLoading(40);
 
     await uploadPicture(formData);
     setLoading(70);
 
     const { data, error } = await supabase
       .from("studentData")
-      .insert([
-        {
-          lrn: formData.lrn,
-          firstname: formData.fname.trim(),
-          middlename: formData.mname.trim(),
-          lastname: formData.lname.trim(),
-          grade: formData.grade,
-          section: formData.section,
-          idpicfile: formData.idpic.item(0)!.name,
-          birthday: formData.birthday,
-          address: formData.address.trim(),
-          ecname1: formData.e1Name.trim(),
-          ecfb1: formData.e1FB.trim(),
-          ecres1: formData.e1Res.trim(),
-          ecnum1: formData.e1Num,
-          ecname2: formData.e2Name.trim(),
-          ecfb2: formData.e2FB.trim(),
-          ecres2: formData.e2Res.trim(),
-          ecnum2: formData.e2Num,
-          ecname3: formData.e3Name.trim(),
-          ecfb3: formData.e3FB.trim(),
-          ecres3: formData.e3Res.trim(),
-          ecnum3: formData.e3Num,
-          pwd: formData.pwd,
-        },
-      ])
+      .insert(formDataFormatted)
       .select();
 
     if (error) {
@@ -118,6 +133,7 @@ const Form = () => {
         autoClose: 2000,
         type: "error",
       });
+      setError(true);
       console.log(error);
     } else {
       setLoading(100);
@@ -130,6 +146,24 @@ const Form = () => {
     }
 
     console.log(formData, data);
+  };
+
+  const verifyCaptcha = async () => {
+    const formData = {
+      secret: process.env.CF_SECRET,
+      response: captchaToken,
+      idempotency_key: crypto.randomUUID(),
+    };
+    const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+    const firstResult = await fetch(url, {
+      body: JSON.stringify(formData),
+      method: "POST",
+    });
+    const firstOutcome = await firstResult.json();
+    if (firstOutcome.success) {
+      return true;
+    }
   };
 
   const uploadPicture = async (formData: FormData) => {
@@ -480,6 +514,13 @@ const Form = () => {
         >
           Submit
         </button>
+        <Turnstile
+          siteKey="0x4AAAAAAAOMOy_l-B3ae-Jg"
+          onSuccess={(token) => {
+            setCaptchaToken(token);
+          }}
+          className="mx-auto"
+        />
         <p className="prose text-xs text-center mx-auto">
           If you are experiencing trouble registering, please contact the App
           Developers, Sulpicio Demontaño IV and Addy Suarnaba on Messenger.
