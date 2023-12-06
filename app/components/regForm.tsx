@@ -149,11 +149,9 @@ const Form = () => {
   };
 
   const verifyCaptcha = async () => {
-    const formData = {
-      secret: process.env.CF_SECRET,
-      response: captchaToken,
-      idempotency_key: crypto.randomUUID(),
-    };
+    const formData = new URLSearchParams();
+    formData.append("secret", process.env.CF_SECRET!);
+    formData.append("token", captchaToken!);
     const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
     setLoading(5);
