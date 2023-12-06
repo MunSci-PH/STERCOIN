@@ -156,11 +156,14 @@ const Form = () => {
     };
     const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
+    setLoading(5);
+
     const firstResult = await fetch(url, {
       body: JSON.stringify(formData),
       method: "POST",
     });
     const firstOutcome = await firstResult.json();
+    setLoading(10);
     if (firstOutcome.success) {
       return true;
     }
