@@ -78,7 +78,21 @@ export default function Section() {
     setLoad(false);
   }, [supabase]);
 
-  const getStudents = async (e: string) => {
+  const getStudents = async (search: string) => {
+    const { data: studentList, error } = await supabase
+      .from("studentData")
+      .select()
+      .textSearch("lastname", search);
+    const list = studentList?.map((e) => e);
+    console.log(list);
+    if (error) {
+      console.error(error);
+    }
+
+    return list;
+  };
+
+  const getAllStudents = async () => {
     const { data: studentList, error } = await supabase
       .from("studentData")
       .select();
@@ -91,9 +105,10 @@ export default function Section() {
     return list;
   };
 
-  const handleChange = async (e: string) => {
+  const handleChange = async (e: { target: { value: string } }) => {
+    console.log(e.target.value);
     setLoadState(true);
-    const results = await getStudents(e);
+    const results = await getStudents(e.target.value);
     console.log(results);
 
     setList(results);
