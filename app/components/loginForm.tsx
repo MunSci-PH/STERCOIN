@@ -15,6 +15,8 @@ const LoginForm = () => {
   const [captchaToken, setCaptchaToken] = useState<string>();
 
   const tryLogin = (e: loginData) => {
+    e.captchaToken = captchaToken!;
+
     fetch("/api/auth/login", {
       method: "POST",
       body: JSON.stringify(e),
