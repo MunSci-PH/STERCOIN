@@ -59,7 +59,7 @@ const Form = () => {
   const onSubmit = async (formData: FormData) => {
     setLoading(1);
 
-    if (!(await verifyCaptcha())) {
+    /**if (!(await verifyCaptcha())) {
       console.error("Captcha is invalid.");
       toast("Captcha is invalid.", {
         theme: isDarkTheme ? "dark" : "light",
@@ -68,7 +68,7 @@ const Form = () => {
       });
       setError(true);
       return;
-    }
+    }*/
 
     setLoading(15);
 
