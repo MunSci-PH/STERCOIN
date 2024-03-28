@@ -14,18 +14,6 @@ export default function Grade({ params }: { params: { slug: number } }) {
   const [isLoaded, setLoadState] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (!data.session) {
-        router.push("/dashboard/login");
-      }
-    };
-
-    checkAuth();
-  }, [router, supabase.auth]);
-
-  useEffect(() => {
     async function getSections(grade: number) {
       const { data: sectionList, error } = await supabase
         .from("sections")

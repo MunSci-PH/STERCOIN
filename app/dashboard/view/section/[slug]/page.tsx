@@ -48,18 +48,6 @@ export default function Section({ params }: { params: { slug: string } }) {
   const [isLoading, setLoad] = useState<Boolean>(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (!data.session) {
-        router.push("/dashboard/login");
-      }
-    };
-
-    checkAuth();
-  }, [router, supabase.auth]);
-
-  useEffect(() => {
     async function getStudents(section: string) {
       const { data: studentList, error } = await supabase
         .from("studentData")

@@ -53,8 +53,15 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-
-  await supabase.auth.getSession();
-
-  return response;
+  const { data, error } = await supabase.auth.getSession();
+  if (
+    !data.session &&
+    !request.nextUrl.pathname.startsWith("/dashboard/login")
+  ) {
+    return NextResponse.redirect(new URL("/dashboard/login", request.url));
+  }
 }
+
+export const config = {
+  matcher: "/dashboard/:path*",
+};

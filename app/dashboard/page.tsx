@@ -15,25 +15,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
-  const { data, error } = await supabase.auth.getSession();
-
-  if (!data.session) {
-    redirect("/dashboard/login");
-  }
-
   return (
     <main className="flex-1 flex container mx-auto text-center px-4">
       <div className="w-full md:w-4/5 mx-auto">

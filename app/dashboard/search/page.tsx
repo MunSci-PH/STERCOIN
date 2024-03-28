@@ -48,18 +48,6 @@ export default function Section() {
   const { register } = useForm();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (!data.session) {
-        router.push("/dashboard/login");
-      }
-    };
-
-    checkAuth();
-  }, [router, supabase.auth]);
-
-  useEffect(() => {
     async function getStudents() {
       const { data: studentList, error } = await supabase
         .from("studentData")
