@@ -1,16 +1,14 @@
 "use client";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-interface IContainerProps {
-  router: AppRouterInstance;
-}
-
-const BackButton: React.FC<IContainerProps> = (props) => {
+const BackButton = () => {
+  const router = useRouter();
   return (
     <button
       className="btn space-y-4 inline w-fit"
-      onClick={() => props.router.back()}
+      onClick={() => router.back()}
     >
       <AiOutlineArrowLeft />
     </button>

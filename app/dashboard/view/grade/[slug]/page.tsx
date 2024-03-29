@@ -1,42 +1,31 @@
-"use client";
+import BackButton from "@/components/backButton";
 import NotFound from "@/components/not-found";
-import Loading from "@/loading";
-import { createClient } from "@/utils/client";
+import { createSSRClient } from "@/utils/server";
+import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { AiOutlineArrowLeft, AiOutlineRight } from "react-icons/ai";
+import { Suspense } from "react";
+import { AiOutlineRight } from "react-icons/ai";
 
-export default function Grade({ params }: { params: { slug: number } }) {
-  const router = useRouter();
-  const supabase = createClient();
-  const [sectionList, setList] = useState<string[]>([]);
-  const [isLoaded, setLoadState] = useState<boolean>(false);
+export default async function Grade({ params }: { params: { slug: number } }) {
+  const supabase = await createSSRClient();
+  const sectionListQuery = supabase
+    .from("sections")
+    .select("sectionName")
+    .eq("grade", params.slug);
+  type sections = QueryData<typeof sectionListQuery>;
 
-  useEffect(() => {
-    async function getSections(grade: number) {
-      const { data: sectionList, error } = await supabase
-        .from("sections")
-        .select()
-        .eq("grade", grade);
-      const list = sectionList
-        ?.map((e) => e.sectionName)
-        .sort((a, b) => a.localeCompare(b));
-      console.log(sectionList);
-      if (error) {
-        console.error(error);
-      }
-      //@ts-expect-error
-      setList(list);
-      setLoadState(true);
-    }
+  async function getSections() {
+    const { data, error } = await sectionListQuery;
+    console.log(sectionList);
+    if (error) console.error(error);
+    const finalSectionList: sections | null = data;
 
-    getSections(params.slug);
-  }, [params.slug, supabase]);
+    return finalSectionList;
+  }
 
-  if (!isLoaded) {
-    return <Loading></Loading>;
-  } else if (params.slug >= 7 && params.slug <= 12) {
+  var sectionList: sections | null = await getSections();
+
+  if (params.slug >= 7 && params.slug <= 12) {
     return (
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="w-full md:w-4/5 mx-auto">
@@ -45,25 +34,20 @@ export default function Grade({ params }: { params: { slug: number } }) {
               <p className="text-left text-4xl font-sans font-bold inline w-fit">
                 Grade {params.slug}
               </p>
-              <button
-                className="btn space-y-4 inline w-fit"
-                onClick={() => router.back()}
-              >
-                <AiOutlineArrowLeft />
-              </button>
+              <BackButton></BackButton>
             </div>
             <Suspense
               fallback={<span className="loading loading-spinner"></span>}
             >
               <div className="w-full my-1">
-                {sectionList.map((option) => (
+                {sectionList?.map((option) => (
                   <div
-                    key={option}
+                    key={option.sectionName}
                     className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
                   >
-                    <p className="text-xl my-auto">{option}</p>
+                    <p className="text-xl my-auto">{option.sectionName}</p>
                     <Link
-                      href={`/dashboard/view/section/${option}`}
+                      href={`/dashboard/view/section/${option.sectionName}`}
                       className="btn btn-primary"
                     >
                       <AiOutlineRight />

@@ -1,50 +1,19 @@
-"use client";
+import BackButton from "@/components/backButton";
 import NotFound from "@/components/not-found";
-import Loading from "@/loading";
-import { createClient } from "@/utils/client";
+import { createSSRClient } from "@/utils/server";
 import { storageClient } from "@/utils/storage";
+import { QueryData } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { Suspense } from "react";
 import { FaPhone } from "react-icons/fa";
 
-interface studentDataFormat<Array> {
-  idpicfile: string | null;
-  address: string | null;
-  birthday: string;
-  created_at: string;
-  ecres1: string;
-  ecres2: string;
-  ecres3: string | null;
-  ecfb1: string;
-  ecfb2: string;
-  ecfb3: string | null;
-  ecname1: string;
-  ecname2: string;
-  ecname3: string | null;
-  ecnum1: string;
-  ecnum2: string;
-  ecnum3: string | null;
-  firstname: string;
-  grade: number;
-  lastname: string;
-  lrn: number;
-  middlename: string;
-  pwd: boolean;
-  section: string;
-}
-
-export default function Section({ params }: { params: { slug: number } }) {
-  const supabase = createClient();
-  const router = useRouter();
-  //@ts-expect-error
-  const [studentInfo, setList] = useState<studentDataFormat | null>();
-  const [studentLRN, setLRN] = useState<any>();
-  const [isLoading, setLoad] = useState<Boolean>(true);
-  const [picture, setPic] = useState<string>();
-  const [isDarkTheme, setTheme] = useState(false);
+export default async function Section({
+  params,
+}: {
+  params: { slug: number };
+}) {
+  const supabase = await createSSRClient();
   const shimmer = (w: number, h: number) => `
 <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
@@ -64,49 +33,33 @@ export default function Section({ params }: { params: { slug: number } }) {
       ? Buffer.from(str).toString("base64")
       : window.btoa(str);
 
-  useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setTheme(true);
-    } else {
-      setTheme(false);
-    }
-  }, []);
+  const studentListQuery = supabase
+    .from("studentData")
+    .select()
+    .eq("lrn", params.slug);
+  type student = QueryData<typeof studentListQuery>;
+  async function getStudent(lrn: number) {
+    const { data, error } = await studentListQuery;
+    if (error) console.error(error);
+    const studentList: student = data!;
 
-  useEffect(() => {
-    async function getStudent(lrn: number) {
-      const { data: studentList, error } = await supabase
-        .from("studentData")
-        .select()
-        .eq("lrn", lrn);
-      const list = studentList?.map((e) => e);
-      console.log(list);
-      if (error) {
-        console.error(error);
-      }
+    return studentList;
+  }
 
-      setList(list!);
-      setLRN(list?.map((e) => e.LRN));
+  var studentInfo: student = await getStudent(params.slug);
 
-      setLoad(false);
+  async function getPicture() {
+    const { data } = await storageClient
+      .from("idpics")
+      .getPublicUrl(
+        `${params.slug.toString()}/${studentInfo?.map((e) => e.idpicfile)}`
+      );
+    return data.publicUrl;
+  }
 
-      const { data } = await storageClient
-        .from("idpics")
-        .getPublicUrl(
-          `${params.slug.toString()}/${list?.map((e) => e.idpicfile)}`
-        );
-      setPic(`${data.publicUrl}`);
-    }
+  var studentPic = await getPicture();
 
-    getStudent(params.slug);
-  }, [params.slug, supabase]);
-
-  if (isLoading) {
-    return <Loading></Loading>;
-  } else if (!isLoading && studentLRN.length == 0) {
+  if (!studentInfo.map((e) => e.lrn)) {
     return <NotFound></NotFound>;
   } else {
     return (
@@ -120,12 +73,7 @@ export default function Section({ params }: { params: { slug: number } }) {
                 <p className="text-left text-4xl my-auto font-sans font-bold inline w-fit">
                   Student Info
                 </p>
-                <button
-                  className="btn space-y-4 inline w-fit"
-                  onClick={() => router.back()}
-                >
-                  <AiOutlineArrowLeft />
-                </button>
+                <BackButton></BackButton>
               </div>
               <div className="w-full my-1">
                 {studentInfo?.map((info: any) => (
@@ -134,9 +82,9 @@ export default function Section({ params }: { params: { slug: number } }) {
                       key={info.lrn}
                       className=" align-middle p-5 rounded my-2"
                     >
-                      {picture ? (
+                      {studentPic ? (
                         <Image
-                          src={picture}
+                          src={studentPic}
                           width={128}
                           height={128}
                           alt=""

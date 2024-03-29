@@ -1,94 +1,49 @@
-"use client";
+import BackButton from "@/components/backButton";
 import NotFound from "@/components/not-found";
-import Loading from "@/loading";
-import { createClient } from "@/utils/client";
+import { createSSRClient } from "@/utils/server";
+import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  JSXElementConstructor,
-  Key,
-  PromiseLikeOfReactNode,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  Suspense,
-  useEffect,
-  useState,
-} from "react";
-import { AiOutlineArrowLeft, AiOutlineRight } from "react-icons/ai";
+import { Suspense } from "react";
+import { AiOutlineRight } from "react-icons/ai";
 
-interface studentDataFormat<Array> {
-  address: string | null;
-  birthday: string;
-  created_at: string;
-  ecfb1: string;
-  ecfb2: string;
-  ecfb3: string | null;
-  ecname1: string;
-  ecname2: string;
-  ecname3: string | null;
-  ecnum1: string;
-  ecnum2: string;
-  ecnum3: string | null;
-  firstname: string;
-  grade: number;
-  lastname: string;
-  lrn: number;
-  middlename: string;
-  pwd: boolean;
-  section: string;
-}
+export default async function Section({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const supabase = await createSSRClient();
+  const studentListQuery = supabase
+    .from("studentData")
+    .select()
+    .eq("section", params.slug);
+  type students = QueryData<typeof studentListQuery>;
 
-export default function Section({ params }: { params: { slug: string } }) {
-  const supabase = createClient();
-  const router = useRouter();
-  //@ts-expect-error
-  const [studentList, setList] = useState<studentDataFormat | null>();
-  const [sectionList, setSectionList] = useState<string[]>([]);
-  const [isLoading, setLoad] = useState<Boolean>(true);
+  async function getStudents() {
+    const { data, error } = await studentListQuery;
+    if (error) console.error(error);
+    const finalStudentList: students = data!;
+    return finalStudentList;
+  }
 
-  useEffect(() => {
-    async function getStudents(section: string) {
-      const { data: studentList, error } = await supabase
-        .from("studentData")
-        .select()
-        .eq("section", section);
-      const list = studentList
-        ?.map((e) => e)
-        .sort((a, b) => a.lastname.localeCompare(b.lastname));
-      console.log(list);
-      if (error) {
-        console.error(error);
-      }
+  var studentList: students = await getStudents();
 
-      setList(list!);
-    }
+  const sectionListQuery = supabase.from("sections").select("sectionName");
+  type sections = QueryData<typeof sectionListQuery>;
 
-    getStudents(params.slug);
-  }, [params.slug, supabase]);
+  async function getSections() {
+    const { data, error } = await sectionListQuery;
+    console.log(sectionList);
+    if (error) console.error(error);
+    const finalSectionList: sections = data!;
 
-  useEffect(() => {
-    async function getSections() {
-      const { data: sectionList, error } = await supabase
-        .from("sections")
-        .select();
-      const list = sectionList?.map((e) => e.sectionName);
-      console.log(sectionList);
-      if (error) {
-        console.error(error);
-      }
+    return finalSectionList;
+  }
 
-      //@ts-expect-error
-      setSectionList(list);
-      setLoad(false);
-    }
+  var sectionList: (string | null)[] = (await getSections()).map(
+    (e) => e.sectionName
+  );
 
-    getSections();
-  }, [params.slug, supabase]);
-
-  if (isLoading) {
-    return <Loading></Loading>;
-  } else if (sectionList.includes(params.slug)) {
+  if (sectionList?.includes(params.slug)) {
     return (
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="w-full md:w-4/5 mx-auto">
@@ -97,60 +52,29 @@ export default function Section({ params }: { params: { slug: string } }) {
               <p className="text-left text-4xl font-sans font-bold inline w-fit">
                 {params.slug} - {studentList?.length} Records found.
               </p>
-              <button
-                className="btn space-y-4 inline w-fit"
-                onClick={() => router.back()}
-              >
-                <AiOutlineArrowLeft />
-              </button>
+              <BackButton></BackButton>
             </div>
             <Suspense
               fallback={<span className="loading loading-spinner"></span>}
             >
               <div className="w-full my-1">
-                {studentList?.map(
-                  (student: {
-                    lrn: { toString: () => Key | null | undefined };
-                    lastname:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | Iterable<ReactNode>
-                      | ReactPortal
-                      | PromiseLikeOfReactNode
-                      | null
-                      | undefined;
-                    firstname:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | Iterable<ReactNode>
-                      | ReactPortal
-                      | PromiseLikeOfReactNode
-                      | null
-                      | undefined;
-                    middlename: string;
-                  }) => (
-                    <div
-                      key={student.lrn.toString()}
-                      className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
+                {studentList?.map((e) => (
+                  <div
+                    key={e.lrn.toString()}
+                    className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
+                  >
+                    <p className="text-xl my-auto">
+                      {e.lastname}, {e.firstname} {e.middlename?.charAt(0)}
+                      {e.middlename ? "." : ""}
+                    </p>
+                    <Link
+                      href={`/dashboard/view/student/${e.lrn}`}
+                      className="btn btn-primary"
                     >
-                      <p className="text-xl my-auto">
-                        {student.lastname}, {student.firstname}{" "}
-                        {student.middlename.charAt(0)}
-                        {student.middlename ? "." : ""}
-                      </p>
-                      <Link
-                        href={`/dashboard/view/student/${student.lrn}`}
-                        className="btn btn-primary"
-                      >
-                        <AiOutlineRight />
-                      </Link>
-                    </div>
-                  )
-                )}
+                      <AiOutlineRight />
+                    </Link>
+                  </div>
+                ))}
               </div>
             </Suspense>
           </div>

@@ -1,5 +1,7 @@
 "use client";
+import { createClient } from "@/utils/client";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { QueryData } from "@supabase/supabase-js";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -9,6 +11,8 @@ export type loginData = {
   password: string;
   captchaToken: string;
 };
+
+const supabase = createClient();
 
 const LoginForm = () => {
   const { register, handleSubmit } = useForm<loginData>();
@@ -24,7 +28,7 @@ const LoginForm = () => {
       .then((res) => res.json())
       .then((response) => {
         if (response.error === null) {
-          window.location.reload();
+          console.log(checkRole());
         } else if (response.error.status == "400") {
           toast("Wrong email or password. Please try again", {
             theme: "dark",
@@ -37,6 +41,23 @@ const LoginForm = () => {
       .catch((err) => {
         console.error(err);
       });
+    const checkRole = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      console.log(user);
+
+      const userQuery = supabase.from("users").select().eq("id", user!.id);
+      type userDB = QueryData<typeof userQuery>;
+      const { data, error } = await userQuery;
+      if (error) console.error(error);
+      const userObj: userDB = data!;
+
+      console.log(userObj);
+
+      return userObj;
+    };
   };
 
   return (
