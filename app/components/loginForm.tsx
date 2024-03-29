@@ -26,9 +26,13 @@ const LoginForm = () => {
       body: JSON.stringify(e),
     })
       .then((res) => res.json())
-      .then((response) => {
+      .then(async (response) => {
         if (response.error === null) {
-          console.log(checkRole());
+          if ((await checkRole()) == "full") {
+            window.location.reload();
+          } else {
+            window.location.reload();
+          }
         } else if (response.error.status == "400") {
           toast("Wrong email or password. Please try again", {
             theme: "dark",
@@ -52,7 +56,7 @@ const LoginForm = () => {
       type userDB = QueryData<typeof userQuery>;
       const { data, error } = await userQuery;
       if (error) console.error(error);
-      const userObj: userDB = data!;
+      const userObj: string = data!.map((e) => e.group).toString();
 
       console.log(userObj);
 
