@@ -26,13 +26,9 @@ const LoginForm = () => {
       body: JSON.stringify(e),
     })
       .then((res) => res.json())
-      .then(async (response) => {
+      .then((response) => {
         if (response.error === null) {
-          if ((await checkRole()) == "full") {
-            window.location.reload();
-          } else {
-            window.location.reload();
-          }
+          window.location.reload();
         } else if (response.error.status == "400") {
           toast("Wrong email or password. Please try again", {
             theme: "dark",
@@ -45,23 +41,6 @@ const LoginForm = () => {
       .catch((err) => {
         console.error(err);
       });
-    const checkRole = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      console.log(user);
-
-      const userQuery = supabase.from("users").select().eq("id", user!.id);
-      type userDB = QueryData<typeof userQuery>;
-      const { data, error } = await userQuery;
-      if (error) console.error(error);
-      const userObj: string = data!.map((e) => e.group).toString();
-
-      console.log(userObj);
-
-      return userObj;
-    };
   };
 
   return (
