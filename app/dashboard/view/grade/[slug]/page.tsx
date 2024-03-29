@@ -16,14 +16,15 @@ export default async function Grade({ params }: { params: { slug: number } }) {
 
   async function getSections() {
     const { data, error } = await sectionListQuery;
-    console.log(sectionList);
     if (error) console.error(error);
     const finalSectionList: sections | null = data;
 
-    return finalSectionList;
+    return finalSectionList!
+      ?.map((e) => e.sectionName!)
+      .sort((a, b) => a?.localeCompare(b));
   }
 
-  var sectionList: sections | null = await getSections();
+  const sectionList: (string | null)[] = await getSections();
 
   if (params.slug >= 7 && params.slug <= 12) {
     return (
@@ -42,12 +43,12 @@ export default async function Grade({ params }: { params: { slug: number } }) {
               <div className="w-full my-1">
                 {sectionList?.map((option) => (
                   <div
-                    key={option.sectionName}
+                    key={option}
                     className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
                   >
-                    <p className="text-xl my-auto">{option.sectionName}</p>
+                    <p className="text-xl my-auto">{option}</p>
                     <Link
-                      href={`/dashboard/view/section/${option.sectionName}`}
+                      href={`/dashboard/view/section/${option}`}
                       className="btn btn-primary"
                     >
                       <AiOutlineRight />

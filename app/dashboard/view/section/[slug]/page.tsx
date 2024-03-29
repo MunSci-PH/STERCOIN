@@ -21,7 +21,9 @@ export default async function Section({
   async function getStudents() {
     const { data, error } = await studentListQuery;
     if (error) console.error(error);
-    const finalStudentList: students = data!;
+    const finalStudentList: students = data!
+      .map((e) => e)
+      .sort((a, b) => a.lastname.localeCompare(b.lastname));
     return finalStudentList;
   }
 
@@ -32,16 +34,15 @@ export default async function Section({
 
   async function getSections() {
     const { data, error } = await sectionListQuery;
-    console.log(sectionList);
     if (error) console.error(error);
     const finalSectionList: sections = data!;
 
-    return finalSectionList;
+    return finalSectionList!
+      ?.map((e) => e.sectionName!)
+      .sort((a, b) => a?.localeCompare(b));
   }
 
-  var sectionList: (string | null)[] = (await getSections()).map(
-    (e) => e.sectionName
-  );
+  const sectionList: (string | null)[] = await getSections();
 
   if (sectionList?.includes(params.slug)) {
     return (
