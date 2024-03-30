@@ -1,5 +1,10 @@
-"use client";
+import { Metadata } from "next";
 import Form from "@/components/regForm";
+
+export const metadata: Metadata = {
+  title: "Information Registration | STERCOIN",
+  description: "Student Emergency Release Contact Information",
+};
 
 export default function InfoReg() {
   return (
