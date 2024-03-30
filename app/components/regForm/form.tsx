@@ -3,13 +3,13 @@ import { createClient } from "@/utils/client";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import LRNInput from "./regForm/lrn";
-import NameInput from "./regForm/name";
-import GradeInput from "./regForm/grade";
+import LRNInput from "./lrn";
+import NameInput from "./name";
+import GradeInput from "./grade";
 import { storageClient } from "@/utils/storage";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { QueryData } from "@supabase/supabase-js";
-import { TablesInsert } from "../../database.types";
+import { TablesInsert } from "../../../database.types";
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 

@@ -1,10 +1,10 @@
 import "@/globals.css";
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import Nav from "@/components/nav";
+import Nav from "@/components/layout/nav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Footer from "./components/footer";
+import Footer from "./components/layout/footer";
 
 const lato = Lato({
   subsets: ["latin"],

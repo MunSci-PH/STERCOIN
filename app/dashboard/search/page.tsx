@@ -1,5 +1,5 @@
 "use client";
-import BackButton from "@/components/backButton";
+import BackButton from "@/components/utils/backButton";
 import { createClient } from "@/utils/client";
 import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";

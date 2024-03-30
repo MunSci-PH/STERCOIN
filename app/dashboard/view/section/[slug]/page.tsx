@@ -1,5 +1,5 @@
-import BackButton from "@/components/backButton";
-import NotFound from "@/components/not-found";
+import BackButton from "@/components/utils/backButton";
+import NotFound from "@/components/layout/not-found";
 import { createSSRClient } from "@/utils/server";
 import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
