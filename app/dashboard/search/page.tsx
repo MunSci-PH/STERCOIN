@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { AiOutlineRight } from "react-icons/ai";
 
 export default function Section() {
-  const [isSearching, setLoadState] = useState<Boolean>(false);
   const supabase = createClient();
   const { register } = useForm();
 
@@ -16,13 +15,14 @@ export default function Section() {
   type students = QueryData<typeof studentListQuery>;
   const [studentList, setList] = useState<students>();
   const [searchList, setSearchList] = useState<students>();
+  const [searchQuery, setQuery] = useState<string>();
 
   useEffect(() => {
     const getStudents = async () => {
       const { data, error } = await studentListQuery;
       if (error) console.error(error);
       if (data) {
-        const finalStudentList: students = data!
+        const finalStudentList: students = data
           .map((e) => e)
           .sort((a, b) => a.lastname.localeCompare(b.lastname));
         setList(finalStudentList);
@@ -36,7 +36,7 @@ export default function Section() {
     const studentListQuery = supabase
       .from("studentData")
       .select()
-      .ilike("lastname", searchQuery);
+      .ilike("lastname", `%${searchQuery}%`);
     type students = QueryData<typeof studentListQuery>;
     const { data, error } = await studentListQuery;
     if (error) console.error(error);
@@ -47,7 +47,7 @@ export default function Section() {
   }
 
   const handleChange = async (e: { target: { value: string } }) => {
-    console.log(e.target.value);
+    setQuery(e.target.value);
     const results = await searchStudents(e.target.value);
 
     setSearchList(results);
@@ -77,7 +77,7 @@ export default function Section() {
             <BackButton></BackButton>
           </div>
           <div className="w-full my-1">
-            {searchList?.length == 0
+            {searchQuery?.trim() == ""
               ? studentList?.map((student) => (
                   <div
                     key={student.lrn.toString()}
