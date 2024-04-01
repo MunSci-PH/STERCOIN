@@ -1,5 +1,8 @@
+import { UseFormRegister } from "react-hook-form";
+import { IFormInput } from "./form";
+
 interface IContainerProps {
-  registerFunc: Function;
+  registerFunc: UseFormRegister<IFormInput>;
 }
 
 const NameInput: React.FC<IContainerProps> = (props) => {
@@ -15,11 +18,17 @@ const NameInput: React.FC<IContainerProps> = (props) => {
           type="text"
           placeholder="Juan Jr."
           className="input input-bordered w-full max-w-xs"
-          pattern=".{1,30}"
-          title="Only accepts alphabet letters."
           id="fname"
           required
-          {...props.registerFunc("fname", { required: true })}
+          {...props.registerFunc("fname", {
+            required: true,
+            minLength: 1,
+            maxLength: 30,
+            pattern: {
+              value: /.{1,30}/,
+              message: "Only accepts alphabet letters.",
+            },
+          })}
         />
       </div>
       <div>
@@ -30,10 +39,15 @@ const NameInput: React.FC<IContainerProps> = (props) => {
           type="text"
           placeholder="Martinez"
           className="input input-bordered w-full max-w-xs"
-          pattern=".{1,30}"
-          title="Only accepts alphabet letters."
           id="mname"
-          {...props.registerFunc("mname")}
+          {...props.registerFunc("mname", {
+            minLength: 1,
+            maxLength: 30,
+            pattern: {
+              value: /.{1,30}/,
+              message: "Only accepts alphabet letters.",
+            },
+          })}
         />
       </div>
       <div>
@@ -46,11 +60,16 @@ const NameInput: React.FC<IContainerProps> = (props) => {
           type="text"
           placeholder="Dela Cruz"
           className="input input-bordered w-full max-w-xs"
-          pattern=".{1,30}"
-          title="Only accepts alphabet letters."
           id="lname"
-          required
-          {...props.registerFunc("lname", { required: true })}
+          {...props.registerFunc("lname", {
+            required: true,
+            minLength: 1,
+            maxLength: 30,
+            pattern: {
+              value: /.{1,30}/,
+              message: "Only accepts alphabet letters.",
+            },
+          })}
         />
       </div>
     </div>

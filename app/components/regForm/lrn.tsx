@@ -1,5 +1,10 @@
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { IFormInput } from "./form";
+import { ErrorMessage } from "@hookform/error-message";
+
 interface IContainerProps {
-  registerFunc: Function;
+  registerFunc: UseFormRegister<IFormInput>;
+  errors: FieldErrors<IFormInput>;
 }
 
 const LRNInput: React.FC<IContainerProps> = (props) => {
@@ -10,15 +15,29 @@ const LRNInput: React.FC<IContainerProps> = (props) => {
           LRN <span className="text-red-600">*</span>
         </span>
       </label>
+      <ErrorMessage
+        errors={props.errors}
+        name="lrn"
+        render={({ messages }) =>
+          messages &&
+          Object.entries(messages).map(([type, message]) => (
+            <span key={type} className="indicator-item badge badge-secondary">
+              {message}
+            </span>
+          ))
+        }
+      />
       <input
         type="text"
         placeholder="305469••••••"
         className="input input-bordered w-full"
-        pattern="[0-9]{12}"
-        title="Only accepts digits (0-9) and only 12 characters."
         id="lrn"
-        required
-        {...props.registerFunc("lrn", { required: true })}
+        {...props.registerFunc("lrn", {
+          required: true,
+          minLength: { value: 12, message: "Must be 12 characters only." },
+          maxLength: { value: 12, message: "Must be 12 characters only." },
+          pattern: { value: /[0-9]{12}/, message: "Must only be numbers" },
+        })}
       />
     </div>
   );

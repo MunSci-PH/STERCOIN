@@ -1,5 +1,8 @@
+import { UseFormRegister } from "react-hook-form";
+import { IFormInput } from "./form";
+
 interface IContainerProps {
-  registerFunc: Function;
+  registerFunc: UseFormRegister<IFormInput>;
   onChange: Function;
   disabled: boolean;
   selectedSections: string[];
@@ -13,7 +16,6 @@ const GradeInput: React.FC<IContainerProps> = (props) => {
           className="select select-bordered w-full max-w-s"
           id="grade"
           defaultValue="none"
-          required
           {...props.registerFunc("grade", {
             onChange: (e: any) => {
               props.onChange(e);
@@ -35,9 +37,10 @@ const GradeInput: React.FC<IContainerProps> = (props) => {
           className="select select-bordered w-full max-w-xs"
           id="section"
           defaultValue="none"
-          disabled={props.disabled}
-          required
-          {...props.registerFunc("section", { required: true })}
+          {...props.registerFunc("section", {
+            required: true,
+            disabled: props.disabled,
+          })}
         >
           <option value="none" disabled>
             Section

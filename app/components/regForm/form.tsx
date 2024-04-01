@@ -52,14 +52,13 @@ const Form = () => {
   const [currentValues, setValues] = useState<IFormInput>();
   const [base64, setBase64] = useState<string>();
   const {
-    reset,
     register,
     handleSubmit,
     trigger,
     setFocus,
     getFieldState,
     getValues,
-    formState: { isValid },
+    formState: { errors },
   } = useForm<IFormInput>();
 
   useEffect(() => {
@@ -165,27 +164,8 @@ const Form = () => {
     console.log(formData, data);
   };
 
-  const verifyCaptcha = async () => {
-    const formData = new URLSearchParams();
-    formData.append("secret", process.env.CF_SECRET!);
-    formData.append("token", captchaToken!);
-    const url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-
-    setLoading(5);
-
-    const firstResult = await fetch(url, {
-      body: JSON.stringify(formData),
-      method: "POST",
-    });
-    const firstOutcome = await firstResult.json();
-    setLoading(10);
-    if (firstOutcome.success) {
-      return true;
-    }
-  };
-
   const uploadPicture: SubmitHandler<IFormInput> = async (formData) => {
-    const { data, error } = await storageClient
+    const { error } = await storageClient
       .from("idpics")
       .upload(
         `${formData.lrn}/${formData.idpic.item(0)!.name}`,
@@ -331,6 +311,12 @@ const Form = () => {
       )}
       <form
         onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={(event) => {
+          if (event.key == "Enter") {
+            event.preventDefault();
+            checkNext();
+          }
+        }}
         className="form-control space-y-4 my-12"
       >
         {step == 0 ? (
@@ -342,7 +328,7 @@ const Form = () => {
               every step of the process. This web application respects
               confidentiality agreement.
             </p>
-            <LRNInput registerFunc={register}></LRNInput>
+            <LRNInput registerFunc={register} errors={errors}></LRNInput>
           </>
         ) : (
           <></>
@@ -398,8 +384,11 @@ const Form = () => {
                 id="bday"
                 min="2000-01-01"
                 max="2015-12-31"
-                required
-                {...register("birthday", { required: true })}
+                {...register("birthday", {
+                  required: true,
+                  min: "2000-01-01",
+                  max: "2015-12-31",
+                })}
               />
             </div>
             <div>
@@ -414,7 +403,6 @@ const Form = () => {
                 placeholder="999 Buendia St., Tunasan, Muntinlupa, 1774"
                 className="input input-bordered w-full"
                 id="address"
-                required
                 {...register("address", { required: true })}
               />
             </div>
@@ -436,11 +424,17 @@ const Form = () => {
                   type="text"
                   placeholder="Emergency Contact 1"
                   className="input input-bordered w-full"
-                  pattern=".{1,30}"
-                  title="Only accepts up to 30 characters."
                   id="ec1name"
                   required
-                  {...register("e1Name", { required: true })}
+                  {...register("e1Name", {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,30}/,
+                      message: "Only accepts up to 30 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -451,11 +445,16 @@ const Form = () => {
                   type="tel"
                   placeholder="+63••••••••••"
                   className="input input-bordered w-full"
-                  pattern="((^(\+)(\d){12}$)|(^\d{11}$))"
-                  title="Only accepts the following format: 09151231234 or +6391551231234"
                   id="ec1num"
                   required
-                  {...register("e1Num", { required: true })}
+                  {...register("e1Num", {
+                    required: true,
+                    pattern: {
+                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
+                      message:
+                        "Only accepts the following format: 09151231234 or +6391551231234",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -468,11 +467,17 @@ const Form = () => {
                   type="text"
                   placeholder="Facebook Name"
                   className="input input-bordered w-full"
-                  pattern=".{1,90}"
-                  title="Only accepts up to 90 characters."
                   id="ec1fb"
                   required
-                  {...register("e1FB", { required: true })}
+                  {...register("e1FB", {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,90}/,
+                      message: "Only accepts up to 90 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -508,11 +513,17 @@ const Form = () => {
                   type="text"
                   placeholder="Emergency Contact 2"
                   className="input input-bordered w-full"
-                  pattern=".{1,30}"
-                  title="Only accepts up to 30 characters."
                   id="ec2name"
                   required
-                  {...register("e2Name", { required: true })}
+                  {...register("e2Name", {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,30}/,
+                      message: "Only accepts up to 30 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -523,11 +534,16 @@ const Form = () => {
                   type="tel"
                   placeholder="+63••••••••••"
                   className="input input-bordered w-full"
-                  pattern="((^(\+)(\d){12}$)|(^\d{11}$))"
-                  title="Only accepts the following format: 09151231234 or +6391551231234"
                   id="ec2num"
                   required
-                  {...register("e2Num", { required: true })}
+                  {...register("e2Num", {
+                    required: true,
+                    pattern: {
+                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
+                      message:
+                        "Only accepts the following format: 09151231234 or +6391551231234",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -540,11 +556,17 @@ const Form = () => {
                   type="text"
                   placeholder="Facebook Name"
                   className="input input-bordered w-full"
-                  pattern=".{1,90}"
-                  title="Only accepts up to 90 characters."
                   id="ec2fb"
                   required
-                  {...register("e2FB", { required: true })}
+                  {...register("e2FB", {
+                    required: true,
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,90}/,
+                      message: "Only accepts up to 90 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -580,10 +602,15 @@ const Form = () => {
                   type="text"
                   placeholder="Emergency Contact 3"
                   className="input input-bordered w-full"
-                  pattern=".{1,30}"
-                  title="Only accepts up to 30 characters."
                   id="ec3name"
-                  {...register("e3Name")}
+                  {...register("e3Name", {
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,30}/,
+                      message: "Only accepts up to 30 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -594,10 +621,14 @@ const Form = () => {
                   type="tel"
                   placeholder="+63••••••••••"
                   className="input input-bordered w-full"
-                  pattern="((^(\+)(\d){12}$)|(^\d{11}$))"
-                  title="Only accepts the following format: 09151231234 or +6391551231234"
                   id="ec3num"
-                  {...register("e3Num")}
+                  {...register("e3Num", {
+                    pattern: {
+                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
+                      message:
+                        "Only accepts the following format: 09151231234 or +6391551231234",
+                    },
+                  })}
                 />
               </div>
               <div>
@@ -610,10 +641,15 @@ const Form = () => {
                   type="text"
                   placeholder="Facebook Name"
                   className="input input-bordered w-full"
-                  pattern=".{1,90}"
-                  title="Only accepts up to 90 characters."
                   id="ec3fb"
-                  {...register("e3FB")}
+                  {...register("e3FB", {
+                    minLength: 1,
+                    maxLength: 30,
+                    pattern: {
+                      value: /.{1,90}/,
+                      message: "Only accepts up to 90 characters.",
+                    },
+                  })}
                 />
               </div>
               <div>
