@@ -33,7 +33,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
       captchaToken: captchaToken,
     });
 
-    if (error) throw error;
+    if (error) window.location.href = `/account/error?message=${error.message}`;
     if (data) {
       window.location.href =
         "/account/confirm?message=Password Reset link has been sent to your email address";

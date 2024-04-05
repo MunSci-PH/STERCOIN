@@ -1,7 +1,6 @@
 "use client";
 import { createClient } from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
-import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export type loginData = {
@@ -18,7 +17,6 @@ const ChangePassword = () => {
     watch,
     formState: { errors },
   } = useForm<loginData>();
-  const router = useRouter();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
     const { data, error } = await supabase.auth.updateUser({

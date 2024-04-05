@@ -14,8 +14,6 @@ export type loginData = {
   captchaToken: string;
 };
 
-const supabase = createClient();
-
 const LoginForm = () => {
   const {
     register,

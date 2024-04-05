@@ -32,9 +32,7 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
       );
 
       if (error) {
-        return redirect(
-          `/reset-password?message=Unable to reset Password. Link expired!`
-        );
+        window.location.href = `/account/error?message=Unable to reset Password. Link expired!`;
       }
     }
 
@@ -42,7 +40,7 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
       password: e.password,
     });
 
-    if (error) throw error;
+    if (error) window.location.href = `/account/error?message=${error.message}`;
     if (data) {
       window.location.href = "/dashboard/login";
     }
