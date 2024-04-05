@@ -59,8 +59,7 @@ export async function middleware(request: NextRequest) {
   if (error) throw error;
   if (
     !data.session &&
-    !request.nextUrl.pathname.startsWith("/dashboard/login") &&
-    !request.nextUrl.pathname.startsWith("/dashboard/settings/password/change")
+    !request.nextUrl.pathname.startsWith("/dashboard/login")
   ) {
     return NextResponse.redirect(new URL("/dashboard/login", request.url));
   }
