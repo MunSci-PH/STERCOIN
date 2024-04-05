@@ -62,7 +62,7 @@ export default async function Dashboard() {
               </form>
             </div>
           </div>
-          <div className=" my-36 grid grid-cols-3 md:grid-cols-6 gap-4 text-white">
+          <div className=" my-36 grid grid-cols-2 md:grid-cols-6 gap-4 text-white">
             {userRole == "full" || userRole == "7" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/7"
