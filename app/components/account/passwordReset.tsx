@@ -24,8 +24,6 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
   } = useForm<loginData>();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
-    "use server";
-
     if (props.searchParams.code) {
       const supabase = createClient();
 
