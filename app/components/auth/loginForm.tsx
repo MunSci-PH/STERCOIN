@@ -1,7 +1,9 @@
 "use client";
 import { createClient } from "@/utils/client";
+import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { QueryData } from "@supabase/supabase-js";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -15,7 +17,11 @@ export type loginData = {
 const supabase = createClient();
 
 const LoginForm = () => {
-  const { register, handleSubmit } = useForm<loginData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
 
   const tryLogin = (e: loginData) => {
@@ -45,22 +51,69 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit(tryLogin)} className="form-control space-y-4">
-      <label htmlFor="email" className="label label-text text-base">
-        Email
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text">Email</span>
+        </div>
+        <input
+          type="input"
+          className="input input-bordered w-full max-w-xs"
+          {...register("email", {
+            required: true,
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              message: "Please input a valid email.",
+            },
+          })}
+        />
+        <div className="label">
+          <ErrorMessage
+            errors={errors}
+            name="email"
+            render={({ message }) => {
+              return (
+                <span className="label-text-alt text-error text-left">
+                  {message}
+                </span>
+              );
+            }}
+          />
+        </div>
       </label>
-      <input
-        type="input"
-        className="input input-bordered w-full max-w-xs"
-        {...register("email", { required: true })}
-      />
-      <label htmlFor="password" className="label label-text text-base">
-        Password
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text">Password</span>
+        </div>
+        <input
+          type="password"
+          className="input input-bordered w-full max-w-xs"
+          {...register("password", {
+            required: true,
+            pattern: {
+              value:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+              message: "Please enter a valid password.",
+            },
+          })}
+        />
+        <div className="label">
+          <ErrorMessage
+            errors={errors}
+            name="password"
+            render={({ message }) => {
+              return (
+                <span className="label-text-alt text-error text-left">
+                  {message}
+                </span>
+              );
+            }}
+          />
+        </div>
       </label>
-      <input
-        type="password"
-        className="input input-bordered w-full max-w-xs"
-        {...register("password", { required: true })}
-      />
+      <Link href="/account/password/reset" className="link link-info text-left">
+        Forgot your password?
+      </Link>
       <button className="btn btn-info">Sign In</button>
       <Turnstile
         siteKey="0x4AAAAAAAOMOy_l-B3ae-Jg"

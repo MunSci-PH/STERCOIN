@@ -10,7 +10,7 @@ export type loginData = {
 };
 
 interface IContainerProps {
-  searchParams: { message: string; code: string };
+  searchParams: { code: string };
 }
 
 export const supabase = createClient();
@@ -44,7 +44,7 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
 
     if (error) throw error;
     if (data) {
-      window.location.href = "/dashboard/";
+      window.location.href = "/dashboard/login";
     }
   };
 
