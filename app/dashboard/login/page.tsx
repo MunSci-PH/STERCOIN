@@ -15,7 +15,7 @@ export default async function Dashboard() {
     <>
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="m-auto">
-          <div className="flex flex-col items-center my-12 bg-base-100 p-10 rounded-xl">
+          <div className="flex flex-col items-center my-12 bg-base-100 p-10 rounded-xl w-96">
             <p className="text-center text-4xl font-sans font-bold mb-8">
               Login
             </p>
