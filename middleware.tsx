@@ -53,10 +53,14 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
+
   const { data, error } = await supabase.auth.getSession();
+
+  if (error) throw error;
   if (
     !data.session &&
-    !request.nextUrl.pathname.startsWith("/dashboard/login")
+    !request.nextUrl.pathname.startsWith("/dashboard/login") &&
+    !request.nextUrl.pathname.startsWith("/dashboard/settings/password/change")
   ) {
     return NextResponse.redirect(new URL("/dashboard/login", request.url));
   }
