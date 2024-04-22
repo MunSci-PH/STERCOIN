@@ -90,7 +90,7 @@ const LoginForm = () => {
             required: true,
             pattern: {
               value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
               message: "Please enter a valid password.",
             },
           })}
