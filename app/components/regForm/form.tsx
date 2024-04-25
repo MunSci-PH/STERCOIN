@@ -11,7 +11,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { QueryData } from "@supabase/supabase-js";
 import { TablesInsert } from "../../../database.types";
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const supabase = createClient();
 
@@ -192,7 +192,7 @@ const Form = () => {
 
     const list = finalSectionList!
       ?.map((e) => e.sectionName!)
-      .sort((a, b) => a?.localeCompare(b));
+      .sort((a: string, b: string) => a?.localeCompare(b));
     console.log(e.target.value, list);
     setList(list);
 
@@ -202,46 +202,28 @@ const Form = () => {
   };
 
   const checkNext = async () => {
-    setValues(await getValues());
+    setValues(getValues());
     if (step == 0) {
-      await trigger("lrn", { shouldFocus: true });
-      console.log(getFieldState("lrn").error);
-      if (!getFieldState("lrn").error) setStep(step + 1);
+      const result = await trigger("lrn", { shouldFocus: true });
+      if (result) setStep(step + 1);
     } else if (step == 1) {
-      await trigger(["fname", "mname", "lname", "grade", "section", "pwd"], {
+      const result = await trigger(
+        ["fname", "mname", "lname", "grade", "section", "pwd"],
+        {
+          shouldFocus: true,
+        }
+      );
+      if (result) setStep(step + 1);
+    } else if (step == 2) {
+      const result = await trigger("idpic", { shouldFocus: true });
+      if (result) setStep(step + 1);
+    } else if (step == 3) {
+      const result = await trigger(["birthday", "address"], {
         shouldFocus: true,
       });
-      console.log(
-        getFieldState("fname").error,
-        getFieldState("mname").error,
-        getFieldState("lname").error,
-        getFieldState("grade").error,
-        getFieldState("section").error,
-        getFieldState("pwd").error
-      );
-      if (
-        !getFieldState("fname").error &&
-        !getFieldState("mname").error &&
-        !getFieldState("lname").error &&
-        !getFieldState("grade").error &&
-        !getFieldState("section").error &&
-        !getFieldState("pwd").error
-      )
-        setStep(step + 1);
-    } else if (step == 2) {
-      await trigger("idpic", { shouldFocus: true });
-      console.log(getFieldState("idpic").error);
-      if (!getFieldState("idpic").error) setStep(step + 1);
-    } else if (step == 3) {
-      await trigger(["birthday", "address"], { shouldFocus: true });
-      console.log(
-        getFieldState("birthday").error,
-        getFieldState("address").error
-      );
-      if (!getFieldState("birthday").error && !getFieldState("address").error)
-        setStep(step + 1);
+      if (result) setStep(step + 1);
     } else if (step == 4) {
-      await trigger([
+      const result = await trigger([
         "e1Name",
         "e1FB",
         "e1Num",
@@ -256,17 +238,7 @@ const Form = () => {
         "e3Res",
       ]);
 
-      if (
-        !getFieldState("e1Name").error &&
-        !getFieldState("e1FB").error &&
-        !getFieldState("e1Num").error &&
-        !getFieldState("e2Name").error &&
-        !getFieldState("e2FB").error &&
-        !getFieldState("e2Num").error &&
-        !getFieldState("e3Name").error &&
-        !getFieldState("e3FB").error &&
-        !getFieldState("e3Num").error
-      ) {
+      if (result) {
         console.log(currentValues);
         if (currentValues?.idpic.item(0))
           setBase64(

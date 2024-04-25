@@ -70,7 +70,6 @@ export default async function Dashboard() {
                     </Link>
                   </div>
                 </div>
-
                 <div className="divider"></div>
                 <p className="text-xl text-left">{userRole}</p>
                 <p className="text-left font-bold">Authentication Level</p>
