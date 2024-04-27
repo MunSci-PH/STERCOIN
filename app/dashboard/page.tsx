@@ -66,92 +66,104 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "7" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/7"
-                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>7</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
                 aria-disabled={true}
               >
+                <span>Grade</span>
                 <span>7</span>
               </Link>
             )}
             {userRole == "full" || userRole == "8" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/8"
-                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>8</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
                 aria-disabled={true}
               >
+                <span>Grade</span>
                 <span>8</span>
               </Link>
             )}
             {userRole == "full" || userRole == "9" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/9"
-                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>9</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
               >
+                <span>Grade</span>
                 <span>9</span>
               </Link>
             )}
             {userRole == "full" || userRole == "10" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/10"
-                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>10</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
               >
+                <span>Grade</span>
                 <span>10</span>
               </Link>
             )}
             {userRole == "full" || userRole == "11" || userRole == "shs" ? (
               <Link
                 href="/dashboard/view/grade/11"
-                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>11</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
               >
+                <span>Grade</span>
                 <span>11</span>
               </Link>
             )}
             {userRole == "full" || userRole == "12" || userRole == "shs" ? (
               <Link
                 href="/dashboard/view/grade/12"
-                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl"
+                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl flex flex-col"
               >
+                <span>Grade</span>
                 <span>12</span>
               </Link>
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl opacity-50 pointer-events-none cursor-default"
+                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
               >
+                <span>Grade</span>
                 <span>12</span>
               </Link>
             )}
