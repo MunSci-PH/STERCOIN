@@ -5,6 +5,7 @@ import Nav from "@/components/layout/nav";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/layout/footer";
+import { Analytics } from "@vercel/analytics/next";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Footer />
         </div>
         <ToastContainer />
+        <Analytics />
       </body>
     </html>
   );
