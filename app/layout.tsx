@@ -53,7 +53,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={lato.className}>
         <Disclaimer />
-        <div className="bg-white dark:bg-gray-800 text-black dark:text-white min-h-screen flex flex-col">
+        <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-800 dark:text-white">
           <Nav />
           {children}
           <Footer />

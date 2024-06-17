@@ -37,14 +37,14 @@ export default async function Dashboard() {
   const userRole = await checkRole();
 
   return (
-    <main className="flex-1 flex container mx-auto text-center px-4">
-      <div className="w-full md:w-4/5 mx-auto">
-        <div className="flex flex-col items-center my-12">
-          <div className="w-full flex flex-nowrap justify-between">
-            <p className="text-left text-4xl font-sans font-bold inline w-fit my-auto">
+    <main className="container mx-auto flex flex-1 px-4 text-center">
+      <div className="mx-auto w-full md:w-4/5">
+        <div className="my-12 flex flex-col items-center">
+          <div className="flex w-full flex-nowrap justify-between">
+            <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
               Home
             </p>
-            <div className="grid grid-cols-3 my-auto gap-2">
+            <div className="my-auto grid grid-cols-3 gap-2">
               <Link href="/dashboard/settings" className="btn mx-auto">
                 <AiOutlineSetting />
               </Link>
@@ -62,11 +62,11 @@ export default async function Dashboard() {
               </form>
             </div>
           </div>
-          <div className=" my-36 grid grid-cols-2 md:grid-cols-6 gap-4 text-white">
+          <div className=" my-36 grid grid-cols-2 gap-4 text-white md:grid-cols-6">
             {userRole == "full" || userRole == "7" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/7"
-                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-green-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>7</span>
@@ -74,7 +74,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-green-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-green-600 p-12 text-2xl opacity-50 md:p-10"
                 aria-disabled={true}
               >
                 <span>Grade</span>
@@ -84,7 +84,7 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "8" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/8"
-                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-yellow-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>8</span>
@@ -92,7 +92,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-yellow-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-yellow-600 p-12 text-2xl opacity-50 md:p-10"
                 aria-disabled={true}
               >
                 <span>Grade</span>
@@ -102,7 +102,7 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "9" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/9"
-                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-red-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>9</span>
@@ -110,7 +110,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-red-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-red-600 p-12 text-2xl opacity-50 md:p-10"
               >
                 <span>Grade</span>
                 <span>9</span>
@@ -119,7 +119,7 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "10" || userRole == "jhs" ? (
               <Link
                 href="/dashboard/view/grade/10"
-                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-cyan-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>10</span>
@@ -127,7 +127,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-cyan-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-cyan-600 p-12 text-2xl opacity-50 md:p-10"
               >
                 <span>Grade</span>
                 <span>10</span>
@@ -136,7 +136,7 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "11" || userRole == "shs" ? (
               <Link
                 href="/dashboard/view/grade/11"
-                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-blue-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>11</span>
@@ -144,7 +144,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-blue-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-blue-600 p-12 text-2xl opacity-50 md:p-10"
               >
                 <span>Grade</span>
                 <span>11</span>
@@ -153,7 +153,7 @@ export default async function Dashboard() {
             {userRole == "full" || userRole == "12" || userRole == "shs" ? (
               <Link
                 href="/dashboard/view/grade/12"
-                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl flex flex-col"
+                className="flex flex-col rounded-xl bg-orange-600 p-12 text-2xl md:p-10"
               >
                 <span>Grade</span>
                 <span>12</span>
@@ -161,7 +161,7 @@ export default async function Dashboard() {
             ) : (
               <Link
                 href="#"
-                className="p-12 text-2xl md:p-10 bg-orange-600 rounded-xl flex flex-col opacity-50 pointer-events-none cursor-default"
+                className="pointer-events-none flex cursor-default flex-col rounded-xl bg-orange-600 p-12 text-2xl opacity-50 md:p-10"
               >
                 <span>Grade</span>
                 <span>12</span>

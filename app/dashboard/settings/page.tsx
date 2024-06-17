@@ -41,24 +41,24 @@ export default async function Dashboard() {
 
   return (
     <Suspense fallback={<Loading></Loading>}>
-      <main className="flex-1 flex container mx-auto text-center px-4">
-        <div className="w-full md:w-4/5 mx-auto">
-          <div className="flex flex-col items-center my-12">
-            <div className="w-full flex flex-nowrap justify-between">
-              <p className="text-left text-4xl font-sans font-bold inline w-fit my-auto">
+      <main className="container mx-auto flex flex-1 px-4 text-center">
+        <div className="mx-auto w-full md:w-4/5">
+          <div className="my-12 flex flex-col items-center">
+            <div className="flex w-full flex-nowrap justify-between">
+              <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
                 Settings
               </p>
               <BackButton></BackButton>
             </div>
-            <div className="w-full my-1">
-              <div className="align-middle p-5 rounded my-2">
+            <div className="my-1 w-full">
+              <div className="my-2 rounded p-5 align-middle">
                 <div className="divider"></div>
-                <p className="text-xl text-left">{userInfo?.email}</p>
+                <p className="text-left text-xl">{userInfo?.email}</p>
                 <p className="text-left font-bold">Email</p>
                 <div className="divider"></div>
                 <div className="grid grid-cols-2">
                   <div>
-                    <p className="text-xl text-left">••••••••••</p>
+                    <p className="text-left text-xl">••••••••••</p>
                     <p className="text-left font-bold">Password</p>
                   </div>
                   <div className="justify-self-end">
@@ -71,7 +71,7 @@ export default async function Dashboard() {
                   </div>
                 </div>
                 <div className="divider"></div>
-                <p className="text-xl text-left">{userRole}</p>
+                <p className="text-left text-xl">{userRole}</p>
                 <p className="text-left font-bold">Authentication Level</p>
                 <div className="divider"></div>
               </div>

@@ -43,7 +43,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
   return (
     <form
       onSubmit={handleSubmit(tryLogin)}
-      className="form-control space-y-4 w-full min-w-xs max-w-xs"
+      className="form-control w-full max-w-xs space-y-4"
     >
       <label className="form-control w-full max-w-xs">
         <div className="label">
@@ -67,7 +67,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
             name="email"
             render={({ message }) => {
               return (
-                <span className="label-text-alt text-error text-left">
+                <span className="label-text-alt text-left text-error">
                   {message}
                 </span>
               );
@@ -84,7 +84,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
           setCaptchaToken(token);
         }}
       />
-      <Link href="/dashboard/login" className="link link-info text-left">
+      <Link href="/dashboard/login" className="link-info link text-left">
         Remember your password?
       </Link>
     </form>

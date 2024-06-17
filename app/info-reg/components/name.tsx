@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { IFormInput } from "./form";
+import { IFormInput } from "../form";
 import { ErrorMessage } from "@hookform/error-message";
 
 interface IContainerProps {
@@ -9,7 +9,7 @@ interface IContainerProps {
 
 const NameInput: React.FC<IContainerProps> = (props) => {
   return (
-    <div className="flex items-center flex-nowrap">
+    <div className="flex flex-nowrap items-center">
       <label htmlFor="fname" className="form-control max-w-xs">
         <label className="label">
           <span className="label-text text-sm md:text-base">

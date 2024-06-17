@@ -3,9 +3,9 @@ import { createClient } from "@/utils/client";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import LRNInput from "./lrn";
-import NameInput from "./name";
-import GradeInput from "./grade";
+import LRNInput from "./components/lrn";
+import NameInput from "./components/name";
+import GradeInput from "./components/grade";
 import { storageClient } from "@/utils/storage";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { QueryData } from "@supabase/supabase-js";
@@ -238,11 +238,11 @@ const Form = () => {
             checkNext();
           }
         }}
-        className="form-control space-y-4 my-12"
+        className="form-control my-12 space-y-4"
       >
         {step == 0 ? (
           <>
-            <p className="text-left max-w-screen-md">
+            <p className="max-w-screen-md text-left">
               Disclaimer: This form is hosted on a secure server and can only be
               viewed by the school authority. Please feel confident in filling
               out this form, as all of your information will be kept safe with
@@ -270,9 +270,9 @@ const Form = () => {
         {step == 2 ? (
           <div>
             <label htmlFor="address" className="label mb-1">
-              <span className="text-base label-text text-left">
+              <span className="label-text text-left text-base">
                 ID Picture <span className="text-red-600">*</span>
-                <ul className="list-disc list-inside">
+                <ul className="list-inside list-disc">
                   <li>The photo must have a plain white background.</li>
                   <li>The photo must be taken recently</li>
                   <li>The photo must be in a 1:1 aspect ratio (square)</li>
@@ -293,12 +293,10 @@ const Form = () => {
         )}
         {step == 3 ? (
           <>
-            <div>
-              <label htmlFor="bday" className="label">
-                <span className="text-base label-text">
-                  Birthday <span className="text-red-600">*</span>
-                </span>
-              </label>
+            <label htmlFor="bday" className="label">
+              <span className="label-text text-base">
+                Birthday <span className="text-red-600">*</span>
+              </span>
               <input
                 type="date"
                 className="input input-bordered w-full"
@@ -311,14 +309,12 @@ const Form = () => {
                   max: "2015-12-31",
                 })}
               />
-            </div>
-            <div>
-              <label htmlFor="address" className="label">
-                <span className="text-base label-text">
-                  Full Address (Street Name, Barangay, City, Zip Code){" "}
-                  <span className="text-red-600">*</span>
-                </span>
-              </label>
+            </label>
+            <label htmlFor="address" className="label">
+              <span className="label-text text-base">
+                Full Address (Street Name, Barangay, City, Zip Code){" "}
+                <span className="text-red-600">*</span>
+              </span>
               <input
                 type="text"
                 placeholder="999 Buendia St., Tunasan, Muntinlupa, 1774"
@@ -326,7 +322,7 @@ const Form = () => {
                 id="address"
                 {...register("address", { required: true })}
               />
-            </div>
+            </label>
           </>
         ) : (
           <></>
@@ -334,12 +330,12 @@ const Form = () => {
         {step == 4 ? (
           <>
             <div className="w-96">
-              <p className="text-l text-left prose">
+              <p className="prose text-left text-lg">
                 Emergency Contact 1 <span className="text-red-600">*</span>
               </p>
               <div>
                 <label htmlFor="ec1name" className="label">
-                  <span className="text-base label-text">Full Name</span>
+                  <span className="label-text text-base">Full Name</span>
                 </label>
                 <input
                   type="text"
@@ -360,7 +356,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec1num" className="label">
-                  <span className="text-base label-text">Phone Number</span>
+                  <span className="label-text text-base">Phone Number</span>
                 </label>
                 <input
                   type="tel"
@@ -380,7 +376,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec1fb" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Facebook Messenger Account
                   </span>
                 </label>
@@ -403,12 +399,12 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec1res" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Relationship with Emergency Contact
                   </span>
                 </label>
                 <select
-                  className="select select-bordered w-full max-w-s"
+                  className="select select-bordered w-full max-w-sm"
                   id="ec1res"
                   defaultValue="parent"
                   required
@@ -423,12 +419,12 @@ const Form = () => {
             </div>
             <div className="divider"></div>
             <div className="w-96">
-              <p className="text-l text-left prose">
+              <p className="prose text-left text-lg">
                 Emergency Contact 2 <span className="text-red-600">*</span>
               </p>
               <div>
                 <label htmlFor="ec2name" className="label">
-                  <span className="text-base label-text">Full Name</span>
+                  <span className="label-text text-base">Full Name</span>
                 </label>
                 <input
                   type="text"
@@ -449,7 +445,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec2num" className="label">
-                  <span className="text-base label-text">Phone Number</span>
+                  <span className="label-text text-base">Phone Number</span>
                 </label>
                 <input
                   type="tel"
@@ -469,7 +465,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec2fb" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Facebook Messenger Account
                   </span>
                 </label>
@@ -492,12 +488,12 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec2res" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Relationship with Emergency Contact
                   </span>
                 </label>
                 <select
-                  className="select select-bordered w-full max-w-s"
+                  className="select select-bordered w-full max-w-sm"
                   id="ec2res"
                   defaultValue="parent"
                   required
@@ -512,12 +508,12 @@ const Form = () => {
             </div>
             <div className="divider"></div>
             <div className="w-96">
-              <p className="text-l text-left prose">
+              <p className="prose text-left text-lg">
                 Emergency Contact 3 (Optional)
               </p>
               <div>
                 <label htmlFor="ec3name" className="label">
-                  <span className="text-base label-text">Full Name</span>
+                  <span className="label-text text-base">Full Name</span>
                 </label>
                 <input
                   type="text"
@@ -536,7 +532,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec3num" className="label">
-                  <span className="text-base label-text">Phone Number</span>
+                  <span className="label-text text-base">Phone Number</span>
                 </label>
                 <input
                   type="tel"
@@ -554,7 +550,7 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec3fb" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Facebook Messenger Account
                   </span>
                 </label>
@@ -575,12 +571,12 @@ const Form = () => {
               </div>
               <div>
                 <label htmlFor="ec3res" className="label">
-                  <span className="text-base label-text">
+                  <span className="label-text text-base">
                     Relationship with Emergency Contact
                   </span>
                 </label>
                 <select
-                  className="select select-bordered w-full max-w-s"
+                  className="select select-bordered w-full max-w-sm"
                   id="ec3res"
                   defaultValue="parent"
                   required
@@ -599,67 +595,68 @@ const Form = () => {
         )}
         {step == 5 ? (
           <>
-            <div className=" align-middle p-5 rounded my-2">
+            <div className=" my-2 rounded p-5 align-middle">
               {currentValues?.idpic.item(0) ? (
                 <Image
                   src={base64!}
                   width={128}
                   height={128}
                   alt=""
-                  className="rounded avatar w-32 h-32"
+                  className="avatar h-32 w-32 rounded"
                 />
               ) : (
-                <div className="skeleton w-32 h-32"></div>
+                // eslint-disable-next-line tailwindcss/no-custom-classname
+                <div className="skeleton h-32 w-32"></div>
               )}
               <div className="divider"></div>
-              <p className="text-xl text-left">{currentValues?.lrn}</p>
+              <p className="text-left text-xl">{currentValues?.lrn}</p>
               <p className="text-left font-bold">LRN</p>
               <div className="divider"></div>
-              <p className="text-xl text-left">
+              <p className="text-left text-xl">
                 {currentValues?.lname}, {currentValues?.fname}{" "}
                 {currentValues?.mname}{" "}
               </p>
               <p className="text-left font-bold">Full Name</p>
               <div className="divider"></div>
-              <p className="text-xl text-left">
+              <p className="text-left text-xl">
                 {currentValues?.grade} - {currentValues?.section}
               </p>
               <p className="text-left font-bold">Grade & Section</p>
               <div className="divider"></div>
-              <p className="text-xl text-left">{currentValues?.address}</p>
+              <p className="text-left text-xl">{currentValues?.address}</p>
               <p className="text-left font-bold">Address</p>
               <div className="divider"></div>
-              <p className="text-xl text-left">
+              <p className="text-left text-xl">
                 {currentValues?.birthday.toString()}
               </p>
               <p className="text-left font-bold">
                 Date of Birth{" "}
-                <span className="text-neutral-content text-sm">
+                <span className="text-sm text-neutral-content">
                   (YYYY-MM-DD)
                 </span>
               </p>
               <div className="divider"></div>
-              <p className="text-xl text-left">
+              <p className="text-left text-xl">
                 {currentValues?.e1Name} ({currentValues?.e1FB} -{" "}
                 {currentValues?.e1Res})
               </p>
-              <p className="text-lg text-left">{currentValues?.e1Num}</p>
+              <p className="text-left text-lg">{currentValues?.e1Num}</p>
               <p className="text-left font-bold">Emergency Contact 1</p>
               <div className="divider"></div>
-              <p className="text-xl text-left">
+              <p className="text-left text-xl">
                 {currentValues?.e2Name} ({currentValues?.e2FB} -{" "}
                 {currentValues?.e2Res})
               </p>
-              <p className="text-lg text-left">{currentValues?.e2Num}</p>
+              <p className="text-left text-lg">{currentValues?.e2Num}</p>
               <p className="text-left font-bold">Emergency Contact 2</p>
               <div className="divider"></div>
               {currentValues?.e3Name.trim() != "" && (
                 <>
-                  <p className="text-xl text-left">
+                  <p className="text-left text-xl">
                     {currentValues?.e3Name} ({currentValues?.e3FB} -{" "}
                     {currentValues?.e3Res})
                   </p>
-                  <p className="text-lg text-left">{currentValues?.e3Num}</p>
+                  <p className="text-left text-lg">{currentValues?.e3Num}</p>
                   <p className="text-left font-bold">Emergency Contact 3</p>
                   <div className="divider"></div>
                 </>
@@ -671,13 +668,13 @@ const Form = () => {
                 setStep(step - 1);
               }}
               type="button"
-              className="btn bg-error text-white w-full"
+              className="btn w-full bg-error text-white"
             >
               Back
             </button>
             <button
               className={
-                isError ? "btn text-white bg-error" : "btn text-white bg-info"
+                isError ? "btn bg-error text-white" : "btn bg-info text-white"
               }
               type="submit"
             >
@@ -690,7 +687,7 @@ const Form = () => {
               }}
               className="mx-auto"
             />
-            <p className="prose text-xs text-center mx-auto">
+            <p className="prose mx-auto text-center text-xs">
               If you are experiencing trouble registering, please contact the
               App Developers, Sulpicio Demontaño IV and Addy Suarnaba on
               Messenger.
@@ -699,14 +696,14 @@ const Form = () => {
         ) : (
           <></>
         )}
-        <div className="flex flex-nowrap justify-center gap-4s">
+        <div className="flex flex-nowrap justify-center gap-4">
           {step > 0 && step < 5 ? (
             <button
               onClick={() => {
                 setStep(step - 1);
               }}
               type="button"
-              className="btn bg-error text-white w-1/2"
+              className="btn w-1/2 bg-error text-white"
             >
               Back
             </button>
@@ -719,7 +716,7 @@ const Form = () => {
                 checkNext();
               }}
               type="button"
-              className="btn bg-info text-white w-1/2"
+              className="btn w-1/2 bg-info text-white"
             >
               Next
             </button>

@@ -21,7 +21,7 @@ const Disclaimer = () => {
   return (
     <dialog id="my_modal_1" className="modal" open={accepted}>
       <form method="dialog" className="modal-box">
-        <h3 className="font-bold text-lg">Disclaimer</h3>
+        <h3 className="text-lg font-bold">Disclaimer</h3>
         <p className="py-4">
           Muntinlupa Science High School is bound by the law under RA 10173
           “Data Privacy Act of 2012” All information saved on this web

@@ -24,7 +24,7 @@ const Nav = () => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow"
           >
             <li>
               <Link href="/info-reg">
@@ -33,7 +33,7 @@ const Nav = () => {
             </li>
           </ul>
         </div>
-        <Link className="btn btn-ghost normal-case text-xl" href="/">
+        <Link className="btn btn-ghost text-xl normal-case" href="/">
           <Image src={"/logo.png"} width="32" height="32" alt="" />
           STERCOIN
         </Link>

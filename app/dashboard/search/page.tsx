@@ -55,10 +55,10 @@ export default function Section() {
   };
 
   return (
-    <main className="flex-1 flex container mx-auto text-center px-4">
-      <div className="w-full md:w-4/5 mx-auto">
-        <div className="flex flex-col items-center my-12">
-          <div className="w-full flex flex-nowrap justify-between">
+    <main className="container mx-auto flex flex-1 px-4 text-center">
+      <div className="mx-auto w-full md:w-4/5">
+        <div className="my-12 flex flex-col items-center">
+          <div className="flex w-full flex-nowrap justify-between">
             <form className="form-control">
               <input
                 type="text"
@@ -76,14 +76,14 @@ export default function Section() {
             </form>
             <BackButton></BackButton>
           </div>
-          <div className="w-full my-1">
+          <div className="my-1 w-full">
             {searchQuery?.trim() == ""
               ? studentList?.map((student) => (
                   <div
                     key={student.lrn.toString()}
-                    className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
+                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
                   >
-                    <p className="text-xl my-auto">
+                    <p className="my-auto text-xl">
                       {student.lastname}, {student.firstname}{" "}
                       {student.middlename?.charAt(0)}
                       {student.middlename ? "." : ""}
@@ -99,9 +99,9 @@ export default function Section() {
               : searchList?.map((student) => (
                   <div
                     key={student.lrn.toString()}
-                    className="flex flex-nowrap justify-between align-middle border border-neutral-content p-5 rounded my-2"
+                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
                   >
-                    <p className="text-xl my-auto">
+                    <p className="my-auto text-xl">
                       {student.lastname}, {student.firstname}{" "}
                       {student.middlename?.charAt(0)}
                       {student.middlename ? "." : ""}

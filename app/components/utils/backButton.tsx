@@ -7,7 +7,7 @@ const BackButton = () => {
   const router = useRouter();
   return (
     <button
-      className="btn space-y-4 inline w-fit"
+      className="btn inline w-fit space-y-4"
       onClick={() => router.back()}
     >
       <AiOutlineArrowLeft />

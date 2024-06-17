@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function InfoReg() {
   return (
-    <main className="flex-1 flex container mx-auto text-center px-4">
+    <main className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto">
         <div className="flex flex-col items-center">
-          <p className="text-center text-4xl font-sans font-bold mt-12">
+          <p className="mt-12 text-center font-sans text-4xl font-bold">
             Information Registration
           </p>
           <Form />

@@ -71,7 +71,7 @@ const LoginForm = () => {
             name="email"
             render={({ message }) => {
               return (
-                <span className="label-text-alt text-error text-left">
+                <span className="label-text-alt text-left text-error">
                   {message}
                 </span>
               );
@@ -101,7 +101,7 @@ const LoginForm = () => {
             name="password"
             render={({ message }) => {
               return (
-                <span className="label-text-alt text-error text-left">
+                <span className="label-text-alt text-left text-error">
                   {message}
                 </span>
               );
@@ -109,7 +109,7 @@ const LoginForm = () => {
           />
         </div>
       </label>
-      <Link href="/account/password/reset" className="link link-info text-left">
+      <Link href="/account/password/reset" className="link-info link text-left">
         Forgot your password?
       </Link>
       <button className="btn btn-info">Sign In</button>

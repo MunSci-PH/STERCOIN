@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { IFormInput } from "./form";
+import { IFormInput } from "../form";
 import { ErrorMessage } from "@hookform/error-message";
 
 interface IContainerProps {
@@ -12,7 +12,7 @@ const LRNInput: React.FC<IContainerProps> = (props) => {
     <div>
       <label htmlFor="lrn" className="form-control">
         <label className="label">
-          <span className="text-base label-text">
+          <span className="label-text text-base">
             LRN <span className="text-red-600">*</span>
           </span>
           <ErrorMessage

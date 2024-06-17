@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-      <main className="flex-1 flex container mx-auto text-center px-4">
+      <main className="container mx-auto flex flex-1 px-4 text-center">
         <div className="m-auto">
           <Image
             src="/logo.png"
@@ -12,18 +12,18 @@ export default function Home() {
             alt={""}
             className="mx-auto"
           />
-          <div className="flex flex-row text-3xl md:text-6xl font-sans font-semibold justify-center">
+          <div className="flex flex-row justify-center font-sans text-3xl font-semibold md:text-6xl">
             <span className="inline-flex flex-row items-center">
               Welcome to
-              <p className="ml-3 bg-clip-text text-transparent bg-gradient-to-r to-green-600 from-emerald-600 font-bold py-3">
+              <p className="ml-3 bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text py-3 font-bold text-transparent">
                 STERCOIN
               </p>
             </span>
           </div>
-          <p className="mt-3 md:text-xl text-center bg-clip-text text-transparent font-semibold bg-gradient-to-r to-cyan-600 from-sky-600">
+          <p className="mt-3 bg-gradient-to-r from-sky-600 to-cyan-600 bg-clip-text text-center font-semibold text-transparent md:text-xl">
             STUDENT EMERGENCY RELEASE CONTACT INFORMATION
           </p>
-          <p className="mt-3 md:text-2xl text-center font-medium">
+          <p className="mt-3 text-center font-medium md:text-2xl">
             A web application that stores every student&apos;s information that
             serves as an easy access to the student&apos;s emergency contacts
             information in case of disaster/emergency that may happen to the

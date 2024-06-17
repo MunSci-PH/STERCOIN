@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { IFormInput } from "./form";
+import { IFormInput } from "../form";
 
 interface IContainerProps {
   registerFunc: UseFormRegister<IFormInput>;
@@ -10,10 +10,10 @@ interface IContainerProps {
 
 const GradeInput: React.FC<IContainerProps> = (props) => {
   return (
-    <div className="flex justify-around w-full">
+    <div className="flex w-full justify-around">
       <div className="flex justify-around">
         <select
-          className="select select-bordered w-full max-w-s"
+          className="select select-bordered w-full max-w-sm"
           id="grade"
           defaultValue="none"
           {...props.registerFunc("grade", {
@@ -60,7 +60,7 @@ const GradeInput: React.FC<IContainerProps> = (props) => {
           {...props.registerFunc("pwd")}
         />
         <label htmlFor="pwd" className="label">
-          <span className="text-base label-text">
+          <span className="label-text text-base">
             Are you a person with a disability?
           </span>
         </label>
