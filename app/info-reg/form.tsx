@@ -9,7 +9,7 @@ import GradeInput from "./grade";
 import { storageClient } from "@/utils/storage";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { QueryData } from "@supabase/supabase-js";
-import { TablesInsert } from "../../../database.types";
+import { TablesInsert } from "../../database.types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -75,17 +75,6 @@ const Form = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);
-
-    /**if (!(await verifyCaptcha())) {
-      console.error("Captcha is invalid.");
-      toast("Captcha is invalid.", {
-        theme: isDarkTheme ? "dark" : "light",
-        autoClose: 2000,
-        type: "error",
-      });
-      setError(true);
-      return;
-    }*/
 
     setLoading(15);
 
@@ -202,41 +191,14 @@ const Form = () => {
   };
 
   const checkNext = async () => {
-    setValues(getValues());
-    if (step == 0) {
-      const result = await trigger("lrn", { shouldFocus: true });
-      if (result) setStep(step + 1);
-    } else if (step == 1) {
-      const result = await trigger(
-        ["fname", "mname", "lname", "grade", "section", "pwd"],
-        {
-          shouldFocus: true,
-        }
-      );
-      if (result) setStep(step + 1);
-    } else if (step == 2) {
-      const result = await trigger("idpic", { shouldFocus: true });
-      if (result) setStep(step + 1);
-    } else if (step == 3) {
-      const result = await trigger(["birthday", "address"], {
-        shouldFocus: true,
-      });
+    if (step <= 3) {
+      const result = await trigger();
+
+      console.log(result, errors);
+
       if (result) setStep(step + 1);
     } else if (step == 4) {
-      const result = await trigger([
-        "e1Name",
-        "e1FB",
-        "e1Num",
-        "e1Res",
-        "e2Name",
-        "e2FB",
-        "e2Num",
-        "e2Res",
-        "e3Name",
-        "e3FB",
-        "e3Num",
-        "e3Res",
-      ]);
+      const result = await trigger();
 
       if (result) {
         console.log(currentValues);
@@ -268,19 +230,6 @@ const Form = () => {
 
   return (
     <>
-      {isLoading == 0 || isLoading == 100 ? (
-        <></>
-      ) : (
-        <div className="z-10 bg-opacity-50 bg-black w-full h-full fixed flex">
-          <div
-            className="radial-progress m-auto"
-            style={{ ["--value" as any]: isLoading }}
-            role="progressbar"
-          >
-            {isLoading}%
-          </div>
-        </div>
-      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         onKeyDown={(event) => {

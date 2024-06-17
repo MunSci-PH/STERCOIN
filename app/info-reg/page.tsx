@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Form from "@/components/regForm/form";
+import Form from "@/info-reg/form";
 
 export const metadata: Metadata = {
   title: "Information Registration | STERCOIN",

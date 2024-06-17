@@ -1,43 +1,8 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
-  const [accepted, setAccepted] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("disclaimer") === null) {
-      setAccepted(true);
-    } else {
-      setAccepted(false);
-    }
-  }, []);
-
-  const handleAccept = (acceptedVal: string) => {
-    localStorage.setItem("disclaimer", acceptedVal);
-    setAccepted(false);
-  };
-
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open={accepted}>
-        <form method="dialog" className="modal-box">
-          <h3 className="font-bold text-lg">Disclaimer</h3>
-          <p className="py-4">
-            Muntinlupa Science High School is bound by the law under RA 10173
-            “Data Privacy Act of 2012” All information saved on this web
-            application would be deemed confidential, and only the school&#39;s
-            authorities are authorized to share information. Such information
-            would be shared for legal and legitimate purposes only.
-          </p>
-          <div className="modal-action">
-            <button className="btn" onClick={() => handleAccept("false")}>
-              Accept
-            </button>
-          </div>
-        </form>
-      </dialog>
       <main className="flex-1 flex container mx-auto text-center px-4">
         <div className="m-auto">
           <Image

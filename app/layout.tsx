@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/layout/footer";
 import { Analytics } from "@vercel/analytics/react";
+import Disclaimer from "./components/layout/disclaimer";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
+        <Disclaimer />
         <div className="bg-white dark:bg-gray-800 text-black dark:text-white min-h-screen flex flex-col">
           <Nav />
           {children}
