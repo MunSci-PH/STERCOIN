@@ -256,7 +256,7 @@ const Form = () => {
         )}
         {step == 1 ? (
           <>
-            <NameInput registerFunc={register}></NameInput>
+            <NameInput registerFunc={register} errors={errors}></NameInput>
             <GradeInput
               registerFunc={register}
               onChange={handleChange}
