@@ -51,7 +51,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={lato.className}>
+      <body className={`min-h-screen ${lato.className}`}>
         <Disclaimer />
         <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-800 dark:text-white">
           <Nav />

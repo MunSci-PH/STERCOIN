@@ -49,23 +49,24 @@ export default async function Section({
   var studentInfo: student = await getStudent(params.slug);
 
   async function getPicture() {
-    const { data } = await storageClient
+    const { data } = storageClient
       .from("idpics")
       .getPublicUrl(
         `${params.slug.toString()}/${studentInfo?.map((e) => e.idpicfile)}`
       );
 
-    return data.publicUrl;
-  }
+    const res = await fetch(data.publicUrl);
+    const imageBlob = await res.blob();
 
-  var studentPic = await getPicture();
+    return URL.createObjectURL(imageBlob);
+  }
 
   if (!studentInfo.map((e) => e.lrn)) {
     return <NotFound></NotFound>;
   } else {
     return (
       <main className="container mx-auto flex flex-1 px-4 text-center">
-        <div className="mx-auto w-full md:w-4/5">
+        <div className="m-auto w-full md:w-4/5">
           <Suspense
             fallback={<span className="loading loading-spinner"></span>}
           >
@@ -77,26 +78,24 @@ export default async function Section({
                 <BackButton></BackButton>
               </div>
               <div className="my-1 w-full">
-                {studentInfo?.map((info) => (
+                {studentInfo?.map(async (info) => (
                   <div
                     key={info.lrn}
                     className=" my-2 rounded p-5 align-middle"
                   >
-                    {studentPic ? (
+                    <Suspense
+                      // eslint-disable-next-line tailwindcss/no-custom-classname
+                      fallback={<div className="skeleton h-32 w-32"></div>}
+                    >
                       <Image
-                        src={studentPic}
+                        src={await getPicture()}
                         width={128}
                         height={128}
                         alt=""
-                        placeholder={`data:image/svg+xml;base64,${toBase64(
-                          shimmer(128, 128)
-                        )}`}
+                        unoptimized
                         className="avatar h-32 w-32 rounded"
                       />
-                    ) : (
-                      // eslint-disable-next-line tailwindcss/no-custom-classname
-                      <div className="skeleton h-32 w-32"></div>
-                    )}
+                    </Suspense>
                     <div className="divider"></div>
                     <p className="text-left text-xl">{info.lrn}</p>
                     <p className="text-left font-bold">LRN</p>
