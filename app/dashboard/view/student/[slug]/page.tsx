@@ -49,16 +49,18 @@ export default async function Section({
   var studentInfo: student = await getStudent(params.slug);
 
   async function getPicture() {
-    const { data } = storageClient
+    const { data } = await supabase.storage
       .from("idpics")
-      .getPublicUrl(
-        `${params.slug.toString()}/${studentInfo?.map((e) => e.idpicfile)}`
+      .createSignedUrl(
+        `${params.slug.toString()}/${studentInfo?.map((e) => e.idpicfile)}`,
+        60
       );
 
-    const res = await fetch(data.publicUrl);
-    const imageBlob = await res.blob();
-
-    return URL.createObjectURL(imageBlob);
+    if (data) {
+      return data.signedUrl;
+    } else {
+      return `/user.png`;
+    }
   }
 
   if (!studentInfo.map((e) => e.lrn)) {
@@ -83,19 +85,16 @@ export default async function Section({
                     key={info.lrn}
                     className=" my-2 rounded p-5 align-middle"
                   >
-                    <Suspense
-                      // eslint-disable-next-line tailwindcss/no-custom-classname
-                      fallback={<div className="skeleton h-32 w-32"></div>}
-                    >
-                      <Image
-                        src={await getPicture()}
-                        width={128}
-                        height={128}
-                        alt=""
-                        unoptimized
-                        className="avatar h-32 w-32 rounded"
-                      />
-                    </Suspense>
+                    <Image
+                      src={await getPicture()}
+                      width={128}
+                      height={128}
+                      alt=""
+                      placeholder={`data:image/svg+xml;base64,${toBase64(
+                        shimmer(128, 128)
+                      )}`}
+                      className="avatar h-32 w-32 rounded"
+                    />
                     <div className="divider"></div>
                     <p className="text-left text-xl">{info.lrn}</p>
                     <p className="text-left font-bold">LRN</p>
