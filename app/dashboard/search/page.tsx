@@ -1,5 +1,6 @@
 "use client";
 import BackButton from "@/components/utils/backButton";
+import Loading from "@/loading";
 import { createClient } from "@/utils/client";
 import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
@@ -7,51 +8,48 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineRight } from "react-icons/ai";
 
-export default function Section() {
-  const supabase = createClient();
-  const { register } = useForm();
+const supabase = createClient();
+const studentListQuery = supabase.from("studentData").select();
+type students = QueryData<typeof studentListQuery>;
 
-  const studentListQuery = supabase.from("studentData").select();
-  type students = QueryData<typeof studentListQuery>;
-  const [studentList, setList] = useState<students>();
-  const [searchList, setSearchList] = useState<students>();
-  const [searchQuery, setQuery] = useState<string>();
+const getStudents = async (searchQuery: string | null) => {
+  if (!searchQuery) {
+    const { data, error } = await studentListQuery;
 
-  useEffect(() => {
-    const getStudents = async () => {
-      const { data, error } = await studentListQuery;
-      if (error) console.error(error);
-      if (data) {
-        const finalStudentList: students = data
-          .map((e) => e)
-          .sort((a, b) => a.lastname.localeCompare(b.lastname));
-        setList(finalStudentList);
-      }
-    };
-
-    getStudents();
-  }, [studentListQuery]);
-
-  async function searchStudents(searchQuery: string) {
+    if (error) console.error(error);
+    if (data) {
+      const finalStudentList: students = data!.map((e) => e);
+      return finalStudentList;
+    }
+  } else {
     const studentListQuery = supabase
       .from("studentData")
       .select()
       .ilike("lastname", `%${searchQuery}%`);
     type students = QueryData<typeof studentListQuery>;
     const { data, error } = await studentListQuery;
+
     if (error) console.error(error);
     if (data) {
       const finalStudentList: students = data!.map((e) => e);
       return finalStudentList;
     }
   }
+};
+
+export default function Section() {
+  const { register } = useForm();
+
+  const [studentList, setList] = useState<students>();
+
+  useEffect(() => {
+    getStudents(null).then((e) => setList(e));
+  }, []);
 
   const handleChange = async (e: { target: { value: string } }) => {
-    setQuery(e.target.value);
-    const results = await searchStudents(e.target.value);
+    const results = await getStudents(e.target.value);
 
-    setSearchList(results);
-    console.log(searchList);
+    setList(results);
   };
 
   return (
@@ -77,43 +75,28 @@ export default function Section() {
             <BackButton></BackButton>
           </div>
           <div className="my-1 w-full">
-            {searchQuery?.trim() == ""
-              ? studentList?.map((student) => (
-                  <div
-                    key={student.lrn.toString()}
-                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
+            {studentList ? (
+              studentList?.map((student) => (
+                <div
+                  key={student.lrn.toString()}
+                  className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
+                >
+                  <p className="my-auto text-xl">
+                    {student.lastname}, {student.firstname}{" "}
+                    {student.middlename?.charAt(0)}
+                    {student.middlename ? "." : ""}
+                  </p>
+                  <Link
+                    href={`/dashboard/view/student/${student.lrn}`}
+                    className="btn btn-primary"
                   >
-                    <p className="my-auto text-xl">
-                      {student.lastname}, {student.firstname}{" "}
-                      {student.middlename?.charAt(0)}
-                      {student.middlename ? "." : ""}
-                    </p>
-                    <Link
-                      href={`/dashboard/view/student/${student.lrn}`}
-                      className="btn btn-primary"
-                    >
-                      <AiOutlineRight />
-                    </Link>
-                  </div>
-                ))
-              : searchList?.map((student) => (
-                  <div
-                    key={student.lrn.toString()}
-                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
-                  >
-                    <p className="my-auto text-xl">
-                      {student.lastname}, {student.firstname}{" "}
-                      {student.middlename?.charAt(0)}
-                      {student.middlename ? "." : ""}
-                    </p>
-                    <Link
-                      href={`/dashboard/view/student/${student.lrn}`}
-                      className="btn btn-primary"
-                    >
-                      <AiOutlineRight />
-                    </Link>
-                  </div>
-                ))}
+                    <AiOutlineRight />
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <Loading></Loading>
+            )}
           </div>
         </div>
       </div>

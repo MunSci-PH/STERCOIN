@@ -2,9 +2,8 @@
 import { createClient } from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -21,30 +20,42 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
+  const [isDarkTheme, setTheme] = useState(false);
 
-  const tryLogin = (e: loginData) => {
+  useEffect(() => {
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+  }, []);
+
+  const tryLogin = async (e: loginData) => {
     e.captchaToken = captchaToken!;
 
-    fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(e),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.error === null) {
-          window.location.reload();
-        } else if (response.error.status == "400") {
-          toast("Wrong email or password. Please try again", {
-            theme: "dark",
-            autoClose: 2000,
-            type: "error",
-            closeOnClick: true,
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
+    const supabase = createClient();
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: e.email,
+      password: e.password,
+      options: { captchaToken: captchaToken },
+    });
+
+    if (error) {
+      toast(error.message, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
       });
+
+      return;
+    }
+
+    window.location.reload();
   };
 
   return (
@@ -109,7 +120,7 @@ const LoginForm = () => {
           />
         </div>
       </label>
-      <Link href="/account/password/reset" className="link-info link text-left">
+      <Link href="/account/password/reset" className="link link-info text-left">
         Forgot your password?
       </Link>
       <button className="btn btn-info">Sign In</button>

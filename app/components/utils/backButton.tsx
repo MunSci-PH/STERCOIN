@@ -1,5 +1,4 @@
 "use client";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
@@ -14,4 +13,5 @@ const BackButton = () => {
     </button>
   );
 };
+
 export default BackButton;

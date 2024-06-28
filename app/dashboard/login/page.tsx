@@ -1,4 +1,4 @@
-import LoginForm from "@/components/auth/loginForm";
+import LoginForm from "./loginForm";
 import { createSSRClient } from "@/utils/server";
 import { redirect } from "next/navigation";
 

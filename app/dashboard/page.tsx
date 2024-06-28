@@ -1,11 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import {
-  AiOutlineLogout,
-  AiOutlineSearch,
-  AiOutlineSetting,
-} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineSetting } from "react-icons/ai";
 import { createSSRClient } from "@/utils/server";
+import { SignOutButton } from "@/components/utils/signOutButton";
+import { redirect } from "next/navigation";
 import { QueryData } from "@supabase/supabase-js";
 
 export const metadata: Metadata = {
@@ -14,24 +12,35 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const supabase = await createSSRClient();
+  const supabase = createSSRClient();
 
   const checkRole = async () => {
     const {
       data: { user },
+      error,
     } = await supabase.auth.getUser();
 
     console.log(user);
 
-    const userQuery = supabase.from("users").select().eq("id", user!.id);
-    type userDB = QueryData<typeof userQuery>;
-    const { data, error } = await userQuery;
-    if (error) console.error(error);
+    if (user && !error) {
+      const userQuery = supabase.from("users").select().eq("id", user.id);
+      type userDB = QueryData<typeof userQuery>;
+      const { data, error } = await userQuery;
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-    const userObj: userDB = data!;
-    const userRole: string = userObj.map((e) => e.group).toString();
-
-    return userRole;
+      if (data) {
+        const userObj: userDB | null = data;
+        const userRole: string | undefined = userObj
+          ?.map((e) => e.group)
+          .toString();
+        return userRole;
+      }
+    } else {
+      throw error;
+    }
   };
 
   const userRole = await checkRole();
@@ -51,15 +60,7 @@ export default async function Dashboard() {
               <Link href="/dashboard/search" className="btn mx-auto">
                 <AiOutlineSearch />
               </Link>
-              <form
-                action="/api/auth/logout"
-                method="post"
-                className="form-control flex flex-nowrap justify-between"
-              >
-                <button className="btn btn-primary">
-                  <AiOutlineLogout />
-                </button>
-              </form>
+              <SignOutButton />
             </div>
           </div>
           <div className=" my-36 grid grid-cols-2 gap-4 text-white md:grid-cols-6">

@@ -1,4 +1,5 @@
 import BackButton from "@/components/utils/backButton";
+import { SignOutAllButton } from "@/components/utils/signOutAllButton";
 import Loading from "@/loading";
 import { createSSRClient } from "@/utils/server";
 import { QueryData } from "@supabase/supabase-js";
@@ -74,6 +75,12 @@ export default async function Dashboard() {
                 <p className="text-left text-xl">{userRole}</p>
                 <p className="text-left font-bold">Authentication Level</p>
                 <div className="divider"></div>
+                <div className="flex justify-between align-middle">
+                  <p className="my-auto text-2xl font-bold">
+                    Sign Out Globally
+                  </p>
+                  <SignOutAllButton />
+                </div>
               </div>
             </div>
           </div>

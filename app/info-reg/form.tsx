@@ -56,7 +56,6 @@ const Form = () => {
     handleSubmit,
     trigger,
     setFocus,
-    getFieldState,
     getValues,
     formState: { errors },
   } = useForm<IFormInput>();
@@ -199,6 +198,7 @@ const Form = () => {
       if (result) setStep(step + 1);
     } else if (step == 4) {
       const result = await trigger();
+      setValues(getValues());
 
       if (result) {
         console.log(currentValues);
