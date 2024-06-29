@@ -46,11 +46,15 @@ const LoginForm = () => {
     });
 
     if (error) {
+      if (error.message == "Email not confirmed") {
+        window.location.href = `/dashboard/login/confirm?email=${e.email}`;
+      }
       toast(error.message, {
         theme: isDarkTheme ? "dark" : "light",
         autoClose: 2000,
         type: "error",
       });
+      console.error(error);
 
       return;
     }

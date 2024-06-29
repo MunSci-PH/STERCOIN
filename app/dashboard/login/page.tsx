@@ -3,11 +3,11 @@ import { createSSRClient } from "@/utils/server";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const supabase = await createSSRClient();
+  const supabase = createSSRClient();
 
-  const { data } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getUser();
 
-  if (data.session) {
+  if (data.user) {
     redirect("/dashboard");
   }
 
