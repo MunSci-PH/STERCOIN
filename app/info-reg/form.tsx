@@ -12,6 +12,7 @@ import { QueryData } from "@supabase/supabase-js";
 import { TablesInsert } from "../../database.types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import EmergencyContactsInput from "./components/emergencyContacts";
 
 const supabase = createClient();
 
@@ -75,6 +76,25 @@ const Form = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);
 
+    const res = await fetch("/api/turnstile/verify", {
+      method: "POST",
+      body: JSON.stringify({ captchaToken }),
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    const captchaData = await res.json();
+    if (captchaData.status == 400) {
+      toast(`Captcha Error: ${captchaData.statusText}`, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      setLoading(0);
+      return;
+    }
+
     setLoading(15);
 
     if (formData.grade === null) {
@@ -86,6 +106,7 @@ const Form = () => {
       });
       setStep(1);
       setFocus("grade");
+      setLoading(0);
       return;
     }
     if (formData.section === null) {
@@ -97,6 +118,19 @@ const Form = () => {
       });
       setStep(1);
       setFocus("section");
+      setLoading(0);
+      return;
+    }
+    if (!formData.idpic.item(0)) {
+      console.error("Image missing.");
+      toast("Image is missing.", {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      setStep(2);
+      setFocus("idpic");
+      setLoading(0);
       return;
     }
     setLoading(40);
@@ -133,21 +167,23 @@ const Form = () => {
 
     const { data, error } = await submitQuery;
 
-    await uploadPicture(formData);
-    setLoading(70);
-
     if (error) {
-      toast(`Error Submitting Form: ${error.code}. ${error.details}`, {
+      toast(`Error Submitting Form: ${error.code}. ${error.message}`, {
         theme: isDarkTheme ? "dark" : "light",
         autoClose: 2000,
         type: "error",
       });
       setError(true);
+      setLoading(0);
       console.log(error);
-    } else {
-      setLoading(100);
-      router.push("/info-reg/success");
+      return;
     }
+
+    await uploadPicture(formData);
+    setLoading(70);
+
+    setLoading(100);
+    router.push("/info-reg/success");
 
     console.log(formData, data);
   };
@@ -166,6 +202,7 @@ const Form = () => {
         autoClose: 2000,
         type: "error",
       });
+      setLoading(0);
       console.log(error);
     }
   };
@@ -293,320 +330,64 @@ const Form = () => {
         )}
         {step == 3 ? (
           <>
-            <label htmlFor="bday" className="label">
-              <span className="label-text text-base">
-                Birthday <span className="text-red-600">*</span>
-              </span>
-              <input
-                type="date"
-                className="input input-bordered w-full"
-                id="bday"
-                min="2000-01-01"
-                max="2015-12-31"
-                {...register("birthday", {
-                  required: true,
-                  min: "2000-01-01",
-                  max: "2015-12-31",
-                })}
-              />
-            </label>
-            <label htmlFor="address" className="label">
-              <span className="label-text text-base">
-                Full Address (Street Name, Barangay, City, Zip Code){" "}
-                <span className="text-red-600">*</span>
-              </span>
-              <input
-                type="text"
-                placeholder="999 Buendia St., Tunasan, Muntinlupa, 1774"
-                className="input input-bordered w-full"
-                id="address"
-                {...register("address", { required: true })}
-              />
-            </label>
+            <div className="flex flex-col">
+              <label htmlFor="bday" className="form-control">
+                <label className="label">
+                  <span className="label-text text-base">
+                    Birthday <span className="text-red-600">*</span>
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  className="input input-bordered w-full"
+                  id="bday"
+                  min="2000-01-01"
+                  max="2015-12-31"
+                  {...register("birthday", {
+                    required: true,
+                    min: "2000-01-01",
+                    max: "2015-12-31",
+                  })}
+                />
+              </label>
+              <label htmlFor="address" className="form-control">
+                <label className="label">
+                  <span className="label-text text-base">
+                    Full Address (Street Name, Barangay, City, Zip Code){" "}
+                    <span className="text-red-600">*</span>
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="999 Buendia St., Tunasan, Muntinlupa, 1774"
+                  className="input input-bordered w-full"
+                  id="address"
+                  {...register("address", { required: true })}
+                />
+              </label>
+            </div>
           </>
         ) : (
           <></>
         )}
         {step == 4 ? (
-          <>
-            <div className="w-96">
-              <p className="prose text-left text-lg">
-                Emergency Contact 1 <span className="text-red-600">*</span>
-              </p>
-              <div>
-                <label htmlFor="ec1name" className="label">
-                  <span className="label-text text-base">Full Name</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Emergency Contact 1"
-                  className="input input-bordered w-full"
-                  id="ec1name"
-                  required
-                  {...register("e1Name", {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,30}/,
-                      message: "Only accepts up to 30 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec1num" className="label">
-                  <span className="label-text text-base">Phone Number</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+63••••••••••"
-                  className="input input-bordered w-full"
-                  id="ec1num"
-                  required
-                  {...register("e1Num", {
-                    required: true,
-                    pattern: {
-                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
-                      message:
-                        "Only accepts the following format: 09151231234 or +6391551231234",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec1fb" className="label">
-                  <span className="label-text text-base">
-                    Facebook Messenger Account
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Facebook Name"
-                  className="input input-bordered w-full"
-                  id="ec1fb"
-                  required
-                  {...register("e1FB", {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,90}/,
-                      message: "Only accepts up to 90 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec1res" className="label">
-                  <span className="label-text text-base">
-                    Relationship with Emergency Contact
-                  </span>
-                </label>
-                <select
-                  className="select select-bordered w-full max-w-sm"
-                  id="ec1res"
-                  defaultValue="parent"
-                  required
-                  {...register("e1Res", { required: true })}
-                >
-                  <option value="Parent">Parent</option>
-                  <option value="Legal Guardian">Legal Guardian</option>
-                  <option value="Relative">Relative</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-            <div className="divider"></div>
-            <div className="w-96">
-              <p className="prose text-left text-lg">
-                Emergency Contact 2 <span className="text-red-600">*</span>
-              </p>
-              <div>
-                <label htmlFor="ec2name" className="label">
-                  <span className="label-text text-base">Full Name</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Emergency Contact 2"
-                  className="input input-bordered w-full"
-                  id="ec2name"
-                  required
-                  {...register("e2Name", {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,30}/,
-                      message: "Only accepts up to 30 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec2num" className="label">
-                  <span className="label-text text-base">Phone Number</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+63••••••••••"
-                  className="input input-bordered w-full"
-                  id="ec2num"
-                  required
-                  {...register("e2Num", {
-                    required: true,
-                    pattern: {
-                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
-                      message:
-                        "Only accepts the following format: 09151231234 or +6391551231234",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec2fb" className="label">
-                  <span className="label-text text-base">
-                    Facebook Messenger Account
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Facebook Name"
-                  className="input input-bordered w-full"
-                  id="ec2fb"
-                  required
-                  {...register("e2FB", {
-                    required: true,
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,90}/,
-                      message: "Only accepts up to 90 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec2res" className="label">
-                  <span className="label-text text-base">
-                    Relationship with Emergency Contact
-                  </span>
-                </label>
-                <select
-                  className="select select-bordered w-full max-w-sm"
-                  id="ec2res"
-                  defaultValue="parent"
-                  required
-                  {...register("e2Res", { required: true })}
-                >
-                  <option value="Parent">Parent</option>
-                  <option value="Legal Guardian">Legal Guardian</option>
-                  <option value="Relative">Relative</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-            <div className="divider"></div>
-            <div className="w-96">
-              <p className="prose text-left text-lg">
-                Emergency Contact 3 (Optional)
-              </p>
-              <div>
-                <label htmlFor="ec3name" className="label">
-                  <span className="label-text text-base">Full Name</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Emergency Contact 3"
-                  className="input input-bordered w-full"
-                  id="ec3name"
-                  {...register("e3Name", {
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,30}/,
-                      message: "Only accepts up to 30 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec3num" className="label">
-                  <span className="label-text text-base">Phone Number</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="+63••••••••••"
-                  className="input input-bordered w-full"
-                  id="ec3num"
-                  {...register("e3Num", {
-                    pattern: {
-                      value: /((^(\+)(\d){12}$)|(^\d{11}$))/,
-                      message:
-                        "Only accepts the following format: 09151231234 or +6391551231234",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec3fb" className="label">
-                  <span className="label-text text-base">
-                    Facebook Messenger Account
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Facebook Name"
-                  className="input input-bordered w-full"
-                  id="ec3fb"
-                  {...register("e3FB", {
-                    minLength: 1,
-                    maxLength: 30,
-                    pattern: {
-                      value: /.{1,90}/,
-                      message: "Only accepts up to 90 characters.",
-                    },
-                  })}
-                />
-              </div>
-              <div>
-                <label htmlFor="ec3res" className="label">
-                  <span className="label-text text-base">
-                    Relationship with Emergency Contact
-                  </span>
-                </label>
-                <select
-                  className="select select-bordered w-full max-w-sm"
-                  id="ec3res"
-                  defaultValue="parent"
-                  required
-                  {...register("e3Res", { required: true })}
-                >
-                  <option value="Parent">Parent</option>
-                  <option value="Legal Guardian">Legal Guardian</option>
-                  <option value="Relative">Relative</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-          </>
+          <EmergencyContactsInput registerFunc={register} errors={errors} />
         ) : (
           <></>
         )}
         {step == 5 ? (
           <>
-            <div className=" my-2 rounded p-5 align-middle">
-              {currentValues?.idpic.item(0) ? (
+            <div className="my-2 rounded p-5 align-middle">
+              {base64 && currentValues?.idpic.item(0) ? (
                 <Image
-                  src={base64!}
+                  src={base64}
                   width={128}
                   height={128}
                   alt=""
                   className="avatar h-32 w-32 rounded"
                 />
               ) : (
-                // eslint-disable-next-line tailwindcss/no-custom-classname
-                <div className="skeleton h-32 w-32"></div>
+                <div className="skeleton mx-auto h-32 w-32"></div>
               )}
               <div className="divider"></div>
               <p className="text-left text-xl">{currentValues?.lrn}</p>
@@ -668,6 +449,7 @@ const Form = () => {
                 setStep(step - 1);
               }}
               type="button"
+              disabled={isLoading !== 0 ? true : false}
               className="btn w-full bg-error text-white"
             >
               Back
@@ -677,8 +459,13 @@ const Form = () => {
                 isError ? "btn bg-error text-white" : "btn bg-info text-white"
               }
               type="submit"
+              disabled={isLoading !== 0 ? true : false}
             >
-              Submit
+              {isLoading !== 0 ? (
+                <span className="loading loading-dots"></span>
+              ) : (
+                "Submit"
+              )}
             </button>
             <Turnstile
               siteKey="0x4AAAAAAAOMOy_l-B3ae-Jg"
