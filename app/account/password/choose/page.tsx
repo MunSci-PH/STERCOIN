@@ -7,13 +7,11 @@ export default async function ResetPassword({
 }: {
   searchParams: { code: string };
 }) {
-  const supabase = await createSSRClient();
+  const supabase = createSSRClient();
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data } = await supabase.auth.getUser();
 
-  if (session) {
+  if (data.user) {
     return redirect("/");
   }
 

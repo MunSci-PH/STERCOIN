@@ -1,7 +1,6 @@
 "use client";
 import { createClient } from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
-import { redirect } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export type loginData = {
