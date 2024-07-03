@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const useTheme = (localStorage: Storage, window: Window) => {
-  const [isDarkTheme, setThemeDark] = useState(false);
+const useTheme = () => {
+  const [isDarkTheme, setDarkTheme] = useState(false);
 
-  if (
-    localStorage.theme === "dark" ||
-    (!("theme" in localStorage) &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches)
-  ) {
-    setThemeDark(true);
-  }
+  useEffect(() => {
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    )
+      setDarkTheme(true);
+  }, []);
 
   return isDarkTheme;
 };
+
+export default useTheme;

@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import EmergencyContactsInput from "./components/emergencyContacts";
 import useSupabaseBrowser from "@/utils/client";
-import { useTheme } from "@/hooks/useTheme";
+import useTheme from "@/hooks/useTheme";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
@@ -48,7 +48,6 @@ const Form = () => {
   const [isDisable, setDisable] = useState(true);
   const [selectedSections, setList] = useState<string[]>([]);
   const [isError, setError] = useState(false);
-  const isDarkTheme = useTheme(localStorage, window);
   const [isLoading, setLoading] = useState(0);
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [step, setStep] = useState(0);
@@ -63,6 +62,7 @@ const Form = () => {
     formState: { errors },
   } = useForm<IFormInput>();
   const supabase = useSupabaseBrowser();
+  const isDarkTheme = useTheme();
 
   const useSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);

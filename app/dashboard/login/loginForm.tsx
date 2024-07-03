@@ -1,5 +1,5 @@
 "use client";
-import { useTheme } from "@/hooks/useTheme";
+import useTheme from "@/hooks/useTheme";
 import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -21,7 +21,7 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
-  const isDarkTheme = useTheme(localStorage, window);
+  const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: loginData) => {
