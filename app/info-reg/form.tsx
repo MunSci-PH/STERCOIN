@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LRNInput from "./components/lrn";
@@ -7,7 +7,6 @@ import NameInput from "./components/name";
 import GradeInput from "./components/grade";
 import { storageClient } from "@/utils/storage";
 import { Turnstile } from "@marsidev/react-turnstile";
-import { QueryData } from "@supabase/supabase-js";
 import { TablesInsert } from "../../database.types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,31 +16,7 @@ import useTheme from "@/hooks/useTheme";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
-
-export type IFormInput = {
-  lrn: number;
-  fname: string;
-  mname: string;
-  lname: string;
-  grade: string;
-  section: string;
-  pwd: boolean;
-  idpic: FileList;
-  birthday: Date;
-  address: string;
-  e1Name: string;
-  e1Num: number;
-  e1FB: string;
-  e1Res: string;
-  e2Name: string;
-  e2Num: number;
-  e2FB: string;
-  e2Res: string;
-  e3Name: string;
-  e3Num: number;
-  e3FB: string;
-  e3Res: string;
-};
+import { IFormInput } from "./types";
 
 const Form = () => {
   const router = useRouter();
@@ -90,8 +65,6 @@ const Form = () => {
       return;
     }
 
-    setLoading(15);
-
     if (formData.grade === null) {
       console.error("Grade cannot be null.");
       toast("Grade cannot be empty.", {
@@ -104,6 +77,7 @@ const Form = () => {
       setLoading(0);
       return;
     }
+
     if (formData.section === null) {
       console.error("Section cannot be null.");
       toast("Section cannot be empty.", {
@@ -116,6 +90,7 @@ const Form = () => {
       setLoading(0);
       return;
     }
+
     if (!formData.idpic.item(0)) {
       console.error("Image missing.");
       toast("Image is missing.", {

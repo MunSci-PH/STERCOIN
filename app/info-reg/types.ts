@@ -1,0 +1,24 @@
+export type IFormInput = {
+  lrn: number;
+  fname: string;
+  mname: string;
+  lname: string;
+  grade: string;
+  section: string;
+  pwd: boolean;
+  idpic: FileList;
+  birthday: Date;
+  address: string;
+  e1Name: string;
+  e1Num: number;
+  e1FB: string;
+  e1Res: string;
+  e2Name: string;
+  e2Num: number;
+  e2FB: string;
+  e2Res: string;
+  e3Name: string;
+  e3Num: number;
+  e3FB: string;
+  e3Res: string;
+};
