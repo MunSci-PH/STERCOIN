@@ -12,8 +12,6 @@ interface IContainerProps {
   searchParams: { code: string };
 }
 
-export const supabase = useSupabaseBrowser();
-
 const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
   const {
     handleSubmit,
@@ -21,6 +19,7 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
     watch,
     formState: { errors },
   } = useForm<loginData>();
+  const supabase = useSupabaseBrowser();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
     if (props.searchParams.code) {

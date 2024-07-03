@@ -3,7 +3,6 @@ import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -15,8 +14,6 @@ interface IContainerProps {
   searchParams: { token_hash: string; type: string };
 }
 
-export const supabase = useSupabaseBrowser();
-
 const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
   const {
     handleSubmit,
@@ -24,6 +21,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
     formState: { errors },
   } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
+  const supabase = useSupabaseBrowser();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
     const origin = window.location.origin;
@@ -84,7 +82,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
           setCaptchaToken(token);
         }}
       />
-      <Link href="/dashboard/login" className="link-info link text-left">
+      <Link href="/dashboard/login" className="link link-info text-left">
         Remember your password?
       </Link>
     </form>

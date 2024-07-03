@@ -18,8 +18,6 @@ import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
 
-const supabase = useSupabaseBrowser();
-
 export type IFormInput = {
   lrn: number;
   fname: string;
@@ -64,8 +62,9 @@ const Form = () => {
     getValues,
     formState: { errors },
   } = useForm<IFormInput>();
+  const supabase = useSupabaseBrowser();
 
-  const onSubmit: SubmitHandler<IFormInput> = async (formData) => {
+  const useSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);
 
     const res = useReactQuery({
@@ -196,7 +195,7 @@ const Form = () => {
     }
   };
 
-  const handleChange = async (e: { target: { value: number } }) => {
+  const useHandleChange = async (e: { target: { value: number } }) => {
     const { data, error } = useQuery(
       getSectionsByGrade(supabase, e.target.value)
     );
@@ -255,7 +254,7 @@ const Form = () => {
   return (
     <>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(useSubmit)}
         onKeyDown={(event) => {
           if (event.key == "Enter") {
             event.preventDefault();
@@ -283,7 +282,7 @@ const Form = () => {
             <NameInput registerFunc={register} errors={errors}></NameInput>
             <GradeInput
               registerFunc={register}
-              onChange={handleChange}
+              onChange={useHandleChange}
               disabled={isDisable}
               selectedSections={selectedSections}
             ></GradeInput>
@@ -371,10 +370,10 @@ const Form = () => {
                   width={128}
                   height={128}
                   alt=""
-                  className="avatar h-32 w-32 rounded"
+                  className="avatar size-32 rounded"
                 />
               ) : (
-                <div className="skeleton mx-auto h-32 w-32"></div>
+                <div className="skeleton mx-auto size-32"></div>
               )}
               <div className="divider"></div>
               <p className="text-left text-xl">{currentValues?.lrn}</p>

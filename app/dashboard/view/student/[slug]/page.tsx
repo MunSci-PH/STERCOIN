@@ -90,7 +90,7 @@ export default async function Section({
                       placeholder={`data:image/svg+xml;base64,${toBase64(
                         shimmer(128, 128)
                       )}`}
-                      className="avatar h-32 w-32 rounded"
+                      className="avatar size-32 rounded"
                     />
                     <div className="divider"></div>
                     <p className="text-left text-xl">{info.lrn}</p>

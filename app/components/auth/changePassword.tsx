@@ -8,8 +8,6 @@ export type loginData = {
   confirm: string;
 };
 
-const supabase = useSupabaseBrowser();
-
 const ChangePassword = () => {
   const {
     handleSubmit,
@@ -17,6 +15,7 @@ const ChangePassword = () => {
     watch,
     formState: { errors },
   } = useForm<loginData>();
+  const supabase = useSupabaseBrowser();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
     const { data, error } = await supabase.auth.updateUser({
