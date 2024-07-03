@@ -117,7 +117,7 @@ const LoginForm = () => {
       </Link>
       <button className="btn btn-info">Sign In</button>
       <Turnstile
-        siteKey="0x4AAAAAAAOMOy_l-B3ae-Jg"
+        siteKey={process.env.CF_SITEKEY!}
         onSuccess={(token) => {
           setCaptchaToken(token);
         }}
