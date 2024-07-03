@@ -454,7 +454,7 @@ const Form = () => {
               )}
             </button>
             <Turnstile
-              siteKey={process.env.CF_SITEKEY!}
+              siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
               onSuccess={(token) => {
                 setCaptchaToken(token);
               }}

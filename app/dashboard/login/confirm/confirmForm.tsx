@@ -89,7 +89,7 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
       </label>
       <button className="btn btn-info">Confirm Email</button>
       <Turnstile
-        siteKey={process.env.CF_SITEKEY!}
+        siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
         onSuccess={(token) => {
           setCaptchaToken(token);
         }}
