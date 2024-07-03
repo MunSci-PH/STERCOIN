@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { AiOutlineSearch, AiOutlineSetting } from "react-icons/ai";
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
 import { SignOutButton } from "@/components/utils/signOutButton";
-import { redirect } from "next/navigation";
-import { QueryData } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
+import { getUserById } from "@/queries/getUserById";
 
 export const metadata: Metadata = {
   title: "Dashboard | STERCOIN",
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const supabase = createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const checkRole = async () => {
     const {
@@ -23,16 +24,14 @@ export default async function Dashboard() {
     console.log(user);
 
     if (user && !error) {
-      const userQuery = supabase.from("users").select().eq("id", user.id);
-      type userDB = QueryData<typeof userQuery>;
-      const { data, error } = await userQuery;
+      const { data, error } = await getUserById(supabase, user.id);
       if (error) {
         console.error(error);
         return;
       }
 
       if (data) {
-        const userObj: userDB | null = data;
+        const userObj = data;
         const userRole: string | undefined = userObj
           ?.map((e) => e.group)
           .toString();

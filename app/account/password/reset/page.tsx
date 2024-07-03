@@ -1,5 +1,6 @@
 import ForgotPasswordForm from "@/components/auth/forgotPassword";
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function ForgotPassword({
@@ -7,7 +8,8 @@ export default async function ForgotPassword({
 }: {
   searchParams: { token_hash: string; type: string };
 }) {
-  const supabase = await createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const {
     data: { session },

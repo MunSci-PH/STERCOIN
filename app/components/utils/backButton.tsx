@@ -8,6 +8,8 @@ const BackButton = () => {
     <button
       className="btn inline w-fit space-y-4"
       onClick={() => router.back()}
+      type="button"
+      title="Back"
     >
       <AiOutlineArrowLeft />
     </button>

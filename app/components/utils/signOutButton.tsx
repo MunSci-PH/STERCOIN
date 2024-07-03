@@ -1,9 +1,9 @@
 "use client";
-import { createClient } from "@/utils/client";
+import useSupabaseBrowser from "@/utils/client";
 import { AiOutlineLogout } from "react-icons/ai";
 
 export const SignOutButton = () => {
-  const supabase = createClient();
+  const supabase = useSupabaseBrowser();
 
   return (
     <button
@@ -12,6 +12,8 @@ export const SignOutButton = () => {
         if (error) throw error;
         return window.location.reload();
       }}
+      type="button"
+      title="Logout"
       className="btn btn-primary"
     >
       <AiOutlineLogout />

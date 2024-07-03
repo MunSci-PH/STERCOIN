@@ -1,5 +1,4 @@
 "use client";
-import { createClient } from "@/utils/client";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -13,8 +12,13 @@ import { TablesInsert } from "../../database.types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import EmergencyContactsInput from "./components/emergencyContacts";
+import useSupabaseBrowser from "@/utils/client";
+import { useTheme } from "@/hooks/useTheme";
+import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { useQuery as useReactQuery } from "@tanstack/react-query";
 
-const supabase = createClient();
+const supabase = useSupabaseBrowser();
 
 export type IFormInput = {
   lrn: number;
@@ -46,7 +50,7 @@ const Form = () => {
   const [isDisable, setDisable] = useState(true);
   const [selectedSections, setList] = useState<string[]>([]);
   const [isError, setError] = useState(false);
-  const [isDarkTheme, setTheme] = useState(false);
+  const isDarkTheme = useTheme(localStorage, window);
   const [isLoading, setLoading] = useState(0);
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [step, setStep] = useState(0);
@@ -61,30 +65,22 @@ const Form = () => {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setTheme(true);
-    } else {
-      setTheme(false);
-    }
-  }, []);
-
   const onSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);
 
-    const res = await fetch("/api/turnstile/verify", {
-      method: "POST",
-      body: JSON.stringify({ captchaToken }),
-      headers: {
-        "content-type": "application/json",
-      },
+    const res = useReactQuery({
+      queryKey: ["turnstile"],
+      queryFn: () =>
+        fetch("/api/turnstile/verify", {
+          method: "POST",
+          body: JSON.stringify({ captchaToken }),
+          headers: {
+            "content-type": "application/json",
+          },
+        }),
     });
 
-    const captchaData = await res.json();
+    const captchaData = await res.data?.json();
     if (captchaData.status == 400) {
       toast(`Captcha Error: ${captchaData.statusText}`, {
         theme: isDarkTheme ? "dark" : "light",
@@ -160,12 +156,7 @@ const Form = () => {
       pwd: formData.pwd,
     };
 
-    const submitQuery = supabase
-      .from("studentData")
-      .insert(submitData)
-      .select();
-
-    const { data, error } = await submitQuery;
+    const { error } = await supabase.from("studentData").insert(submitData);
 
     if (error) {
       toast(`Error Submitting Form: ${error.code}. ${error.message}`, {
@@ -184,8 +175,6 @@ const Form = () => {
 
     setLoading(100);
     router.push("/info-reg/success");
-
-    console.log(formData, data);
   };
 
   const uploadPicture: SubmitHandler<IFormInput> = async (formData) => {
@@ -207,15 +196,13 @@ const Form = () => {
     }
   };
 
-  const sectionListQuery = supabase.from("sections").select("sectionName");
-  type sections = QueryData<typeof sectionListQuery>;
-
   const handleChange = async (e: { target: { value: number } }) => {
-    const { data, error } = await sectionListQuery.eq("grade", e.target.value);
+    const { data, error } = useQuery(
+      getSectionsByGrade(supabase, e.target.value)
+    );
     if (error) console.error(error);
-    const finalSectionList: sections = data!;
 
-    const list = finalSectionList!
+    const list = data!
       ?.map((e) => e.sectionName!)
       .sort((a: string, b: string) => a?.localeCompare(b));
     console.log(e.target.value, list);

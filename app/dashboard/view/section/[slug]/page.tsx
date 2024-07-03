@@ -1,48 +1,43 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
 import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AiOutlineRight } from "react-icons/ai";
+import { cookies } from "next/headers";
+import { getStudentsBySection } from "@/queries/getStudentsBySection";
+import { getSections } from "@/queries/getSections";
 
 export default async function Section({
   params,
 }: {
   params: { slug: string };
 }) {
-  const supabase = await createSSRClient();
-  const studentListQuery = supabase
-    .from("studentData")
-    .select()
-    .eq("section", params.slug);
-  type students = QueryData<typeof studentListQuery>;
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   async function getStudents() {
-    const { data, error } = await studentListQuery;
+    const { data, error } = await getStudentsBySection(supabase, params.slug);
     if (error) console.error(error);
-    const finalStudentList: students = data!
+    const finalStudentList = data!
       .map((e) => e)
       .sort((a, b) => a.lastname.localeCompare(b.lastname));
     return finalStudentList;
   }
 
-  var studentList: students = await getStudents();
+  var studentList = await getStudents();
 
-  const sectionListQuery = supabase.from("sections").select("sectionName");
-  type sections = QueryData<typeof sectionListQuery>;
-
-  async function getSections() {
-    const { data, error } = await sectionListQuery;
+  async function getAllSections() {
+    const { data, error } = await getSections(supabase);
     if (error) console.error(error);
-    const finalSectionList: sections = data!;
 
-    return finalSectionList!
+    return data!
       ?.map((e) => e.sectionName!)
       .sort((a, b) => a?.localeCompare(b));
   }
 
-  const sectionList: (string | null)[] = await getSections();
+  const sectionList: (string | null)[] = await getAllSections();
 
   if (sectionList?.includes(params.slug)) {
     return (

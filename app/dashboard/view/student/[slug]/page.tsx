@@ -1,19 +1,21 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import { createSSRClient } from "@/utils/server";
-import { storageClient } from "@/utils/storage";
+import useSupabaseServer from "@/utils/server";
 import { QueryData } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaPhone } from "react-icons/fa";
+import { cookies } from "next/headers";
+import { getStudentsByLRN } from "@/queries/getStudentsByLRN";
 
 export default async function Section({
   params,
 }: {
   params: { slug: number };
 }) {
-  const supabase = await createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
   const shimmer = (w: number, h: number) => `
 <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
@@ -33,20 +35,15 @@ export default async function Section({
       ? Buffer.from(str).toString("base64")
       : window.btoa(str);
 
-  const studentListQuery = supabase
-    .from("studentData")
-    .select()
-    .eq("lrn", params.slug);
-  type student = QueryData<typeof studentListQuery>;
   async function getStudent(lrn: number) {
-    const { data, error } = await studentListQuery;
+    const { data, error } = await getStudentsByLRN(supabase, lrn);
     if (error) console.error(error);
-    const studentList: student = data!;
+    const studentList = data!;
 
     return studentList;
   }
 
-  var studentInfo: student = await getStudent(params.slug);
+  var studentInfo = await getStudent(params.slug);
 
   async function getPicture() {
     const { data } = await supabase.storage

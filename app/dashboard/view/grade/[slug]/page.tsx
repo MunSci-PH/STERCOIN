@@ -1,25 +1,21 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import { createSSRClient } from "@/utils/server";
-import { QueryData } from "@supabase/supabase-js";
+import useSupabaseServer from "@/utils/server";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AiOutlineRight } from "react-icons/ai";
+import { cookies } from "next/headers";
+import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 
 export default async function Grade({ params }: { params: { slug: number } }) {
-  const supabase = await createSSRClient();
-  const sectionListQuery = supabase
-    .from("sections")
-    .select("sectionName")
-    .eq("grade", params.slug);
-  type sections = QueryData<typeof sectionListQuery>;
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   async function getSections() {
-    const { data, error } = await sectionListQuery;
+    const { data, error } = await getSectionsByGrade(supabase, params.slug);
     if (error) console.error(error);
-    const finalSectionList: sections | null = data;
 
-    return finalSectionList!
+    return data!
       ?.map((e) => e.sectionName!)
       .sort((a, b) => a?.localeCompare(b));
   }

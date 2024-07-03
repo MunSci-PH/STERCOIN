@@ -1,5 +1,6 @@
 import ResetPasswordForm from "@/components/auth/passwordReset";
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function ResetPassword({
@@ -7,7 +8,8 @@ export default async function ResetPassword({
 }: {
   searchParams: { code: string };
 }) {
-  const supabase = createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const { data } = await supabase.auth.getUser();
 

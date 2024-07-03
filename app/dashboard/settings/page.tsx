@@ -1,9 +1,11 @@
 import BackButton from "@/components/utils/backButton";
 import { SignOutAllButton } from "@/components/utils/signOutAllButton";
 import Loading from "@/loading";
-import { createSSRClient } from "@/utils/server";
+import { getUserById } from "@/queries/getUserById";
+import useSupabaseServer from "@/utils/server";
 import { QueryData } from "@supabase/supabase-js";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaEdit } from "react-icons/fa";
@@ -14,7 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const supabase = await createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const getUserInfo = async () => {
     const {
@@ -27,13 +30,11 @@ export default async function Dashboard() {
   const userInfo = await getUserInfo();
 
   const checkRole = async () => {
-    const userQuery = supabase.from("users").select().eq("id", userInfo!.id);
-    type userDB = QueryData<typeof userQuery>;
-    const { data, error } = await userQuery;
+    const { data, error } = await getUserById(supabase, userInfo!.id);
+
     if (error) console.error(error);
 
-    const userObj: userDB = data!;
-    const userRole: string = userObj.map((e) => e.group).toString();
+    const userRole: string | undefined = data?.map((e) => e.group).toString();
 
     return userRole;
   };

@@ -1,5 +1,5 @@
 "use client";
-import { createClient } from "@/utils/client";
+import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -8,7 +8,7 @@ export type loginData = {
   confirm: string;
 };
 
-const supabase = createClient();
+const supabase = useSupabaseBrowser();
 
 const ChangePassword = () => {
   const {
@@ -24,7 +24,7 @@ const ChangePassword = () => {
     });
 
     if (error) throw error;
-    if (data) {
+    if (data.user) {
       fetch("/api/auth/logout", {
         method: "POST",
       }).then(() => {

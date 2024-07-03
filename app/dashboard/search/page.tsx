@@ -1,56 +1,43 @@
 "use client";
 import BackButton from "@/components/utils/backButton";
 import Loading from "@/loading";
-import { createClient } from "@/utils/client";
-import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineRight } from "react-icons/ai";
-
-const supabase = createClient();
-const studentListQuery = supabase.from("studentData").select();
-type students = QueryData<typeof studentListQuery>;
-
-const getStudents = async (searchQuery: string | null) => {
-  if (!searchQuery) {
-    const { data, error } = await studentListQuery;
-
-    if (error) console.error(error);
-    if (data) {
-      const finalStudentList: students = data!.map((e) => e);
-      return finalStudentList;
-    }
-  } else {
-    const studentListQuery = supabase
-      .from("studentData")
-      .select()
-      .ilike("lastname", `%${searchQuery}%`);
-    type students = QueryData<typeof studentListQuery>;
-    const { data, error } = await studentListQuery;
-
-    if (error) console.error(error);
-    if (data) {
-      const finalStudentList: students = data!.map((e) => e);
-      return finalStudentList;
-    }
-  }
-};
+import useSupabaseBrowser from "@/utils/client";
+import { getStudents } from "@/queries/getStudents";
+import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
+import { getStudentsByLastName } from "@/queries/getStudentsByLastName";
 
 export default function Section() {
+  const supabase = useSupabaseBrowser();
   const { register } = useForm();
-
-  const [studentList, setList] = useState<students>();
+  const { data, isLoading } = useQuery(getStudents(supabase), {
+    throwOnError: true,
+  });
+  const [studentList, setStudentList] = useState<typeof data>();
 
   useEffect(() => {
-    getStudents(null).then((e) => setList(e));
-  }, []);
+    if (data) {
+      setStudentList(data);
+    }
+  }, [data]);
 
-  const handleChange = async (e: { target: { value: string } }) => {
-    const results = await getStudents(e.target.value);
+  async function handleChange(e: any) {
+    const value = e.target.value.trim();
 
-    setList(results);
-  };
+    if (!value) {
+      const results = await getStudents(supabase);
+      if (results.error) throw results.error;
+      setStudentList(results.data);
+      return;
+    }
+
+    const results = await getStudentsByLastName(supabase, value);
+    if (results.error) throw results.error;
+    setStudentList(results.data);
+  }
 
   return (
     <main className="container mx-auto flex flex-1 px-4 text-center">
@@ -75,7 +62,7 @@ export default function Section() {
             <BackButton></BackButton>
           </div>
           <div className="my-1 w-full">
-            {studentList ? (
+            {!isLoading ? (
               studentList?.map((student) => (
                 <div
                   key={student.lrn.toString()}

@@ -1,5 +1,6 @@
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
 import { type EmailOtpType } from "@supabase/supabase-js";
+import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -7,6 +8,8 @@ export async function GET(request: NextRequest) {
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
   const next = searchParams.get("next") ?? "/dashboard";
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const redirectTo = request.nextUrl.clone();
   redirectTo.pathname = next;
@@ -14,8 +17,6 @@ export async function GET(request: NextRequest) {
   redirectTo.searchParams.delete("type");
 
   if (token_hash && type) {
-    const supabase = createSSRClient();
-
     const { error } = await supabase.auth.verifyOtp({
       type,
       token_hash,

@@ -1,9 +1,11 @@
 import LoginForm from "./loginForm";
-import { createSSRClient } from "@/utils/server";
+import useSupabaseServer from "@/utils/server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const supabase = createSSRClient();
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
 
   const { data } = await supabase.auth.getUser();
 

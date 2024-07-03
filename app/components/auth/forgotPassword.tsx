@@ -1,5 +1,5 @@
 "use client";
-import { createClient } from "@/utils/client";
+import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
@@ -15,7 +15,7 @@ interface IContainerProps {
   searchParams: { token_hash: string; type: string };
 }
 
-export const supabase = createClient();
+export const supabase = useSupabaseBrowser();
 
 const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
   const {

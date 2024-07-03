@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
 import Disclaimer from "./components/layout/disclaimer";
+import { ReactQueryClientProvider } from "./components/layout/QueryProvider";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -50,17 +51,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`min-h-screen ${lato.className}`}>
-        <Disclaimer />
-        <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-800 dark:text-white">
-          <Nav />
-          {children}
-          <Footer />
-        </div>
-        <ToastContainer />
-        <Analytics />
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en">
+        <body className={`min-h-screen ${lato.className}`}>
+          <Disclaimer />
+          <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-800 dark:text-white">
+            <Nav />
+            {children}
+            <Footer />
+          </div>
+          <ToastContainer />
+          <Analytics />
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }

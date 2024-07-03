@@ -1,5 +1,6 @@
 "use client";
-import { createClient } from "@/utils/client";
+import { useTheme } from "@/hooks/useTheme";
+import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { Turnstile } from "@marsidev/react-turnstile";
 import Link from "next/link";
@@ -23,25 +24,12 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
     formState: { errors },
   } = useForm<confirmData>({ defaultValues: { email: props.email } });
   const [captchaToken, setCaptchaToken] = useState<string>();
-  const [isDarkTheme, setTheme] = useState(false);
-
-  useEffect(() => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-      setTheme(true);
-    } else {
-      setTheme(false);
-    }
-  }, []);
+  const isDarkTheme = useTheme(localStorage, window);
+  const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: confirmData) => {
     if (!e.email) e.email = props.email;
     e.captchaToken = captchaToken!;
-
-    const supabase = createClient();
 
     const { error } = await supabase.auth.resend({
       type: "signup",

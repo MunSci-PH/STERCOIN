@@ -1,5 +1,5 @@
 "use client";
-import { createClient } from "@/utils/client";
+import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -12,7 +12,7 @@ interface IContainerProps {
   searchParams: { code: string };
 }
 
-export const supabase = createClient();
+export const supabase = useSupabaseBrowser();
 
 const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
   const {
@@ -24,8 +24,6 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
     if (props.searchParams.code) {
-      const supabase = createClient();
-
       const { error } = await supabase.auth.exchangeCodeForSession(
         props.searchParams.code
       );
