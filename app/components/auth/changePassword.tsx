@@ -24,11 +24,9 @@ const ChangePassword = () => {
 
     if (error) throw error;
     if (data.user) {
-      fetch("/api/auth/logout", {
-        method: "POST",
-      }).then(() => {
-        window.location.reload();
-      });
+      const { error } = await supabase.auth.signOut({ scope: "global" });
+      if (error) throw error;
+      return window.location.reload();
     }
   };
 

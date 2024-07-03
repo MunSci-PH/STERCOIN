@@ -1,5 +1,8 @@
 export type IFormInput = {
   lrn: number;
+  email: string;
+  password: string;
+  confirm: string;
   fname: string;
   mname: string;
   lname: string;

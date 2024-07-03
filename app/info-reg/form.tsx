@@ -17,6 +17,7 @@ import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { useQuery as useReactQuery } from "@tanstack/react-query";
 import { IFormInput } from "./types";
+import AuthInput from "./components/auth";
 
 const Form = () => {
   const router = useRouter();
@@ -34,6 +35,7 @@ const Form = () => {
     trigger,
     setFocus,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<IFormInput>();
   const supabase = useSupabaseBrowser();
@@ -42,19 +44,15 @@ const Form = () => {
   const useSubmit: SubmitHandler<IFormInput> = async (formData) => {
     setLoading(1);
 
-    const res = useReactQuery({
-      queryKey: ["turnstile"],
-      queryFn: () =>
-        fetch("/api/turnstile/verify", {
-          method: "POST",
-          body: JSON.stringify({ captchaToken }),
-          headers: {
-            "content-type": "application/json",
-          },
-        }),
+    const res = await fetch("/api/turnstile/verify", {
+      method: "POST",
+      body: JSON.stringify({ captchaToken }),
+      headers: {
+        "content-type": "application/json",
+      },
     });
 
-    const captchaData = await res.data?.json();
+    const captchaData = await res?.json();
     if (captchaData.status == 400) {
       toast(`Captcha Error: ${captchaData.statusText}`, {
         theme: isDarkTheme ? "dark" : "light",
@@ -72,7 +70,7 @@ const Form = () => {
         autoClose: 2000,
         type: "error",
       });
-      setStep(1);
+      setStep(2);
       setFocus("grade");
       setLoading(0);
       return;
@@ -85,7 +83,7 @@ const Form = () => {
         autoClose: 2000,
         type: "error",
       });
-      setStep(1);
+      setStep(2);
       setFocus("section");
       setLoading(0);
       return;
@@ -98,12 +96,33 @@ const Form = () => {
         autoClose: 2000,
         type: "error",
       });
-      setStep(2);
+      setStep(3);
       setFocus("idpic");
       setLoading(0);
       return;
     }
+
     setLoading(40);
+
+    const signup = await supabase.auth.signUp({
+      email: formData.email.trim(),
+      password: formData.password.trim(),
+      options: {
+        captchaToken: captchaToken,
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (signup.error) {
+      console.error(signup.error.message);
+      toast(signup.error.message, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      setLoading(0);
+      return;
+    }
 
     const submitData: TablesInsert<"studentData"> = {
       lrn: formData.lrn,
@@ -128,6 +147,7 @@ const Form = () => {
       ecres3: formData.e3Res.trim(),
       ecnum3: formData.e3Num.toString(),
       pwd: formData.pwd,
+      email: formData.email.trim(),
     };
 
     const { error } = await supabase.from("studentData").insert(submitData);
@@ -171,9 +191,8 @@ const Form = () => {
   };
 
   const useHandleChange = async (e: { target: { value: number } }) => {
-    const { data, error } = useQuery(
-      getSectionsByGrade(supabase, e.target.value)
-    );
+    const { data, error } = await getSectionsByGrade(supabase, e.target.value);
+
     if (error) console.error(error);
 
     const list = data!
@@ -188,13 +207,13 @@ const Form = () => {
   };
 
   const checkNext = async () => {
-    if (step <= 3) {
+    if (step <= 4) {
       const result = await trigger();
 
       console.log(result, errors);
 
       if (result) setStep(step + 1);
-    } else if (step == 4) {
+    } else if (step == 5) {
       const result = await trigger();
       setValues(getValues());
 
@@ -253,6 +272,15 @@ const Form = () => {
           <></>
         )}
         {step == 1 ? (
+          <AuthInput
+            registerFunc={register}
+            errors={errors}
+            watch={watch}
+          ></AuthInput>
+        ) : (
+          <></>
+        )}
+        {step == 2 ? (
           <>
             <NameInput registerFunc={register} errors={errors}></NameInput>
             <GradeInput
@@ -265,7 +293,7 @@ const Form = () => {
         ) : (
           <></>
         )}
-        {step == 2 ? (
+        {step == 3 ? (
           <div>
             <label htmlFor="address" className="label mb-1">
               <span className="label-text text-left text-base">
@@ -289,7 +317,7 @@ const Form = () => {
         ) : (
           <></>
         )}
-        {step == 3 ? (
+        {step == 4 ? (
           <>
             <div className="flex flex-col">
               <label htmlFor="bday" className="form-control">
@@ -331,12 +359,12 @@ const Form = () => {
         ) : (
           <></>
         )}
-        {step == 4 ? (
+        {step == 5 ? (
           <EmergencyContactsInput registerFunc={register} errors={errors} />
         ) : (
           <></>
         )}
-        {step == 5 ? (
+        {step == 6 ? (
           <>
             <div className="my-2 rounded p-5 align-middle">
               {base64 && currentValues?.idpic.item(0) ? (
@@ -445,7 +473,7 @@ const Form = () => {
           <></>
         )}
         <div className="flex flex-nowrap justify-center gap-4">
-          {step > 0 && step < 5 ? (
+          {step > 0 && step < 6 ? (
             <button
               onClick={() => {
                 setStep(step - 1);
@@ -458,7 +486,7 @@ const Form = () => {
           ) : (
             <></>
           )}
-          {step < 5 ? (
+          {step < 6 ? (
             <button
               onClick={() => {
                 checkNext();
