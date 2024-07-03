@@ -103,12 +103,7 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                   <p className="text-left font-bold">Address</p>
                   <div className="divider"></div>
                   <p className="text-left text-xl">{studentInfo.birthday}</p>
-                  <p className="text-left font-bold">
-                    Date of Birth{" "}
-                    <span className="text-sm text-neutral-content">
-                      (YYYY-MM-DD)
-                    </span>
-                  </p>
+                  <p className="text-left font-bold">Date of Birth</p>
                   <div className="divider"></div>
                   <p className="text-left text-xl">
                     {new Date(
@@ -129,24 +124,14 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                     {studentInfo.ecname1} ({studentInfo.ecfb1} -{" "}
                     {studentInfo.ecres1})
                   </p>
-                  <p className="text-left text-lg">
-                    {studentInfo.ecnum1}{" "}
-                    <Link href={`tel: ${studentInfo.ecnum1}`} className="btn">
-                      <FaPhone />
-                    </Link>
-                  </p>
+                  <p className="text-left text-lg">{studentInfo.ecnum1} </p>
                   <p className="text-left font-bold">Emergency Contact 1</p>
                   <div className="divider"></div>
                   <p className="text-left text-xl">
                     {studentInfo.ecname2} ({studentInfo.ecfb2} -{" "}
                     {studentInfo.ecres2})
                   </p>
-                  <p className="text-left text-lg">
-                    {studentInfo.ecnum2}
-                    <Link href={`tel: ${studentInfo.ecnum2}`} className="btn">
-                      <FaPhone />
-                    </Link>
-                  </p>
+                  <p className="text-left text-lg">{studentInfo.ecnum2}</p>
                   <p className="text-left font-bold">Emergency Contact 2</p>
                   <div className="divider"></div>
                   {studentInfo.ecname3 != "" && (
@@ -155,15 +140,7 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                         {studentInfo.ecname3} ({studentInfo.ecfb3} -{" "}
                         {studentInfo.ecres3})
                       </p>
-                      <p className="text-left text-lg">
-                        {studentInfo.ecnum3}
-                        <Link
-                          href={`tel: ${studentInfo.ecnum3}`}
-                          className="btn"
-                        >
-                          <FaPhone />
-                        </Link>
-                      </p>
+                      <p className="text-left text-lg">{studentInfo.ecnum3}</p>
                       <p className="text-left font-bold">Emergency Contact 3</p>
                       <div className="divider"></div>
                     </>

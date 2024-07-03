@@ -110,12 +110,7 @@ export default async function Section({
                     <p className="text-left font-bold">Address</p>
                     <div className="divider"></div>
                     <p className="text-left text-xl">{info.birthday}</p>
-                    <p className="text-left font-bold">
-                      Date of Birth{" "}
-                      <span className="text-sm text-neutral-content">
-                        (YYYY-MM-DD)
-                      </span>
-                    </p>
+                    <p className="text-left font-bold">Date of Birth</p>
                     <div className="divider"></div>
                     <p className="text-left text-xl">
                       {new Date(Date.parse(info.created_at)).toLocaleString(
