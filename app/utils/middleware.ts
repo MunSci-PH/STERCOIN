@@ -1,3 +1,4 @@
+import { getUserById } from "@/queries/getUserById";
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -41,6 +42,22 @@ export async function updateSession(request: NextRequest) {
   if (!user && !request.nextUrl.pathname.startsWith("/dashboard/login")) {
     // no user, potentially respond by redirecting the user to the login page
     return NextResponse.redirect(new URL("/dashboard/login", request.url));
+  }
+
+  if (
+    (user && request.nextUrl.pathname.startsWith("/dashboard/search")) ||
+    request.nextUrl.pathname.startsWith("/dashboard/view")
+  ) {
+    const { data, error } = await getUserById(supabase, user!.id);
+
+    if (error) throw error;
+    if (data) {
+      const isAdmin =
+        data.map((e) => e.role).toString() == "admin" ? true : false;
+      if (!isAdmin) {
+        return NextResponse.redirect(new URL("/dashboard/", request.url));
+      }
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
