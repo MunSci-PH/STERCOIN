@@ -21,10 +21,12 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
+  const [isLoading, setLoading] = useState(false);
   const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: loginData) => {
+    setLoading(true);
     e.captchaToken = captchaToken!;
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -43,6 +45,8 @@ const LoginForm = () => {
         type: "error",
       });
       console.error(error);
+
+      setLoading(false);
 
       return;
     }
@@ -115,7 +119,9 @@ const LoginForm = () => {
       <Link href="/account/password/reset" className="link link-info text-left">
         Forgot your password?
       </Link>
-      <button className="btn btn-info">Sign In</button>
+      <button className="btn btn-info" disabled={isLoading}>
+        {isLoading ? <span className="loading loading-dots"></span> : "Sign In"}
+      </button>
       <Turnstile
         siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
         onSuccess={(token) => {
