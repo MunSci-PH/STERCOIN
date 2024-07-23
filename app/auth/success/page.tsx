@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Student Emergency Release Contact Information",
 };
 
-export default function Confirm({
+export default function Success({
   searchParams,
 }: {
   searchParams: { message: string };

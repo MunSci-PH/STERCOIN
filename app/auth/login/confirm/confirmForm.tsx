@@ -50,7 +50,7 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
       return;
     }
 
-    window.location.href = "/dashboard/login";
+    window.location.href = "/auth/login";
   };
 
   return (

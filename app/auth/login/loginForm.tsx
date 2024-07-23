@@ -37,7 +37,7 @@ const LoginForm = () => {
 
     if (error) {
       if (error.message == "Email not confirmed") {
-        window.location.href = `/dashboard/login/confirm?email=${e.email}`;
+        window.location.href = `/auth/login/confirm?email=${e.email}`;
       }
       toast(error.message, {
         theme: isDarkTheme ? "dark" : "light",
@@ -116,7 +116,7 @@ const LoginForm = () => {
           />
         </div>
       </label>
-      <Link href="/account/password/reset" className="link link-info text-left">
+      <Link href="/auth/password/reset" className="link link-info text-left">
         Forgot your password?
       </Link>
       <button className="btn btn-info" disabled={isLoading}>

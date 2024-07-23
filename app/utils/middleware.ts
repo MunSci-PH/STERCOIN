@@ -39,15 +39,12 @@ export async function updateSession(request: NextRequest) {
     error,
   } = await supabase.auth.getUser();
 
-  if (!user && !request.nextUrl.pathname.startsWith("/dashboard/login")) {
+  if (!user) {
     // no user, potentially respond by redirecting the user to the login page
-    return NextResponse.redirect(new URL("/dashboard/login", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (
-    (user && request.nextUrl.pathname.startsWith("/dashboard/search")) ||
-    request.nextUrl.pathname.startsWith("/dashboard/view")
-  ) {
+  if (user && request.nextUrl.pathname.startsWith("/dashboard/admin/")) {
     const { data, error } = await getUserById(supabase, user!.id);
 
     if (error) throw error;

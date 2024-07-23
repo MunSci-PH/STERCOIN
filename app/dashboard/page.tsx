@@ -33,7 +33,7 @@ export default async function Dashboard() {
                 <AiOutlineSetting />
               </Link>
               {user.isAdmin ? (
-                <Link href="/dashboard/search" className="btn mx-auto">
+                <Link href="/dashboard/admin/search" className="btn mx-auto">
                   <AiOutlineSearch />
                 </Link>
               ) : (

@@ -27,14 +27,14 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
     const origin = window.location.origin;
 
     const { data, error } = await supabase.auth.resetPasswordForEmail(e.email, {
-      redirectTo: `${origin}/account/password/choose`,
+      redirectTo: `${origin}/auth/password/choose`,
       captchaToken: captchaToken,
     });
 
-    if (error) window.location.href = `/account/error?message=${error.message}`;
+    if (error) window.location.href = `/auth/error?message=${error.message}`;
     if (data) {
       window.location.href =
-        "/account/confirm?message=Password Reset link has been sent to your email address";
+        "/auth/success?message=Password reset link has been sent to your email address";
     }
   };
 
@@ -82,7 +82,7 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
           setCaptchaToken(token);
         }}
       />
-      <Link href="/dashboard/login" className="link link-info text-left">
+      <Link href="/auth/login" className="link link-info text-left">
         Remember your password?
       </Link>
     </form>
