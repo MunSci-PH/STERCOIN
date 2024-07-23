@@ -1,6 +1,7 @@
 "use client";
 import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export type loginData = {
@@ -19,6 +20,7 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
     watch,
     formState: { errors },
   } = useForm<loginData>();
+  const [isLoading, setLoading] = useState(false);
   const supabase = useSupabaseBrowser();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
@@ -105,7 +107,9 @@ const ResetPasswordForm: React.FC<IContainerProps> = (props) => {
           />
         </div>
       </label>
-      <button className="btn btn-info">Save</button>
+      <button type="submit" className="btn btn-info" disabled={isLoading}>
+        {isLoading ? <span className="loading loading-dots"></span> : "Save"}
+      </button>
     </form>
   );
 };

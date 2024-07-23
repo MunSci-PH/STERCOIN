@@ -2,9 +2,9 @@
 import useTheme from "@/hooks/useTheme";
 import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -23,11 +23,15 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm<confirmData>({ defaultValues: { email: props.email } });
+  const [isLoading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string>();
+  const [captchaLoading, setCaptchaLoading] = useState(true);
+  const turnstileRef = useRef<TurnstileInstance>();
   const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: confirmData) => {
+    setLoading(true);
     if (!e.email) e.email = props.email;
     e.captchaToken = captchaToken!;
 
@@ -46,6 +50,9 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
         type: "error",
       });
       console.error(error);
+      setCaptchaLoading(true);
+      turnstileRef.current?.reset();
+      setLoading(false);
 
       return;
     }
@@ -87,11 +94,36 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
           />
         </div>
       </label>
-      <button className="btn btn-info">Confirm Email</button>
+      <button
+        type="submit"
+        className="btn btn-info"
+        disabled={isLoading || captchaLoading}
+      >
+        {isLoading || captchaLoading ? (
+          <span className="loading loading-dots"></span>
+        ) : (
+          "Confirm Email"
+        )}
+      </button>
       <Turnstile
+        ref={turnstileRef}
         siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
         onSuccess={(token) => {
+          setCaptchaLoading(false);
           setCaptchaToken(token);
+        }}
+        onExpire={() => {
+          setCaptchaLoading(true);
+          setCaptchaToken("");
+          turnstileRef.current?.reset();
+        }}
+        onError={(e) => {
+          toast(e, {
+            theme: isDarkTheme ? "dark" : "light",
+            autoClose: 2000,
+            type: "error",
+          });
+          console.error(e);
         }}
       />
     </form>

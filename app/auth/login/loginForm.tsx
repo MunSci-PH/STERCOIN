@@ -2,9 +2,9 @@
 import useTheme from "@/hooks/useTheme";
 import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -22,6 +22,8 @@ const LoginForm = () => {
   } = useForm<loginData>();
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [isLoading, setLoading] = useState(false);
+  const [captchaLoading, setCaptchaLoading] = useState(true);
+  const turnstileRef = useRef<TurnstileInstance>();
   const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
@@ -45,7 +47,8 @@ const LoginForm = () => {
         type: "error",
       });
       console.error(error);
-
+      turnstileRef.current?.reset();
+      setCaptchaLoading(true);
       setLoading(false);
 
       return;
@@ -119,13 +122,36 @@ const LoginForm = () => {
       <Link href="/auth/password/reset" className="link link-info text-left">
         Forgot your password?
       </Link>
-      <button className="btn btn-info" disabled={isLoading}>
-        {isLoading ? <span className="loading loading-dots"></span> : "Sign In"}
+      <button
+        type="submit"
+        className="btn btn-info"
+        disabled={isLoading || captchaLoading}
+      >
+        {isLoading || captchaLoading ? (
+          <span className="loading loading-dots"></span>
+        ) : (
+          "Sign In"
+        )}
       </button>
       <Turnstile
+        ref={turnstileRef}
         siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
         onSuccess={(token) => {
+          setCaptchaLoading(false);
           setCaptchaToken(token);
+        }}
+        onExpire={() => {
+          setCaptchaLoading(true);
+          setCaptchaToken("");
+          turnstileRef.current?.reset();
+        }}
+        onError={(e) => {
+          toast(e, {
+            theme: isDarkTheme ? "dark" : "light",
+            autoClose: 2000,
+            type: "error",
+          });
+          console.error(e);
         }}
       />
     </form>

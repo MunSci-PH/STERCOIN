@@ -1,10 +1,12 @@
 "use client";
+import useTheme from "@/hooks/useTheme";
 import useSupabaseBrowser from "@/utils/client";
 import { ErrorMessage } from "@hookform/error-message";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export type loginData = {
   email: string;
@@ -20,18 +22,31 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
     register,
     formState: { errors },
   } = useForm<loginData>();
+  const [isLoading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string>();
+  const [captchaLoading, setCaptchaLoading] = useState(true);
+  const turnstileRef = useRef<TurnstileInstance>();
+  const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
   const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
-    const origin = window.location.origin;
+    setLoading(true);
 
     const { data, error } = await supabase.auth.resetPasswordForEmail(e.email, {
-      redirectTo: `${origin}/auth/password/choose`,
+      redirectTo: `${window.location.origin}/auth/password/choose`,
       captchaToken: captchaToken,
     });
 
-    if (error) window.location.href = `/auth/error?message=${error.message}`;
+    if (error) {
+      toast(error.message, {
+        theme: isDarkTheme ? "dark" : "light",
+        autoClose: 2000,
+        type: "error",
+      });
+      turnstileRef.current?.reset();
+      setCaptchaLoading(true);
+      setLoading(false);
+    }
     if (data) {
       window.location.href =
         "/auth/success?message=Password reset link has been sent to your email address";
@@ -73,13 +88,36 @@ const ForgotPasswordForm: React.FC<IContainerProps> = (props) => {
           />
         </div>
       </label>
-      <button type="submit" className="btn btn-info">
-        Confirm
+      <button
+        type="submit"
+        className="btn btn-info"
+        disabled={isLoading || captchaLoading}
+      >
+        {isLoading || captchaLoading ? (
+          <span className="loading loading-dots"></span>
+        ) : (
+          "Confirm"
+        )}
       </button>
       <Turnstile
+        ref={turnstileRef}
         siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
         onSuccess={(token) => {
+          setCaptchaLoading(false);
           setCaptchaToken(token);
+        }}
+        onExpire={() => {
+          setCaptchaLoading(true);
+          setCaptchaToken("");
+          turnstileRef.current?.reset();
+        }}
+        onError={(e) => {
+          toast(e, {
+            theme: isDarkTheme ? "dark" : "light",
+            autoClose: 2000,
+            type: "error",
+          });
+          console.error(e);
         }}
       />
       <Link href="/auth/login" className="link link-info text-left">
