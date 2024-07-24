@@ -207,6 +207,7 @@ const Form = () => {
   };
 
   const checkNext = async () => {
+    setValues(getValues());
     if (step <= 4) {
       const result = await trigger();
 
@@ -215,34 +216,16 @@ const Form = () => {
       if (result) setStep(step + 1);
     } else if (step == 5) {
       const result = await trigger();
-      setValues(getValues());
 
       if (result) {
         console.log(currentValues);
-        if (currentValues?.idpic.item(0))
-          setBase64(
-            (await toBase64(currentValues?.idpic.item(0) as File)) as string
-          );
+        if (currentValues?.idpic.item(0)) {
+          setBase64(URL.createObjectURL(currentValues?.idpic.item(0)!));
+        }
 
         setStep(step + 1);
       }
     }
-  };
-
-  const toBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-
-      fileReader.readAsDataURL(file as Blob);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
   };
 
   return (
