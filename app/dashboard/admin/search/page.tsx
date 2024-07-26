@@ -74,7 +74,7 @@ export default function Section() {
                     {student.middlename ? "." : ""}
                   </p>
                   <Link
-                    href={`/dashboard/view/student/${student.lrn}`}
+                    href={`/dashboard/admin/view/student/${student.lrn}`}
                     className="btn btn-primary"
                   >
                     <AiOutlineRight />

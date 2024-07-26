@@ -64,7 +64,7 @@ export default async function Section({
                       {e.middlename ? "." : ""}
                     </p>
                     <Link
-                      href={`/dashboard/view/student/${e.lrn}`}
+                      href={`/dashboard/admin/view/student/${e.lrn}`}
                       className="btn btn-primary"
                     >
                       <AiOutlineRight />

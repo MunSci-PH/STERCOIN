@@ -44,7 +44,7 @@ export default async function Grade({ params }: { params: { slug: number } }) {
                   >
                     <p className="my-auto text-xl">{option}</p>
                     <Link
-                      href={`/dashboard/view/section/${option}`}
+                      href={`/dashboard/admin/view/section/${option}`}
                       className="btn btn-primary"
                     >
                       <AiOutlineRight />
