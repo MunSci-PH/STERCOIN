@@ -9,8 +9,9 @@ import { useState } from "react";
 import Logo from "../../../public/logo.png";
 import useSupabaseBrowser from "@/utils/client";
 import { User } from "@supabase/supabase-js";
+import { UserInfo } from "@/dashboard/types";
 
-const Nav = ({ user }: { user: User | null }) => {
+const Nav = ({ user, role }: { user: User | null; role: UserInfo | null }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const supabase = useSupabaseBrowser();
 
@@ -35,9 +36,11 @@ const Nav = ({ user }: { user: User | null }) => {
             <Button variant={"outline"} asChild>
               <Link href="/dashboard">Home</Link>
             </Button>
-            <Button variant={"outline"} asChild>
-              <Link href="/dashboard/admin/search">Search</Link>
-            </Button>
+            {role?.isAdmin && (
+              <Button variant={"outline"} asChild>
+                <Link href="/dashboard/admin/search">Search</Link>
+              </Button>
+            )}
             <Button variant={"outline"} asChild>
               <Link href="/dashboard/settings">Settings</Link>
             </Button>
@@ -90,12 +93,14 @@ const Nav = ({ user }: { user: User | null }) => {
               >
                 Home
               </Link>
-              <Link
-                className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
-                href="/dashboard/admin/search"
-              >
-                Search
-              </Link>
+              {role?.isAdmin && (
+                <Link
+                  className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
+                  href="/dashboard/admin/search"
+                >
+                  Search
+                </Link>
+              )}
               <Link
                 className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
                 href="/dashboard/settings"

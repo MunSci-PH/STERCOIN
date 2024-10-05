@@ -1,13 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import { UserInfo } from "./types";
-import { FaPhone } from "react-icons/fa6";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { getUser } from "@/queries/getUser";
 import { getStudentByEmail } from "@/queries/getStudentByEmail";
 import Loading from "@/loading";
+import { Separator } from "@/components/ui/separator";
 
 interface IContainerProps {
   user: UserInfo;
@@ -73,7 +72,7 @@ const UserView: React.FC<IContainerProps> = async (props) => {
           <div className="my-12 flex flex-col items-center">
             <div className="my-1 w-full">
               {studentInfo ? (
-                <div className=" my-2 rounded p-5 align-middle">
+                <div className="my-2 flex flex-1 flex-col rounded p-5 align-middle gap-4">
                   <Image
                     src={await getPicture()}
                     width={128}
@@ -82,67 +81,89 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                     placeholder={`data:image/svg+xml;base64,${toBase64(
                       shimmer(128, 128)
                     )}`}
-                    className="avatar size-32 rounded"
+                    className="avatar size-32 rounded mx-auto"
                   />
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">{studentInfo.lrn}</p>
-                  <p className="text-left font-bold">LRN</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">
-                    {studentInfo.lastname}, {studentInfo.firstname}{" "}
-                    {studentInfo.middlename}{" "}
-                  </p>
-                  <p className="text-left font-bold">Full Name</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">
-                    {studentInfo.grade} - {studentInfo.section}
-                  </p>
-                  <p className="text-left font-bold">Grade & Section</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">{studentInfo.address}</p>
-                  <p className="text-left font-bold">Address</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">{studentInfo.birthday}</p>
-                  <p className="text-left font-bold">Date of Birth</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">
-                    {new Date(
-                      Date.parse(studentInfo.created_at)
-                    ).toLocaleString("en-us", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
-                      second: "numeric",
-                    })}
-                  </p>
-                  <p className="text-left font-bold">Registered at</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">
-                    {studentInfo.ecname1} ({studentInfo.ecfb1} -{" "}
-                    {studentInfo.ecres1})
-                  </p>
-                  <p className="text-left text-lg">{studentInfo.ecnum1} </p>
-                  <p className="text-left font-bold">Emergency Contact 1</p>
-                  <div className="divider"></div>
-                  <p className="text-left text-xl">
-                    {studentInfo.ecname2} ({studentInfo.ecfb2} -{" "}
-                    {studentInfo.ecres2})
-                  </p>
-                  <p className="text-left text-lg">{studentInfo.ecnum2}</p>
-                  <p className="text-left font-bold">Emergency Contact 2</p>
-                  <div className="divider"></div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">{studentInfo.lrn}</p>
+                    <p className="text-left font-bold">LRN</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">
+                      {studentInfo.lastname}, {studentInfo.firstname}{" "}
+                      {studentInfo.middlename}{" "}
+                    </p>
+                    <p className="text-left font-bold">Full Name</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">
+                      {studentInfo.grade} - {studentInfo.section}
+                    </p>
+                    <p className="text-left font-bold">Grade & Section</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">{studentInfo.address}</p>
+                    <p className="text-left font-bold">Address</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">{studentInfo.birthday}</p>
+                    <p className="text-left font-bold">Date of Birth</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">
+                      {new Date(
+                        Date.parse(studentInfo.created_at)
+                      ).toLocaleString("en-us", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        second: "numeric",
+                      })}
+                    </p>
+                    <p className="text-left font-bold">Registered at</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">
+                      {studentInfo.ecname1} ({studentInfo.ecfb1} -{" "}
+                      {studentInfo.ecres1})
+                    </p>
+                    <p className="text-left text-lg">{studentInfo.ecnum1} </p>
+                    <p className="text-left font-bold">Emergency Contact 1</p>
+                  </div>
+                  <Separator />
+                  <div>
+                    <p className="text-left text-xl">
+                      {studentInfo.ecname2} ({studentInfo.ecfb2} -{" "}
+                      {studentInfo.ecres2})
+                    </p>
+                    <p className="text-left text-lg">{studentInfo.ecnum2}</p>
+                    <p className="text-left font-bold">Emergency Contact 2</p>
+                  </div>
+                  <Separator />
                   {studentInfo.ecname3 != "" && (
                     <>
-                      <p className="text-left text-xl">
-                        {studentInfo.ecname3} ({studentInfo.ecfb3} -{" "}
-                        {studentInfo.ecres3})
-                      </p>
-                      <p className="text-left text-lg">{studentInfo.ecnum3}</p>
-                      <p className="text-left font-bold">Emergency Contact 3</p>
-                      <div className="divider"></div>
+                      <div>
+                        <p className="text-left text-xl">
+                          {studentInfo.ecname3} ({studentInfo.ecfb3} -{" "}
+                          {studentInfo.ecres3})
+                        </p>
+                        <p className="text-left text-lg">
+                          {studentInfo.ecnum3}
+                        </p>
+                        <p className="text-left font-bold">
+                          Emergency Contact 3
+                        </p>
+                      </div>
+                      <Separator />
                     </>
                   )}
                 </div>

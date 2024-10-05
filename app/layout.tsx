@@ -10,6 +10,8 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import useSupabaseServer from "./utils/server";
 import { cookies } from "next/headers";
 import { getUser } from "./queries/getUser";
+import { UserInfo } from "./dashboard/types";
+import useCheckRoleServer from "./hooks/useCheckRoleServer";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -56,6 +58,10 @@ export default async function RootLayout({
   const supabase = useSupabaseServer(cookieStore);
 
   const user = (await getUser(supabase)).data.user;
+  var role: UserInfo | null = null;
+  if (user) {
+    role = (await useCheckRoleServer(supabase)) as UserInfo;
+  }
 
   return (
     <html lang="en">
@@ -69,7 +75,7 @@ export default async function RootLayout({
           >
             <Disclaimer />
             <div className="flex min-h-screen flex-col">
-              <Nav user={user} />
+              <Nav user={user} role={role} />
               {children}
               <Footer />
             </div>
