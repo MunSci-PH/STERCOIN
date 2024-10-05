@@ -1,4 +1,10 @@
-import ForgotPasswordForm from "@/components/auth/forgotPassword";
+import ForgotPasswordForm from "@/auth/password/reset/forgotPassword";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -21,14 +27,17 @@ export default async function ForgotPassword({
 
   return (
     <>
-      <main className="container mx-auto flex flex-1 px-4 text-center">
+      <main className="container mx-auto flex flex-1 px-4">
         <div className="m-auto">
-          <div className="my-12 flex w-96 flex-col items-center rounded-xl bg-base-100 p-10">
-            <p className="mb-8 text-center font-sans text-4xl font-bold">
-              Forgot Password
-            </p>
+          <Card className="w-[325px] md:w-[350px]">
+            <CardHeader>
+              <CardTitle>Forgot Password</CardTitle>
+              <CardDescription>
+                Enter your email to reset your password.
+              </CardDescription>
+            </CardHeader>
             <ForgotPasswordForm searchParams={searchParams} />
-          </div>
+          </Card>
         </div>
       </main>
     </>

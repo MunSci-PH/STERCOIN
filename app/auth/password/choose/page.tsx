@@ -1,4 +1,10 @@
-import ResetPasswordForm from "@/components/auth/passwordReset";
+import ResetPasswordForm from "@/auth/password/choose/passwordReset";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -19,14 +25,17 @@ export default async function ResetPassword({
 
   return (
     <>
-      <main className="container mx-auto flex flex-1 px-4 text-center">
+      <main className="container mx-auto flex flex-1 px-4">
         <div className="m-auto">
-          <div className="my-12 flex w-96 flex-col items-center rounded-xl bg-base-100 p-10">
-            <p className="mb-8 text-center font-sans text-4xl font-bold">
-              Choose Your Password
-            </p>
+          <Card className="w-[325px] md:w-[350px]">
+            <CardHeader>
+              <CardTitle>Choose Your Password</CardTitle>
+              <CardDescription>
+                Enter your new password to change your password.
+              </CardDescription>
+            </CardHeader>
             <ResetPasswordForm searchParams={searchParams} />
-          </div>
+          </Card>
         </div>
       </main>
     </>

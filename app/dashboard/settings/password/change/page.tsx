@@ -1,4 +1,4 @@
-import ChangePassword from "@/components/auth/changePassword";
+import ChangePassword from "@/dashboard/settings/password/change/changePassword";
 
 export default async function Dashboard() {
   return (

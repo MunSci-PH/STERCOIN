@@ -71,6 +71,11 @@ const LoginForm = () => {
     <Form {...form} control={form.control}>
       <form onSubmit={form.handleSubmit(tryLogin)}>
         <CardContent className="space-y-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <FormField
             control={form.control}
             name="email"
@@ -78,7 +83,7 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="Email" {...field} />
+                  <Input type="email" placeholder="Email" required {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -91,17 +96,17 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    required
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
           <div>
             <Link
               href="/auth/password/reset"

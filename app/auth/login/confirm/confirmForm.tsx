@@ -64,6 +64,11 @@ const ConfirmForm = ({ email }: { email: string }) => {
     <Form {...form} control={form.control}>
       <form onSubmit={form.handleSubmit(tryLogin)} className="space-y-4">
         <CardContent className="space-y-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <FormField
             control={form.control}
             name="email"
@@ -76,17 +81,13 @@ const ConfirmForm = ({ email }: { email: string }) => {
                     placeholder="Email"
                     {...field}
                     disabled={email ? true : false}
+                    required
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
         </CardContent>
         <CardFooter className="flex flex-1 flex-col gap-4">
           <Button

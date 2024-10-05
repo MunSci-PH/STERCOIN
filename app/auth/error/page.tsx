@@ -13,7 +13,7 @@ export default function Error({
   return (
     <div className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto">
-        <p className="ml-2 text-3xl font-bold text-error">Error</p>
+        <p className="ml-2 text-3xl font-bold text-destructive">Error</p>
         <p className="mt-3 text-left text-2xl font-medium">
           {searchParams.message}
         </p>
