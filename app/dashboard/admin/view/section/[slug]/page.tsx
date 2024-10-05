@@ -1,13 +1,14 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
 import useSupabaseServer from "@/utils/server";
-import { QueryData } from "@supabase/supabase-js";
 import Link from "next/link";
 import { Suspense } from "react";
-import { AiOutlineRight } from "react-icons/ai";
 import { cookies } from "next/headers";
 import { getStudentsBySection } from "@/queries/getStudentsBySection";
 import { getSections } from "@/queries/getSections";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Section({
   params,
@@ -54,22 +55,33 @@ export default async function Section({
               fallback={<span className="loading loading-spinner"></span>}
             >
               <div className="my-1 w-full">
-                {studentList?.map((e) => (
-                  <div
+                {studentList?.map((e, index) => (
+                  <Button
                     key={e.lrn.toString()}
-                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
+                    variant={"outline"}
+                    className="w-full flex justify-between align-middle my-2 py-10"
+                    asChild
                   >
-                    <p className="my-auto text-xl">
-                      {e.lastname}, {e.firstname} {e.middlename?.charAt(0)}
-                      {e.middlename ? "." : ""}
-                    </p>
                     <Link
                       href={`/dashboard/admin/view/student/${e.lrn}`}
                       className="btn btn-primary"
                     >
-                      <AiOutlineRight />
+                      <div className="flex flex-1 gap-2">
+                        <div>
+                          <p className="text-xl">{index + 1}</p>
+                        </div>
+                        <Separator orientation="vertical" decorative />
+                        <div>
+                          <p className="text-xl">
+                            {e.lastname}, {e.firstname}{" "}
+                            {e.middlename?.charAt(0)}
+                            {e.middlename ? "." : ""}
+                          </p>
+                        </div>
+                      </div>
+                      <ArrowRight />
                     </Link>
-                  </div>
+                  </Button>
                 ))}
               </div>
             </Suspense>

@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useSupabaseBrowser from "@/utils/client";
-import { ErrorMessage } from "@hookform/error-message";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -42,6 +41,8 @@ const ResetPasswordForm = ({
   const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
+    setLoading(true);
+
     if (searchParams.code) {
       const { error } = await supabase.auth.exchangeCodeForSession(
         searchParams.code

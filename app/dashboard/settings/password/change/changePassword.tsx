@@ -1,100 +1,105 @@
 "use client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import useSupabaseBrowser from "@/utils/client";
-import { ErrorMessage } from "@hookform/error-message";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-export type loginData = {
-  password: string;
-  confirm: string;
-};
+const formSchema = z
+  .object({
+    password: z.string().trim().min(8),
+    confirm: z.string().trim().min(8),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match",
+    path: ["confirm"],
+  });
 
 const ChangePassword = () => {
-  const {
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm<loginData>();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
+  const [error, setError] = useState<string>();
   const supabase = useSupabaseBrowser();
 
-  const tryLogin: SubmitHandler<loginData> = async (e: loginData) => {
+  const tryLogin = async (e: z.infer<typeof formSchema>) => {
     const { data, error } = await supabase.auth.updateUser({
       password: e.password,
     });
 
-    if (error) throw error;
+    if (error) setError(error.message);
     if (data.user) {
       const { error } = await supabase.auth.signOut({ scope: "global" });
-      if (error) throw error;
+      if (error) setError(error.message);
       return window.location.reload();
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(tryLogin)}
-      className="form-control w-full max-w-xs space-y-4"
-    >
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">New Password</span>
-        </div>
-        <input
-          type="password"
-          className="input input-bordered w-full max-w-xs"
-          {...register("password", {
-            required: true,
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-              message:
-                "Must be atleast eight characters, at least one uppercase letter, one lowercase letter, one number and one special character",
-            },
-          })}
-        />
-        <div className="label">
-          <ErrorMessage
-            errors={errors}
+    <Form {...form} control={form.control}>
+      <form onSubmit={form.handleSubmit(tryLogin)}>
+        <CardContent className="space-y-4">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <FormField
+            control={form.control}
             name="password"
-            render={({ message }) => {
-              return (
-                <span className="label-text-alt text-left text-error">
-                  {message}
-                </span>
-              );
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="New Password"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-      </label>
-
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Confirm Password</span>
-        </div>
-        <input
-          type="password"
-          className="input input-bordered w-full max-w-xs"
-          {...register("confirm", {
-            required: true,
-            validate: (e) => e === watch("password") || "Passwords don't match",
-          })}
-        />
-        <div className="label">
-          <ErrorMessage
-            errors={errors}
+          <FormField
+            control={form.control}
             name="confirm"
-            render={({ message }) => {
-              return (
-                <span className="label-text-alt text-left text-error">
-                  {message}
-                </span>
-              );
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Re-enter Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Re-enter Password"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-      </label>
-      <button className="btn btn-info">Save</button>
-    </form>
+        </CardContent>
+        <CardFooter>
+          <Button type="submit" className="w-full">
+            Save
+          </Button>
+        </CardFooter>
+      </form>
+    </Form>
   );
 };
 export default ChangePassword;

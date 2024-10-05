@@ -4,11 +4,13 @@ import Loading from "@/loading";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AiOutlineRight } from "react-icons/ai";
 import useSupabaseBrowser from "@/utils/client";
 import { getStudents } from "@/queries/getStudents";
 import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 import { getStudentsByLastName } from "@/queries/getStudentsByLastName";
+import { Input } from "@/components/ui/input";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Section() {
   const supabase = useSupabaseBrowser();
@@ -45,7 +47,7 @@ export default function Section() {
         <div className="my-12 flex flex-col items-center">
           <div className="flex w-full flex-nowrap justify-between">
             <form className="form-control">
-              <input
+              <Input
                 type="text"
                 placeholder="Search Last Names"
                 className="input input-bordered w-full max-w-xs"
@@ -64,22 +66,21 @@ export default function Section() {
           <div className="my-1 w-full">
             {!isLoading ? (
               studentList?.map((student) => (
-                <div
+                <Button
                   key={student.lrn.toString()}
-                  className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
+                  variant={"outline"}
+                  className="w-full flex justify-between align-middle my-2 py-10"
+                  asChild
                 >
-                  <p className="my-auto text-xl">
-                    {student.lastname}, {student.firstname}{" "}
-                    {student.middlename?.charAt(0)}
-                    {student.middlename ? "." : ""}
-                  </p>
-                  <Link
-                    href={`/dashboard/admin/view/student/${student.lrn}`}
-                    className="btn btn-primary"
-                  >
-                    <AiOutlineRight />
+                  <Link href={`/dashboard/admin/view/student/${student.lrn}`}>
+                    <p className="text-xl">
+                      {student.lastname}, {student.firstname}{" "}
+                      {student.middlename?.charAt(0)}
+                      {student.middlename ? "." : ""}
+                    </p>
+                    <ArrowRight />
                   </Link>
-                </div>
+                </Button>
               ))
             ) : (
               <Loading></Loading>

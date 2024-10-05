@@ -1,18 +1,19 @@
 "use client";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { Button } from "../ui/button";
 
 const BackButton = () => {
   const router = useRouter();
   return (
-    <button
-      className="btn inline w-fit space-y-4"
+    <Button
+      className="inline w-fit space-y-4"
       onClick={() => router.back()}
       type="button"
       title="Back"
     >
-      <AiOutlineArrowLeft />
-    </button>
+      <ArrowLeft />
+    </Button>
   );
 };
 

@@ -3,9 +3,10 @@ import NotFound from "@/components/layout/not-found";
 import useSupabaseServer from "@/utils/server";
 import Link from "next/link";
 import { Suspense } from "react";
-import { AiOutlineRight } from "react-icons/ai";
 import { cookies } from "next/headers";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export default async function Grade({ params }: { params: { slug: number } }) {
   const cookieStore = cookies();
@@ -38,18 +39,17 @@ export default async function Grade({ params }: { params: { slug: number } }) {
             >
               <div className="my-1 w-full">
                 {sectionList?.map((option) => (
-                  <div
+                  <Button
                     key={option}
-                    className="my-2 flex flex-nowrap justify-between rounded border border-neutral-content p-5 align-middle"
+                    variant={"outline"}
+                    className="w-full flex justify-between align-middle my-2 py-10"
+                    asChild
                   >
-                    <p className="my-auto text-xl">{option}</p>
-                    <Link
-                      href={`/dashboard/admin/view/section/${option}`}
-                      className="btn btn-primary"
-                    >
-                      <AiOutlineRight />
+                    <Link href={`/dashboard/admin/view/section/${option}`}>
+                      <p className="text-xl">{option}</p>
+                      <ArrowRight />
                     </Link>
-                  </div>
+                  </Button>
                 ))}
               </div>
             </Suspense>

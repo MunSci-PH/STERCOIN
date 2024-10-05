@@ -1,9 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import BackButton from "@/components/utils/backButton";
 import { SignOutAllButton } from "@/components/utils/signOutAllButton";
 import Loading from "@/loading";
 import { getUserById } from "@/queries/getUserById";
 import useSupabaseServer from "@/utils/server";
-import { QueryData } from "@supabase/supabase-js";
+import { Edit } from "lucide-react";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -53,29 +55,32 @@ export default async function Dashboard() {
               <BackButton></BackButton>
             </div>
             <div className="my-1 w-full">
-              <div className="my-2 rounded p-5 align-middle">
-                <div className="divider"></div>
-                <p className="text-left text-xl">{userInfo?.email}</p>
-                <p className="text-left font-bold">Email</p>
-                <div className="divider"></div>
+              <div className="my-2 flex flex-1 flex-col rounded p-5 align-middle gap-4">
+                <Separator />
+                <div>
+                  <p className="text-left text-xl">{userInfo?.email}</p>
+                  <p className="text-left font-bold">Email</p>
+                </div>
+                <Separator />
                 <div className="grid grid-cols-2">
                   <div>
                     <p className="text-left text-xl">••••••••••</p>
                     <p className="text-left font-bold">Password</p>
                   </div>
-                  <div className="justify-self-end">
-                    <Link
-                      href="settings/password/change"
-                      className="btn btn-circle text-xl"
-                    >
-                      <FaEdit />
-                    </Link>
+                  <div className="my-auto justify-self-end rounded-xl">
+                    <Button className="rounded-full text-xl" asChild>
+                      <Link href="settings/password/change">
+                        <Edit />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
-                <div className="divider"></div>
-                <p className="text-left text-xl">{userRole}</p>
-                <p className="text-left font-bold">Authentication Level</p>
-                <div className="divider"></div>
+                <Separator />
+                <div>
+                  <p className="text-left text-xl">{userRole}</p>
+                  <p className="text-left font-bold">Authentication Level</p>
+                </div>
+                <Separator />
                 <div className="flex justify-between align-middle">
                   <p className="my-auto text-2xl font-bold">
                     Sign Out Globally

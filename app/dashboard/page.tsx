@@ -21,8 +21,8 @@ export default async function Dashboard() {
   const user: UserInfo = (await useCheckRoleServer(supabase)) as UserInfo;
 
   return (
-    <main className="container mx-auto flex flex-1 flex-col px-4 text-center">
-      <div className="mt-12 flex w-3/4 flex-nowrap justify-between">
+    <main className="container mx-auto flex flex-1 flex-col items-center px-4 text-center">
+      <div className="mt-12 flex w-4/5 flex-nowrap justify-between">
         <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
           Dashboard
         </p>
