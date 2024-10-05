@@ -9,6 +9,9 @@ import { Analytics } from "@vercel/analytics/next";
 import Disclaimer from "./components/layout/disclaimer";
 import { ReactQueryClientProvider } from "./components/layout/QueryProvider";
 import { ThemeProvider } from "./components/layout/theme-provider";
+import useSupabaseServer from "./utils/server";
+import { cookies } from "next/headers";
+import { getUser } from "./queries/getUser";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -46,15 +49,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = cookies();
+  const supabase = useSupabaseServer(cookieStore);
+
+  const user = (await getUser(supabase)).data.user;
+
   return (
-    <ReactQueryClientProvider>
-      <html lang="en">
-        <body className={`min-h-screen ${lato.className}`}>
+    <html lang="en">
+      <body className={`min-h-screen ${lato.className}`}>
+        <ReactQueryClientProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -63,15 +71,15 @@ export default function RootLayout({
           >
             <Disclaimer />
             <div className="flex min-h-screen flex-col">
-              <Nav />
+              <Nav user={user} />
               {children}
               <Footer />
             </div>
             <ToastContainer />
           </ThemeProvider>
           <Analytics />
-        </body>
-      </html>
-    </ReactQueryClientProvider>
+        </ReactQueryClientProvider>
+      </body>
+    </html>
   );
 }

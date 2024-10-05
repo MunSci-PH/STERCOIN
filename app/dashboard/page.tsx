@@ -21,27 +21,14 @@ export default async function Dashboard() {
   const user: UserInfo = (await useCheckRoleServer(supabase)) as UserInfo;
 
   return (
-    <main className="container mx-auto flex flex-1 px-4 text-center">
-      <div className="mx-auto w-full md:w-4/5">
-        <div className="my-12 flex flex-col items-center">
-          <div className="flex w-full flex-nowrap justify-between">
-            <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
-              Home
-            </p>
-            <div className="my-auto grid grid-cols-3 gap-2">
-              <Link href="/dashboard/settings" className="btn mx-auto">
-                <AiOutlineSetting />
-              </Link>
-              {user.isAdmin ? (
-                <Link href="/dashboard/admin/search" className="btn mx-auto">
-                  <AiOutlineSearch />
-                </Link>
-              ) : (
-                <></>
-              )}
-              <SignOutButton />
-            </div>
-          </div>
+    <main className="container mx-auto flex flex-1 flex-col px-4 text-center">
+      <div className="mt-12 flex w-3/4 flex-nowrap justify-between">
+        <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
+          Dashboard
+        </p>
+      </div>
+      <div className="m-auto w-full md:w-4/5">
+        <div className="flex h-full flex-col items-center">
           {user?.isAdmin ? (
             <AdminView user={user}></AdminView>
           ) : (
