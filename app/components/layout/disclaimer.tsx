@@ -1,41 +1,60 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
 const Disclaimer = () => {
-  const [accepted, setAccepted] = useState<boolean>(false);
+  const [shouldOpen, setShouldOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (localStorage.getItem("disclaimer") === null) {
-      setAccepted(true);
+      setShouldOpen(true);
     } else {
-      setAccepted(false);
+      setShouldOpen(false);
     }
   }, []);
 
   const handleAccept = (acceptedVal: string) => {
     localStorage.setItem("disclaimer", acceptedVal);
-    setAccepted(false);
+    setShouldOpen(false);
   };
 
   return (
-    <dialog id="my_modal_1" className="modal" open={accepted}>
-      <form method="dialog" className="modal-box">
-        <h3 className="text-lg font-bold">Disclaimer</h3>
-        <p className="py-4">
-          Muntinlupa Science High School is bound by the law under RA 10173
-          “Data Privacy Act of 2012” All information saved on this web
-          application would be deemed confidential, and only the school&#39;s
-          authorities are authorized to share information. Such information
-          would be shared for legal and legitimate purposes only.
-        </p>
-        <div className="modal-action">
-          <button className="btn" onClick={() => handleAccept("false")}>
-            Accept
-          </button>
-        </div>
-      </form>
-    </dialog>
+    <Dialog open={shouldOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Disclaimer</DialogTitle>
+          <DialogDescription>
+            Muntinlupa Science High School is bound by the law under RA 10173
+            “Data Privacy Act of 2012” All information saved on this web
+            application would be deemed confidential, and only the school&#39;s
+            authorities are authorized to share information. Such information
+            would be shared for legal and legitimate purposes only.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => handleAccept("false")}
+            >
+              Accept
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
