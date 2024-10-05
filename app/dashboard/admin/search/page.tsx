@@ -46,11 +46,11 @@ export default function Section() {
       <div className="mx-auto w-full md:w-4/5">
         <div className="my-12 flex flex-col items-center">
           <div className="flex w-full flex-nowrap justify-between">
-            <form className="form-control">
+            <form>
               <Input
                 type="text"
                 placeholder="Search Last Names"
-                className="input input-bordered w-full max-w-xs"
+                className="w-full max-w-xs"
                 title="Only accepts alphabet letters."
                 id="search"
                 required
@@ -69,7 +69,7 @@ export default function Section() {
                 <Button
                   key={student.lrn.toString()}
                   variant={"outline"}
-                  className="w-full flex justify-between align-middle my-2 py-10"
+                  className="my-2 flex w-full justify-between py-10 align-middle"
                   asChild
                 >
                   <Link href={`/dashboard/admin/view/student/${student.lrn}`}>

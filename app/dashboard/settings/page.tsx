@@ -55,7 +55,7 @@ export default async function Dashboard() {
               <BackButton></BackButton>
             </div>
             <div className="my-1 w-full">
-              <div className="my-2 flex flex-1 flex-col rounded p-5 align-middle gap-4">
+              <div className="my-2 flex flex-1 flex-col gap-4 rounded p-5 align-middle">
                 <Separator />
                 <div>
                   <p className="text-left text-xl">{userInfo?.email}</p>

@@ -356,7 +356,7 @@ const Form = () => {
                   width={128}
                   height={128}
                   alt=""
-                  className="avatar size-32 rounded"
+                  className="size-32 rounded"
                 />
               ) : (
                 <div className="skeleton mx-auto size-32"></div>
@@ -384,7 +384,7 @@ const Form = () => {
               </p>
               <p className="text-left font-bold">
                 Date of Birth{" "}
-                <span className="text-sm text-neutral-content">
+                <span className="text-neutral-content text-sm">
                   (YYYY-MM-DD)
                 </span>
               </p>
@@ -422,7 +422,7 @@ const Form = () => {
               }}
               type="button"
               disabled={isLoading !== 0 ? true : false}
-              className="btn w-full bg-error text-white"
+              className="btn bg-error w-full text-white"
             >
               Back
             </button>
@@ -462,7 +462,7 @@ const Form = () => {
                 setStep(step - 1);
               }}
               type="button"
-              className="btn w-1/2 bg-error text-white"
+              className="btn bg-error w-1/2 text-white"
             >
               Back
             </button>
@@ -475,7 +475,7 @@ const Form = () => {
                 checkNext();
               }}
               type="button"
-              className="btn w-1/2 bg-info text-white"
+              className="btn bg-info w-1/2 text-white"
             >
               Next
             </button>

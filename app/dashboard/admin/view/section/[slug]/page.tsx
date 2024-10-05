@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { getStudentsBySection } from "@/queries/getStudentsBySection";
 import { getSections } from "@/queries/getSections";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -51,21 +51,16 @@ export default async function Section({
               </p>
               <BackButton></BackButton>
             </div>
-            <Suspense
-              fallback={<span className="loading loading-spinner"></span>}
-            >
+            <Suspense fallback={<Loader2 className="animate-spin" />}>
               <div className="my-1 w-full">
                 {studentList?.map((e, index) => (
                   <Button
                     key={e.lrn.toString()}
                     variant={"outline"}
-                    className="w-full flex justify-between align-middle my-2 py-10"
+                    className="my-2 flex w-full justify-between py-10 align-middle"
                     asChild
                   >
-                    <Link
-                      href={`/dashboard/admin/view/student/${e.lrn}`}
-                      className="btn btn-primary"
-                    >
+                    <Link href={`/dashboard/admin/view/student/${e.lrn}`}>
                       <div className="flex flex-1 gap-2">
                         <div>
                           <p className="text-xl">{index + 1}</p>

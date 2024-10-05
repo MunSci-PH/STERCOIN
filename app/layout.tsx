@@ -58,10 +58,9 @@ export default async function RootLayout({
   const supabase = useSupabaseServer(cookieStore);
 
   const user = (await getUser(supabase)).data.user;
-  var role: UserInfo | null = null;
-  if (user) {
-    role = (await useCheckRoleServer(supabase)) as UserInfo;
-  }
+  const role: UserInfo | null = (await useCheckRoleServer(
+    supabase
+  )) as UserInfo;
 
   return (
     <html lang="en">

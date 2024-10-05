@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 export default async function Grade({ params }: { params: { slug: number } }) {
   const cookieStore = cookies();
@@ -34,15 +34,13 @@ export default async function Grade({ params }: { params: { slug: number } }) {
               </p>
               <BackButton></BackButton>
             </div>
-            <Suspense
-              fallback={<span className="loading loading-spinner"></span>}
-            >
+            <Suspense fallback={<Loader2 className="animate-spin" />}>
               <div className="my-1 w-full">
                 {sectionList?.map((option) => (
                   <Button
                     key={option}
                     variant={"outline"}
-                    className="w-full flex justify-between align-middle my-2 py-10"
+                    className="my-2 flex w-full justify-between py-10 align-middle"
                     asChild
                   >
                     <Link href={`/dashboard/admin/view/section/${option}`}>

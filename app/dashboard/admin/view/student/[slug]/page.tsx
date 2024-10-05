@@ -80,7 +80,7 @@ export default async function Section({
                 {studentInfo?.map(async (info) => (
                   <div
                     key={info.lrn}
-                    className="my-2 flex flex-1 flex-col rounded p-5 align-middle gap-4"
+                    className="my-2 flex flex-1 flex-col gap-4 rounded p-5 align-middle"
                   >
                     <Image
                       src={await getPicture()}
@@ -90,7 +90,7 @@ export default async function Section({
                       placeholder={`data:image/svg+xml;base64,${toBase64(
                         shimmer(128, 128)
                       )}`}
-                      className="avatar size-32 rounded self-center"
+                      className="size-32 self-center rounded"
                     />
                     <Separator />
                     <div>

@@ -29,7 +29,7 @@ const useCheckRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
       isAdmin = userAdmin;
     }
   } else {
-    throw error;
+    return { role: null, isAdmin: false };
   }
 
   return { role: role, isAdmin: isAdmin };

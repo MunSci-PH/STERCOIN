@@ -7,6 +7,7 @@ import { getUser } from "@/queries/getUser";
 import { getStudentByEmail } from "@/queries/getStudentByEmail";
 import Loading from "@/loading";
 import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
 
 interface IContainerProps {
   user: UserInfo;
@@ -68,11 +69,11 @@ const UserView: React.FC<IContainerProps> = async (props) => {
   return (
     <main className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto w-full md:w-4/5">
-        <Suspense fallback={<span className="loading loading-spinner"></span>}>
+        <Suspense fallback={<Loader2 className="animate-spin" />}>
           <div className="my-12 flex flex-col items-center">
             <div className="my-1 w-full">
               {studentInfo ? (
-                <div className="my-2 flex flex-1 flex-col rounded p-5 align-middle gap-4">
+                <div className="my-2 flex flex-1 flex-col gap-4 rounded p-5 align-middle">
                   <Image
                     src={await getPicture()}
                     width={128}
@@ -81,7 +82,7 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                     placeholder={`data:image/svg+xml;base64,${toBase64(
                       shimmer(128, 128)
                     )}`}
-                    className="avatar size-32 rounded mx-auto"
+                    className="mx-auto size-32 rounded"
                   />
                   <Separator />
                   <div>
