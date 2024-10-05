@@ -2,8 +2,6 @@ import "@/globals.css";
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import Nav from "@/components/layout/nav";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
 import Disclaimer from "./components/layout/disclaimer";
@@ -75,7 +73,6 @@ export default async function RootLayout({
               {children}
               <Footer />
             </div>
-            <ToastContainer />
           </ThemeProvider>
           <Analytics />
         </ReactQueryClientProvider>

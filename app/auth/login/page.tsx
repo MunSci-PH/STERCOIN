@@ -1,3 +1,9 @@
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import LoginForm from "./loginForm";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
@@ -15,14 +21,17 @@ export default async function Dashboard() {
 
   return (
     <>
-      <main className="container mx-auto flex flex-1 px-4 text-center">
+      <main className="container mx-auto flex flex-1 px-4">
         <div className="m-auto">
-          <div className="my-12 flex w-96 flex-col items-center rounded-xl bg-base-100 p-10">
-            <p className="mb-8 text-center font-sans text-4xl font-bold">
-              Login
-            </p>
+          <Card className="w-[325px] md:w-[350px]">
+            <CardHeader>
+              <CardTitle>Sign In</CardTitle>
+              <CardDescription>
+                Enter your credentials to access your account.
+              </CardDescription>
+            </CardHeader>
             <LoginForm />
-          </div>
+          </Card>
         </div>
       </main>
     </>
