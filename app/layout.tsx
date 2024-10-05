@@ -8,6 +8,7 @@ import Footer from "./components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
 import Disclaimer from "./components/layout/disclaimer";
 import { ReactQueryClientProvider } from "./components/layout/QueryProvider";
+import { ThemeProvider } from "./components/layout/theme-provider";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -54,13 +55,20 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html lang="en">
         <body className={`min-h-screen ${lato.className}`}>
-          <Disclaimer />
-          <div className="flex min-h-screen flex-col bg-white text-black dark:bg-gray-800 dark:text-white">
-            <Nav />
-            {children}
-            <Footer />
-          </div>
-          <ToastContainer />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Disclaimer />
+            <div className="flex min-h-screen flex-col">
+              <Nav />
+              {children}
+              <Footer />
+            </div>
+            <ToastContainer />
+          </ThemeProvider>
           <Analytics />
         </body>
       </html>

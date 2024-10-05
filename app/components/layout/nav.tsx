@@ -1,58 +1,82 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+import Logo from "../../../public/logo.png";
 
 const Nav = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <div className="navbar bg-base-100">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="size-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+    <>
+      <header className="flex h-16 items-center border-b px-4 lg:px-6">
+        <Button variant={"ghost"} asChild>
+          <Link className="flex items-center justify-center" href="/">
+            <Image src={Logo} alt="Logo" className="size-6" />
+            <span className="ml-2 text-lg font-semibold">STERCOIN</span>
+          </Link>
+        </Button>
+        <nav className="ml-auto hidden gap-4 sm:gap-6 md:flex">
+          <Button variant={"outline"} asChild>
+            <Link href="/info-reg">Sign Up</Link>
+          </Button>
+          <Button variant={"default"} asChild>
+            <Link href="/dashboard">Sign In</Link>
+          </Button>
+        </nav>
+        <Button
+          className="ml-auto md:hidden"
+          variant="outline"
+          size="icon"
+          aria-label="Toggle Menu"
+          onClick={toggleMenu}
+        >
+          <motion.div
+            initial={false}
+            animate={{ rotate: isMenuOpen ? 90 : 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <li>
-              <Link href="/info-reg">
-                Student&apos;s Information Registration
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <Link className="btn btn-ghost text-xl normal-case" href="/">
-          <Image src={"/logo.png"} width="32" height="32" alt="" />
-          STERCOIN
-        </Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link href="/info-reg">
-              Student&apos;s Information Registration
+            {isMenuOpen ? (
+              <X className="size-6" />
+            ) : (
+              <Menu className="size-6" />
+            )}
+          </motion.div>
+        </Button>
+      </header>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.nav
+            className="border-b px-4 py-2 md:hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Link
+              className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
+              href="/info-reg"
+            >
+              Registration
             </Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <Link className="btn" href="/dashboard">
-          User Dashboard
-        </Link>
-      </div>
-    </div>
+            <Link
+              className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
+              href="/dashboard"
+            >
+              Dashboard
+            </Link>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 export default Nav;
