@@ -1,3 +1,9 @@
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import ConfirmForm from "./confirmForm";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
@@ -19,14 +25,17 @@ export default async function Dashboard({
 
   return (
     <>
-      <main className="container mx-auto flex flex-1 px-4 text-center">
+      <main className="container mx-auto flex flex-1 px-4">
         <div className="m-auto">
-          <div className="my-12 flex w-96 flex-col items-center rounded-xl bg-base-100 p-10">
-            <p className="mb-8 text-center font-sans text-4xl font-bold">
-              Confirm Your Email
-            </p>
+          <Card className="w-[325px] md:w-[350px]">
+            <CardHeader>
+              <CardTitle>Confirm Your Email</CardTitle>
+              <CardDescription>
+                Enter your email to confirm your account.{" "}
+              </CardDescription>
+            </CardHeader>
             <ConfirmForm email={searchParams.email} />
-          </div>
+          </Card>
         </div>
       </main>
     </>

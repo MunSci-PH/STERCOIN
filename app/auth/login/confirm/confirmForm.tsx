@@ -1,54 +1,54 @@
 "use client";
-import useTheme from "@/hooks/useTheme";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import useSupabaseBrowser from "@/utils/client";
-import { ErrorMessage } from "@hookform/error-message";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { z } from "zod";
 
-export type confirmData = {
-  email: string;
-  captchaToken: string;
-};
+const formSchema = z.object({
+  email: z.string().email(),
+});
 
-interface IContainerProps {
-  email: string;
-}
-
-const ConfirmForm: React.FC<IContainerProps> = (props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<confirmData>({ defaultValues: { email: props.email } });
+const ConfirmForm = ({ email }: { email: string }) => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { email: email },
+  });
   const [isLoading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [captchaLoading, setCaptchaLoading] = useState(true);
+  const [error, setError] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>();
-  const isDarkTheme = useTheme();
   const supabase = useSupabaseBrowser();
 
-  const tryLogin = async (e: confirmData) => {
+  const tryLogin = async (e: z.infer<typeof formSchema>) => {
     setLoading(true);
-    if (!e.email) e.email = props.email;
-    e.captchaToken = captchaToken!;
+    if (!e.email) e.email = email;
 
     const { error } = await supabase.auth.resend({
       type: "signup",
       email: e.email,
       options: {
-        captchaToken: e.captchaToken,
+        captchaToken: captchaToken,
       },
     });
 
     if (error) {
-      toast(error.message, {
-        theme: isDarkTheme ? "dark" : "light",
-        autoClose: 2000,
-        type: "error",
-      });
+      setError(error.message);
       console.error(error);
       setCaptchaLoading(true);
       turnstileRef.current?.reset();
@@ -61,72 +61,65 @@ const ConfirmForm: React.FC<IContainerProps> = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(tryLogin)} className="form-control space-y-4">
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Email</span>
-        </div>
-        <input
-          type="input"
-          disabled={props.email ? true : false}
-          className="input input-bordered w-full max-w-xs"
-          {...register("email", {
-            required: true,
-            pattern: {
-              value:
-                /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-              message: "Please input a valid email.",
-            },
-            disabled: props.email ? true : false,
-          })}
-        />
-        <div className="label">
-          <ErrorMessage
-            errors={errors}
+    <Form {...form} control={form.control}>
+      <form onSubmit={form.handleSubmit(tryLogin)} className="space-y-4">
+        <CardContent className="space-y-4">
+          <FormField
+            control={form.control}
             name="email"
-            render={({ message }) => {
-              return (
-                <span className="label-text-alt text-left text-error">
-                  {message}
-                </span>
-              );
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    {...field}
+                    disabled={email ? true : false}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+        <CardFooter className="flex flex-1 flex-col gap-4">
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading || captchaLoading}
+          >
+            {isLoading || captchaLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Confirm Email"
+            )}
+          </Button>
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
+            onSuccess={(token) => {
+              setCaptchaLoading(false);
+              setCaptchaToken(token);
+            }}
+            onExpire={() => {
+              setCaptchaLoading(true);
+              setCaptchaToken("");
+              turnstileRef.current?.reset();
+            }}
+            onError={(e) => {
+              setError(e);
+              console.error(e);
             }}
           />
-        </div>
-      </label>
-      <button
-        type="submit"
-        className="btn btn-info"
-        disabled={isLoading || captchaLoading}
-      >
-        {isLoading || captchaLoading ? (
-          <span className="loading loading-dots"></span>
-        ) : (
-          "Confirm Email"
-        )}
-      </button>
-      <Turnstile
-        ref={turnstileRef}
-        siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
-        onSuccess={(token) => {
-          setCaptchaLoading(false);
-          setCaptchaToken(token);
-        }}
-        onExpire={() => {
-          setCaptchaLoading(true);
-          setCaptchaToken("");
-          turnstileRef.current?.reset();
-        }}
-        onError={(e) => {
-          toast(e, {
-            theme: isDarkTheme ? "dark" : "light",
-            autoClose: 2000,
-            type: "error",
-          });
-          console.error(e);
-        }}
-      />
-    </form>
+        </CardFooter>
+      </form>
+    </Form>
   );
 };
 export default ConfirmForm;
