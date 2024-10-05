@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+//NOTE - No longer used as we use the shadcn/ui toaster.
 const useTheme = () => {
   const [isDarkTheme, setDarkTheme] = useState(false);
 
