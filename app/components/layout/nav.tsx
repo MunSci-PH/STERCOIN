@@ -1,3 +1,4 @@
+"use server";
 import useSupabaseServer from "@/utils/server";
 import { cookies } from "next/headers";
 import useCheckRoleServer from "@/hooks/useCheckRoleServer";
@@ -6,6 +7,7 @@ import ClientNav from "./clientnav";
 import { UserInfo } from "@/dashboard/types";
 
 const Nav = async () => {
+  "use server";
   const cookieStore = cookies();
   const supabase = useSupabaseServer(cookieStore);
 
