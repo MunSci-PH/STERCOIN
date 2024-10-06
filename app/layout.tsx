@@ -49,19 +49,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
-
-  const user = (await getUser(supabase)).data.user;
-  const role: UserInfo | null = (await useCheckRoleServer(
-    supabase
-  )) as UserInfo;
-
   return (
     <html lang="en">
       <body className={`min-h-screen ${lato.className}`}>
@@ -74,7 +66,7 @@ export default async function RootLayout({
           >
             <Disclaimer />
             <div className="flex min-h-screen flex-col">
-              <Nav user={user} role={role} />
+              <Nav />
               {children}
               <Footer />
             </div>
