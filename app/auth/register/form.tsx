@@ -47,7 +47,7 @@ const formSchema = z
       .regex(
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       ),
-    grade: z.number().min(1).max(12),
+    grade: z.number().min(7).max(12),
     section: z.string(),
     pwd: z.boolean(),
     idpic: z.array(z.string()).min(1),
@@ -82,7 +82,7 @@ const RegisterForm = () => {
       email: "",
       password: "",
       confirmp: "",
-      grade: 1,
+      grade: 7,
       section: "",
       pwd: false,
       idpic: [],
