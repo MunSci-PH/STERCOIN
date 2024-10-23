@@ -31,6 +31,9 @@ const ForgotPasswordForm = ({
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
   });
   const [isLoading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string>();

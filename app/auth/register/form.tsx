@@ -18,7 +18,17 @@ import { z } from "zod";
 
 const formSchema = z
   .object({
-    lrn: z.number().min(12).max(12),
+    lrn: z
+      .string()
+      .min(12)
+      .max(12)
+      .refine(
+        (v) => {
+          let n = Number(v);
+          return !isNaN(n) && v?.length > 0;
+        },
+        { message: "Must be a number" }
+      ),
     firstname: z.string().trim().min(1).max(50),
     middlename: z.string().trim().max(50).optional(),
     lastname: z.string().min(1).max(50),
@@ -64,6 +74,33 @@ const formSchema = z
 const RegisterForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      lrn: "",
+      firstname: "",
+      middlename: "",
+      lastname: "",
+      email: "",
+      password: "",
+      confirmp: "",
+      grade: 1,
+      section: "",
+      pwd: false,
+      idpic: [],
+      birthday: new Date(),
+      address: "",
+      e1Name: "",
+      e1FB: "",
+      e1Res: "",
+      e1Num: "",
+      e2Name: "",
+      e2FB: "",
+      e2Res: "",
+      e2Num: "",
+      e3Name: "",
+      e3FB: "",
+      e3Res: "",
+      e3Num: "",
+    },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {

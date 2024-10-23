@@ -30,6 +30,10 @@ const formSchema = z
 const ChangePassword = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      password: "",
+      confirm: "",
+    },
   });
   const [error, setError] = useState<string>();
   const supabase = useSupabaseBrowser();

@@ -34,6 +34,10 @@ const formSchema = z.object({
 const LoginForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [isLoading, setLoading] = useState(false);

@@ -35,6 +35,10 @@ const ResetPasswordForm = ({
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      password: "",
+      confirm: "",
+    },
   });
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
