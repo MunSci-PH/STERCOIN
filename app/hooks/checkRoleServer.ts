@@ -1,3 +1,6 @@
+"use server";
+
+import { UserInfo } from "@/dashboard/types";
 import { getUser } from "@/queries/getUser";
 import { getUserById } from "@/queries/getUserById";
 import { TypedSupabaseClient } from "@/utils/types";
@@ -15,7 +18,7 @@ const checkRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
 
     if (error) {
       console.error(error);
-      return;
+      throw error;
     }
 
     if (data) {
@@ -27,10 +30,10 @@ const checkRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
       isAdmin = userAdmin;
     }
   } else {
-    return { role: null, isAdmin: false };
+    return { role: null, isAdmin: false } as UserInfo;
   }
 
-  return { role: role, isAdmin: isAdmin };
+  return { role: role, isAdmin: isAdmin } as UserInfo;
 };
 
 export default checkRoleServer;

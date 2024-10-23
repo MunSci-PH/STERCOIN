@@ -1,4 +1,4 @@
 export type UserInfo = {
-  role: string;
+  role: string | null;
   isAdmin: boolean;
 };

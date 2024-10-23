@@ -2,22 +2,16 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Menu } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useState } from "react";
 import { UserInfo } from "@/dashboard/types";
-import { User } from "@supabase/supabase-js";
+import { PostgrestError, User } from "@supabase/supabase-js";
 import useSupabaseBrowser from "@/utils/client";
-import Logo from "../../../public/logo.png";
+import Logo from "../../../../public/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 
-const ClientNav = ({
-  user,
-  role,
-}: {
-  user: User | null;
-  role: UserInfo | null;
-}) => {
+const ClientNav = ({ user, role }: { user: User | null; role: UserInfo }) => {
   const supabase = useSupabaseBrowser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
