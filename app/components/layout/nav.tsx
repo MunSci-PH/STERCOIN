@@ -2,13 +2,14 @@ import checkRoleServer from "@/hooks/checkRoleServer";
 import { getUser } from "@/queries/getUser";
 import ClientNav from "./clientnav";
 import { UserInfo } from "@/dashboard/types";
-import useSupabaseBrowser from "@/utils/client";
 import { use } from "react";
+import createSupabaseServer from "@/utils/server";
 
 const Nav = () => {
-  const supabase = useSupabaseBrowser();
-
   async function getUserInfo() {
+    "use server";
+    const supabase = await createSupabaseServer();
+
     const user = await getUser(supabase);
     const role = (await checkRoleServer(supabase)) as UserInfo;
     const r = { data: { user, role } };
