@@ -5,11 +5,12 @@ export const metadata: Metadata = {
   description: "Student Emergency Release Contact Information",
 };
 
-export default function Error({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default async function Error(
+  props: {
+    searchParams: Promise<{ message: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return (
     <div className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto">

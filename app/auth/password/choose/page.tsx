@@ -5,17 +5,16 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import useSupabaseServer from "@/utils/server";
-import { cookies } from "next/headers";
+import createSupabaseServer from "@/utils/server";
+
 import { redirect } from "next/navigation";
 
-export default async function ResetPassword({
-  searchParams,
-}: {
-  searchParams: { code: string };
+export default async function ResetPassword(props: {
+  searchParams: Promise<{ code: string }>;
 }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const searchParams = await props.searchParams;
+
+  const supabase = await createSupabaseServer();
 
   const { data } = await supabase.auth.getUser();
 

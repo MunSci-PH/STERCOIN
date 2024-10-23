@@ -5,13 +5,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import LoginForm from "./loginForm";
-import useSupabaseServer from "@/utils/server";
-import { cookies } from "next/headers";
+import createSupabaseServer from "@/utils/server";
+
 import { redirect } from "next/navigation";
 
 export default async function Dashboard() {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const supabase = await createSupabaseServer();
 
   const { data } = await supabase.auth.getUser();
 

@@ -1,10 +1,8 @@
 import { getUser } from "@/queries/getUser";
 import { getUserById } from "@/queries/getUserById";
-import useSupabaseServer from "@/utils/server";
 import { TypedSupabaseClient } from "@/utils/types";
-import { useQuery } from "@supabase-cache-helpers/postgrest-react-query";
 
-const useCheckRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
+const checkRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
   let role = "";
   let isAdmin = false;
   const supabase = supabaseInstance;
@@ -35,4 +33,4 @@ const useCheckRoleServer = async (supabaseInstance: TypedSupabaseClient) => {
   return { role: role, isAdmin: isAdmin };
 };
 
-export default useCheckRoleServer;
+export default checkRoleServer;

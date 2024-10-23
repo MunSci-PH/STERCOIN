@@ -5,17 +5,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ConfirmForm from "./confirmForm";
-import useSupabaseServer from "@/utils/server";
-import { cookies } from "next/headers";
+import createSupabaseServer from "@/utils/server";
+
 import { redirect } from "next/navigation";
 
-export default async function Dashboard({
-  searchParams,
-}: {
-  searchParams: { email: string };
+export default async function Dashboard(props: {
+  searchParams: Promise<{ email: string }>;
 }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const searchParams = await props.searchParams;
+
+  const supabase = await createSupabaseServer();
 
   const { data } = await supabase.auth.getUser();
 

@@ -1,23 +1,22 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import useSupabaseServer from "@/utils/server";
+import createSupabaseServer from "@/utils/server";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaPhone } from "react-icons/fa";
-import { cookies } from "next/headers";
+
 import { getStudentsByLRN } from "@/queries/getStudentsByLRN";
 import { Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
-export default async function Section({
-  params,
-}: {
-  params: { slug: number };
+export default async function Section(props: {
+  params: Promise<{ slug: number }>;
 }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const params = await props.params;
+
+  const supabase = await createSupabaseServer();
   const shimmer = (w: number, h: number) => `
 <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>

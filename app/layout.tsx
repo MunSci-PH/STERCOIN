@@ -7,11 +7,6 @@ import { Analytics } from "@vercel/analytics/next";
 import Disclaimer from "./components/layout/disclaimer";
 import { ReactQueryClientProvider } from "./components/layout/QueryProvider";
 import { ThemeProvider } from "./components/layout/theme-provider";
-import useSupabaseServer from "./utils/server";
-import { cookies } from "next/headers";
-import { getUser } from "./queries/getUser";
-import { UserInfo } from "./dashboard/types";
-import useCheckRoleServer from "./hooks/useCheckRoleServer";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -55,7 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head />
       <body className={`min-h-screen ${lato.className}`}>
         <ReactQueryClientProvider>
           <ThemeProvider

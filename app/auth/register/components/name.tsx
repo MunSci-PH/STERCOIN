@@ -1,6 +1,7 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { IFormInput } from "../types";
+import React from "react";
 
 interface IContainerProps {
   registerFunc: UseFormRegister<IFormInput>;

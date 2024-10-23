@@ -4,10 +4,10 @@ import BackButton from "@/components/utils/backButton";
 import { SignOutAllButton } from "@/components/utils/signOutAllButton";
 import Loading from "@/loading";
 import { getUserById } from "@/queries/getUserById";
-import useSupabaseServer from "@/utils/server";
+import createSupabaseServer from "@/utils/server";
 import { Edit } from "lucide-react";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
+
 import Link from "next/link";
 import { Suspense } from "react";
 import { FaEdit } from "react-icons/fa";
@@ -18,8 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const supabase = await createSupabaseServer();
 
   const getUserInfo = async () => {
     const {

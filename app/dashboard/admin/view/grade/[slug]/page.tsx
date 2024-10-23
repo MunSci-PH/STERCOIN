@@ -1,16 +1,19 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import useSupabaseServer from "@/utils/server";
+import createSupabaseServer from "@/utils/server";
 import Link from "next/link";
 import { Suspense } from "react";
-import { cookies } from "next/headers";
+
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 
-export default async function Grade({ params }: { params: { slug: number } }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+export default async function Grade(props: {
+  params: Promise<{ slug: number }>;
+}) {
+  const params = await props.params;
+
+  const supabase = await createSupabaseServer();
 
   async function getSections() {
     const { data, error } = await getSectionsByGrade(supabase, params.slug);

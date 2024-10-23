@@ -1,18 +1,18 @@
 "use server";
-import useSupabaseServer from "@/utils/server";
-import { cookies } from "next/headers";
-import useCheckRoleServer from "@/hooks/useCheckRoleServer";
+import createSupabaseServer from "@/utils/server";
+
+import checkRoleServer from "@/hooks/checkRoleServer";
 import { getUser } from "@/queries/getUser";
 import ClientNav from "./clientnav";
 import { UserInfo } from "@/dashboard/types";
 
 const Nav = async () => {
   "use server";
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+
+  const supabase = await createSupabaseServer();
 
   const user = await getUser(supabase);
-  const role = (await useCheckRoleServer(supabase)) as UserInfo;
+  const role = (await checkRoleServer(supabase)) as UserInfo;
 
   return <ClientNav user={user.data.user} role={role} />;
 };

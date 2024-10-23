@@ -1,22 +1,21 @@
 import BackButton from "@/components/utils/backButton";
 import NotFound from "@/components/layout/not-found";
-import useSupabaseServer from "@/utils/server";
+import createSupabaseServer from "@/utils/server";
 import Link from "next/link";
 import { Suspense } from "react";
-import { cookies } from "next/headers";
+
 import { getStudentsBySection } from "@/queries/getStudentsBySection";
 import { getSections } from "@/queries/getSections";
 import { ArrowRight, Loader, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-export default async function Section({
-  params,
-}: {
-  params: { slug: string };
+export default async function Section(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const params = await props.params;
+
+  const supabase = await createSupabaseServer();
 
   async function getStudents() {
     const { data, error } = await getStudentsBySection(supabase, params.slug);

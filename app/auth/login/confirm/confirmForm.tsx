@@ -32,7 +32,7 @@ const ConfirmForm = ({ email }: { email: string }) => {
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [captchaLoading, setCaptchaLoading] = useState(true);
   const [error, setError] = useState<string>();
-  const turnstileRef = useRef<TurnstileInstance>();
+  const turnstileRef = useRef<TurnstileInstance>(undefined);
   const supabase = useSupabaseBrowser();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {

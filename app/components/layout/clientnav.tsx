@@ -140,7 +140,7 @@ const ClientNav = ({
           </Button>
           <nav className="ml-auto hidden gap-4 sm:gap-6 md:flex">
             <Button variant={"outline"} asChild>
-              <Link href="/info-reg">Sign Up</Link>
+              <Link href="/auth/register">Sign Up</Link>
             </Button>
             <Button variant={"default"} asChild>
               <Link href="/dashboard">Sign In</Link>
@@ -176,7 +176,7 @@ const ClientNav = ({
               transition={{ duration: 0.2 }}
             >
               <Button variant={"outline"} className="my-2 w-full" asChild>
-                <Link href="/info-reg">Sign Up</Link>
+                <Link href="/auth/register">Sign Up</Link>
               </Button>
               <Button variant={"default"} className="my-2 w-full" asChild>
                 <Link href="/dashboard">Sign In</Link>

@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { AiOutlineSearch, AiOutlineSetting } from "react-icons/ai";
-import useSupabaseServer from "@/utils/server";
+import createSupabaseServer from "@/utils/server";
 import { SignOutButton } from "@/components/utils/signOutButton";
-import { cookies } from "next/headers";
-import useCheckRoleServer from "@/hooks/useCheckRoleServer";
+
+import checkRoleServer from "@/hooks/checkRoleServer";
 import AdminView from "./AdminView";
 import { UserInfo } from "./types";
 import UserView from "./UserView";
@@ -15,10 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const supabase = await createSupabaseServer();
 
-  const user: UserInfo = (await useCheckRoleServer(supabase)) as UserInfo;
+  const user: UserInfo = (await checkRoleServer(supabase)) as UserInfo;
 
   return (
     <main className="container mx-auto flex flex-1 flex-col items-center px-4 text-center">

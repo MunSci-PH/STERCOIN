@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { UserInfo } from "./types";
-import useSupabaseServer from "@/utils/server";
-import { cookies } from "next/headers";
+import createSupabaseServer from "@/utils/server";
 import { Suspense } from "react";
 import { getUser } from "@/queries/getUser";
 import { getStudentByEmail } from "@/queries/getStudentByEmail";
@@ -14,8 +13,7 @@ interface IContainerProps {
 }
 
 const UserView: React.FC<IContainerProps> = async (props) => {
-  const cookieStore = cookies();
-  const supabase = useSupabaseServer(cookieStore);
+  const supabase = await createSupabaseServer();
   const shimmer = (w: number, h: number) => `
 <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
