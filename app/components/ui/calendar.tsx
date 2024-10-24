@@ -67,9 +67,14 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeft className="size-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="size-4" />,
         Dropdown: ({ value, onChange, children, caption, ...props }) => {
-          const options = React.Children.toArray(
-            children
-          ) as React.ReactElement[];
+          const options = React.Children.toArray(children).filter(
+            (
+              child
+            ): child is React.ReactElement<{
+              value: string;
+              children: React.ReactNode;
+            }> => React.isValidElement(child)
+          );
           const selected = options.find((child) => child.props.value === value);
           const handleChange = (value: string) => {
             const changeEvent = {
@@ -82,7 +87,7 @@ function Calendar({
               <SelectTrigger className="w-[120px]">
                 <SelectValue>{selected?.props?.children}</SelectValue>
               </SelectTrigger>
-              <SelectContent defaultValue="algo">
+              <SelectContent>
                 {options.map((option, id: number) => (
                   <SelectItem key={id} value={option.props.value}>
                     {option.props.children}
