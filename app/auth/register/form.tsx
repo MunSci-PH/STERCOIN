@@ -160,7 +160,7 @@ const RegisterForm = ({
     <>
       <Form {...form} control={form.control}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="grid grid-cols-1 xl:grid-cols-2">
+          <CardContent className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -466,6 +466,28 @@ const RegisterForm = ({
                           />
                         </PopoverContent>
                       </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex flex-1 flex-col gap-2 align-bottom md:flex-row">
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="string"
+                          placeholder="Home Address"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
