@@ -212,6 +212,7 @@ const RegisterForm = ({
       ecname3: data.e3Name.trim(),
       ecfb3: data.e3FB.trim(),
       ecres3: data.e3Res.trim(),
+      ecnum3: data.e3Num.trim(),
     };
 
     setLoadingText("Uploading data to database");
