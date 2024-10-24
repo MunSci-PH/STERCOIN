@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -37,25 +37,22 @@ import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { PhoneInput } from "@/components/ui/input-phone";
+
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png"];
 
 const formSchema = z
   .object({
     lrn: z
       .string()
-      .min(12)
-      .max(12)
+      .length(12, "Must be 12 characters.")
       .refine(
         (v) => {
           let n = Number(v);
+          console.log(v.length, v);
           return !isNaN(n) && v?.length > 0;
         },
         { message: "Must be a number" }
@@ -68,39 +65,35 @@ const formSchema = z
       .string()
       .trim()
       .min(8)
-      .regex(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ),
+      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/),
     confirmp: z
       .string()
       .trim()
       .min(8)
-      .regex(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      ),
+      .regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/),
     grade: z.number().min(7).max(12),
     section: z.string(),
     pwd: z.boolean(),
-    idpic: z.array(z.string()).min(1),
+    idpic: typeof window === "undefined" ? z.any() : z.instanceof(FileList),
     birthday: z.date().min(new Date("2000-01-01")).max(new Date("2015-12-31")),
     address: z.string().trim().min(1).max(100),
     e1Name: z.string().trim().min(1).max(50),
     e1FB: z.string().trim().min(1).max(50).url(),
-    e1Res: z.string().trim().min(1).max(50),
+    e1Res: z.string().trim().min(1, "Must select an option.").max(50),
     e1Num: z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
     e2Name: z.string().trim().min(1).max(50),
     e2FB: z.string().trim().min(1).max(50).url(),
-    e2Res: z.string().trim().min(1).max(50),
+    e2Res: z.string().trim().min(1, "Must select an option.").max(50),
     e2Num: z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
     e3Name: z.string().trim().min(1).max(50),
     e3FB: z.string().trim().min(1).max(50).url(),
-    e3Res: z.string().trim().min(1).max(50),
+    e3Res: z.string().trim().min(1, "Must select an option.").max(50),
     e3Num: z
       .string()
       .trim()
@@ -163,6 +156,9 @@ const RegisterForm = ({
       e3Num: "",
     },
   });
+  const [isLoading, setLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState("Loading");
+  const fileRef = form.register("idpic");
 
   const onGradeChange = async (value: number) => {
     const sectionList = await getSectionsByGrade(supabase, value);
@@ -180,6 +176,7 @@ const RegisterForm = ({
     useState<{ label: string; value: string }[]>(sections);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    setLoading(true);
     console.log(data);
   };
 
@@ -187,7 +184,7 @@ const RegisterForm = ({
     <>
       <Form {...form} control={form.control}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+          <CardContent className="grid grid-cols-1 gap-4 xl:grid-cols-2">
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -200,32 +197,13 @@ const RegisterForm = ({
                       school.
                     </FormDescription>
                     <FormControl className="w-full">
-                      <InputOTP
-                        maxLength={12}
-                        className="flex flex-col"
+                      <Input
+                        type="string"
+                        inputMode="numeric"
+                        placeholder="LRN"
+                        required
                         {...field}
-                      >
-                        <InputOTPGroup>
-                          <InputOTPSlot index={0} />
-                          <InputOTPSlot index={1} />
-                          <InputOTPSlot index={2} />
-                          <InputOTPSlot index={3} />
-                          <InputOTPSlot index={4} />
-                          <InputOTPSlot index={5} />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot index={6} />
-                          <InputOTPSlot index={7} />
-                          <InputOTPSlot index={8} />
-                        </InputOTPGroup>
-                        <InputOTPSeparator />
-                        <InputOTPGroup>
-                          <InputOTPSlot index={9} />
-                          <InputOTPSlot index={10} />
-                          <InputOTPSlot index={11} />
-                        </InputOTPGroup>
-                      </InputOTP>
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -356,7 +334,7 @@ const RegisterForm = ({
                   control={form.control}
                   name="grade"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col w-full">
+                    <FormItem className="flex w-full flex-col">
                       <FormLabel>Grade</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -374,7 +352,7 @@ const RegisterForm = ({
                                     (grade) => grade.value === field.value
                                   )?.label
                                 : "Grade"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -416,7 +394,7 @@ const RegisterForm = ({
                   control={form.control}
                   name="section"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col w-full">
+                    <FormItem className="flex w-full flex-col">
                       <FormLabel>Section</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -434,7 +412,7 @@ const RegisterForm = ({
                                     (section) => section.value === field.value
                                   )?.label
                                 : "Section"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -495,13 +473,16 @@ const RegisterForm = ({
                               ) : (
                                 <span>Pick a date</span>
                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              <CalendarIcon className="ml-auto size-4 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
+                            fromYear={2000}
+                            toYear={2015}
+                            captionLayout="dropdown"
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
@@ -548,7 +529,7 @@ const RegisterForm = ({
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <div className="space-y-1 leading-none cursor-pointer">
+                      <div className="cursor-pointer space-y-1 leading-none">
                         <FormLabel className="cursor-pointer">
                           Are you a person with disability?
                         </FormLabel>
@@ -568,7 +549,7 @@ const RegisterForm = ({
                       Please upload a valid ID picture.
                     </FormDescription>
                     <FormControl>
-                      <Input type="file" required {...field} />
+                      <Input type="file" required {...fileRef} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -628,7 +609,7 @@ const RegisterForm = ({
                       </FormDescription>
                       <FormControl>
                         <Input
-                          type="string"
+                          type="url"
                           placeholder="URL"
                           required
                           {...field}
@@ -664,7 +645,7 @@ const RegisterForm = ({
                                       relationship.value === field.value
                                   )?.label
                                 : "Select relationship"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -758,7 +739,7 @@ const RegisterForm = ({
                       </FormDescription>
                       <FormControl>
                         <Input
-                          type="string"
+                          type="url"
                           placeholder="URL"
                           required
                           {...field}
@@ -794,7 +775,7 @@ const RegisterForm = ({
                                       relationship.value === field.value
                                   )?.label
                                 : "Select relationship"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -888,7 +869,7 @@ const RegisterForm = ({
                       </FormDescription>
                       <FormControl>
                         <Input
-                          type="string"
+                          type="url"
                           placeholder="URL"
                           required
                           {...field}
@@ -924,7 +905,7 @@ const RegisterForm = ({
                                       relationship.value === field.value
                                   )?.label
                                 : "Select relationship"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
@@ -967,6 +948,13 @@ const RegisterForm = ({
                 />
               </div>
             </div>
+            <Button
+              type="submit"
+              className="xl:col-span-2"
+              disabled={isLoading}
+            >
+              {isLoading ? loadingText : "Submit"}
+            </Button>
           </CardContent>
         </form>
       </Form>
