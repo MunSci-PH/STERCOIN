@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -33,6 +33,8 @@ import { cn } from "@/lib/utils";
 import useSupabaseBrowser from "@/utils/client";
 import { useState } from "react";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 
 const formSchema = z
   .object({
@@ -118,7 +120,7 @@ const RegisterForm = ({
       section: "",
       pwd: false,
       idpic: [],
-      birthday: new Date(),
+      birthday: new Date("2015-12-31"),
       address: "",
       e1Name: "",
       e1FB: "",
@@ -301,130 +303,173 @@ const RegisterForm = ({
                   )}
                 />
               </div>
-              <div className="flex flex-1 ">
-                <div className="flex flex-1 flex-col gap-2 align-bottom md:flex-row">
-                  <FormField
-                    control={form.control}
-                    name="grade"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col w-full">
-                        <FormLabel>Grade</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  "w-full justify-between",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value
-                                  ? grades.find(
-                                      (grade) => grade.value === field.value
-                                    )?.label
-                                  : "Grade"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
-                            <Command shouldFilter={false}>
-                              <CommandList>
-                                <CommandEmpty>
-                                  No grade level found.
-                                </CommandEmpty>
-                                <CommandGroup>
-                                  {grades.map((grade) => (
-                                    <CommandItem
-                                      value={grade.label}
-                                      key={grade.value}
-                                      onSelect={() => {
-                                        form.setValue("grade", grade.value);
-                                        onGradeChange(grade.value);
-                                      }}
-                                    >
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          grade.value === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {grade.label}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="section"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col w-full">
-                        <FormLabel>Section</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                className={cn(
-                                  "w-full justify-between",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value
-                                  ? sectionList.find(
-                                      (section) => section.value === field.value
-                                    )?.label
-                                  : "Section"}
-                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-[200px] p-0">
-                            <Command>
-                              <CommandList>
-                                <CommandEmpty>No sections found.</CommandEmpty>
-                                <CommandGroup>
-                                  {sectionList.map((section) => (
-                                    <CommandItem
-                                      value={section.label}
-                                      key={section.value}
-                                      onSelect={() => {
-                                        form.setValue("section", section.value);
-                                      }}
-                                    >
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          section.value === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                      {section.label}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+              <Separator />
+              <div className="flex flex-1 flex-col gap-2 align-bottom md:flex-row">
+                <FormField
+                  control={form.control}
+                  name="grade"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel>Grade</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? grades.find(
+                                    (grade) => grade.value === field.value
+                                  )?.label
+                                : "Grade"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                          <Command shouldFilter={false}>
+                            <CommandList>
+                              <CommandEmpty>No grade level found.</CommandEmpty>
+                              <CommandGroup>
+                                {grades.map((grade) => (
+                                  <CommandItem
+                                    value={grade.label}
+                                    key={grade.value}
+                                    onSelect={() => {
+                                      form.setValue("grade", grade.value);
+                                      onGradeChange(grade.value);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        grade.value === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {grade.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="section"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col w-full">
+                      <FormLabel>Section</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? sectionList.find(
+                                    (section) => section.value === field.value
+                                  )?.label
+                                : "Section"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] p-0">
+                          <Command>
+                            <CommandList>
+                              <CommandEmpty>No sections found.</CommandEmpty>
+                              <CommandGroup>
+                                {sectionList.map((section) => (
+                                  <CommandItem
+                                    value={section.label}
+                                    key={section.value}
+                                    onSelect={() => {
+                                      form.setValue("section", section.value);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        section.value === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    {section.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Separator />
+              <div className="flex flex-1 flex-col gap-2 align-bottom md:flex-row">
+                <FormField
+                  control={form.control}
+                  name="birthday"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Date of Birth</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date("2015-12-31") ||
+                              date < new Date("2000-01-01")
+                            }
+                            initialFocus
+                            defaultMonth={field.value}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
           </CardContent>
