@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import useSupabaseBrowser from "@/utils/client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -40,6 +40,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { PhoneInput } from "@/components/ui/input-phone";
+import { TablesInsert } from "../../../database.types";
+import { storageClient } from "@/utils/storage";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png"];
@@ -125,6 +130,7 @@ const RegisterForm = ({
 }: {
   sections: { label: string; value: string }[];
 }) => {
+  const router = useRouter();
   const supabase = useSupabaseBrowser();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -158,6 +164,10 @@ const RegisterForm = ({
   });
   const [isLoading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("Loading");
+  const [captchaToken, setCaptchaToken] = useState<string>();
+  const [captchaLoading, setCaptchaLoading] = useState(true);
+  const [error, setError] = useState<string>();
+  const turnstileRef = useRef<TurnstileInstance>(undefined);
   const fileRef = form.register("idpic");
 
   const onGradeChange = async (value: number) => {
@@ -175,9 +185,72 @@ const RegisterForm = ({
   const [sectionList, setSectionList] =
     useState<{ label: string; value: string }[]>(sections);
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true);
     console.log(data);
+
+    const studentData: TablesInsert<"studentData"> = {
+      lrn: Number(data.lrn.trim()),
+      email: data.email.trim(),
+      firstname: data.firstname.trim(),
+      middlename: data.middlename?.trim(),
+      lastname: data.lastname.trim(),
+      grade: data.grade,
+      section: data.section.trim(),
+      pwd: data.pwd,
+      idpicfile: data.idpic.item(0)?.name,
+      birthday: data.birthday.toISOString(),
+      address: data.address.trim(),
+      ecname1: data.e1Name.trim(),
+      ecfb1: data.e1FB.trim(),
+      ecres1: data.e1Res.trim(),
+      ecnum1: data.e1Num.trim(),
+      ecname2: data.e2Name.trim(),
+      ecfb2: data.e2FB.trim(),
+      ecres2: data.e2Res.trim(),
+      ecnum2: data.e2Num.trim(),
+      ecname3: data.e3Name.trim(),
+      ecfb3: data.e3FB.trim(),
+      ecres3: data.e3Res.trim(),
+    };
+
+    setLoadingText("Uploading data to database");
+
+    const dataUpload = await supabase.from("studentData").insert(studentData);
+
+    if (dataUpload.error) {
+      console.error(dataUpload);
+      setLoading(false);
+      return dataUpload.error;
+    }
+
+    setLoadingText("Uploading picture");
+
+    const pictureUpload = await storageClient
+      .from("idpics")
+      .upload(`${data.lrn}/${data.idpic.item(0)!.name}`, data.idpic[0]);
+
+    if (pictureUpload.error) {
+      console.error(pictureUpload);
+      setLoading(false);
+      return pictureUpload.error;
+    }
+
+    setLoadingText("Registering account");
+
+    const registerAcc = await supabase.auth.signUp({
+      email: data.email.trim(),
+      password: data.password.trim(),
+      options: { captchaToken: captchaToken },
+    });
+
+    if (registerAcc.error) {
+      console.error(registerAcc);
+      setLoading(false);
+      return registerAcc.error;
+    }
+
+    router.push("/auth/register/success");
   };
 
   return (
@@ -185,6 +258,11 @@ const RegisterForm = ({
       <Form {...form} control={form.control}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            {error && (
+              <Alert variant="destructive" className="xl:col-span-2">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="space-y-4">
               <FormField
                 control={form.control}
@@ -951,10 +1029,35 @@ const RegisterForm = ({
             <Button
               type="submit"
               className="xl:col-span-2"
-              disabled={isLoading}
+              disabled={isLoading || captchaLoading}
             >
-              {isLoading ? loadingText : "Submit"}
+              {isLoading || captchaLoading ? (
+                <span className="flex flex-1 flex-row items-center justify-center gap-1">
+                  <Loader2 className="animate-spin" />
+                  {loadingText}
+                </span>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={process.env.NEXT_PUBLIC_CF_SITEKEY!}
+              onSuccess={(token) => {
+                setCaptchaLoading(false);
+                setCaptchaToken(token);
+              }}
+              onExpire={() => {
+                setCaptchaLoading(true);
+                setCaptchaToken("");
+                turnstileRef.current?.reset();
+              }}
+              onError={(e) => {
+                setError(e);
+                console.error(e);
+              }}
+              className="mx-auto xl:col-span-2"
+            />
           </CardContent>
         </form>
       </Form>
