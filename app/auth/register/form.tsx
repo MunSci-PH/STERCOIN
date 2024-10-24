@@ -539,6 +539,23 @@ const RegisterForm = ({
                   )}
                 />
               </div>
+              <Separator />
+              <FormField
+                control={form.control}
+                name="idpic"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>ID Picture</FormLabel>
+                    <FormDescription>
+                      Please upload a valid ID picture.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="file" required {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </CardContent>
         </form>
