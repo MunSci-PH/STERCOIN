@@ -6,13 +6,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import RegisterForm from "./form";
+import createSupabaseServer from "@/utils/server";
+import { getAllSections } from "@/queries/getAllSections";
+import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 
 export const metadata: Metadata = {
   title: "Information Registration | STERCOIN",
   description: "Student Emergency Release Contact Information",
 };
 
-export default function InfoReg() {
+export default async function InfoReg() {
+  const supabase = await createSupabaseServer();
+
+  const sectionList = await getSectionsByGrade(supabase, 7);
+  const sections = sectionList.data?.map((e) => {
+    return { label: e.sectionName!, value: e.sectionName! };
+  });
+
   return (
     <main className="container mx-auto flex flex-1 px-4">
       <div className="m-auto py-4">
@@ -27,7 +37,7 @@ export default function InfoReg() {
               confidentiality agreement.
             </CardDescription>
           </CardHeader>
-          <RegisterForm />
+          <RegisterForm sections={sections ? sections : []} />
         </Card>
       </div>
     </main>
