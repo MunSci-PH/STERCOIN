@@ -35,6 +35,13 @@ import { useState } from "react";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const formSchema = z
   .object({
@@ -166,19 +173,39 @@ const RegisterForm = ({
                 control={form.control}
                 name="lrn"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="w-full">
                     <FormLabel>LRN</FormLabel>
                     <FormDescription>
                       Your LRN is a 12 digit number given by your previous
                       school.
                     </FormDescription>
-                    <FormControl>
-                      <Input
-                        type="string"
-                        placeholder="LRN"
-                        required
+                    <FormControl className="w-full">
+                      <InputOTP
+                        maxLength={12}
+                        className="flex flex-col"
                         {...field}
-                      />
+                      >
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={6} />
+                          <InputOTPSlot index={7} />
+                          <InputOTPSlot index={8} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={9} />
+                          <InputOTPSlot index={10} />
+                          <InputOTPSlot index={11} />
+                        </InputOTPGroup>
+                      </InputOTP>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -473,22 +500,41 @@ const RegisterForm = ({
               </div>
             </div>
             <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="string"
+                        placeholder="Home Address"
+                        required
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <div className="flex flex-1 flex-col gap-2 align-bottom md:flex-row">
                 <FormField
                   control={form.control}
-                  name="address"
+                  name="pwd"
                   render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>Address</FormLabel>
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary">
                       <FormControl>
-                        <Input
-                          type="string"
-                          placeholder="Home Address"
-                          required
-                          {...field}
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <div className="space-y-1 leading-none cursor-pointer">
+                        <FormLabel className="cursor-pointer">
+                          Are you a person with disability?
+                        </FormLabel>
+                      </div>
                     </FormItem>
                   )}
                 />

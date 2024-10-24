@@ -26,7 +26,7 @@ export default async function InfoReg() {
   return (
     <main className="container mx-auto flex flex-1 px-4">
       <div className="m-auto py-4">
-        <Card className="mx-auto w-full md:w-3/4">
+        <Card className="mx-auto w-full xl:w-5/6">
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
             <CardDescription>
