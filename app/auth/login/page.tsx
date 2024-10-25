@@ -8,6 +8,8 @@ import LoginForm from "./loginForm";
 import createSupabaseServer from "@/utils/server";
 
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function Dashboard() {
   const supabase = await createSupabaseServer();
@@ -26,7 +28,13 @@ export default async function Dashboard() {
             <CardHeader>
               <CardTitle>Sign In</CardTitle>
               <CardDescription>
-                Enter your credentials to access your account.
+                Enter your credentials to access your account.{" "}
+                <Link
+                  href="/auth/register"
+                  className="text-sm text-foreground hover:underline"
+                >
+                  Don't have an account yet?
+                </Link>
               </CardDescription>
             </CardHeader>
             <LoginForm />
