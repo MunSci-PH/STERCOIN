@@ -4,7 +4,7 @@ import { Card, CardContent } from "./components/ui/card";
 import React, { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Mockup from "../public/mockup.png";
+import Mockup from "../public/mockup_with_logo.png";
 import Logo from "../public/logo.png";
 
 export default function Home() {
@@ -41,7 +41,7 @@ export default function Home() {
                   Ensuring safety through efficient information management.
                 </p>
                 <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:justify-start">
-                  <Button size="lg" variant="outline" asChild>
+                  <Button size="lg" variant="default" asChild>
                     <Link href="/auth/login">Get Started</Link>
                   </Button>
                 </div>
