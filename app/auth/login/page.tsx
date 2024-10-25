@@ -33,7 +33,7 @@ export default async function Dashboard() {
                   href="/auth/register"
                   className="text-sm text-foreground hover:underline"
                 >
-                  Don't have an account yet?
+                  Don&apos;t have an account yet?
                 </Link>
               </CardDescription>
             </CardHeader>
