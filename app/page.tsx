@@ -19,11 +19,15 @@ export default function Home() {
                   <Image
                     src={Mockup}
                     alt="STERCOIN Mockup"
+                    placeholder="blur"
+                    draggable={false}
                     className="hiddenFi my-auto md:block"
                   />
                   <Image
                     src={Logo}
                     alt="STERCOIN Logo"
+                    placeholder="blur"
+                    draggable={false}
                     className="rounded-full md:hidden"
                   />
                 </div>
