@@ -656,7 +656,7 @@ const RegisterForm = ({
                 control={form.control}
                 name="idpic"
                 render={({ field }) => (
-                  <FormItem className="w-full flex flex-col">
+                  <FormItem className="flex w-full flex-col">
                     <FormLabel>ID Picture</FormLabel>
                     <FormDescription>
                       Please upload a valid ID picture.

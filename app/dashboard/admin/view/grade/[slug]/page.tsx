@@ -37,7 +37,7 @@ export default async function Grade(props: {
               </p>
               <BackButton></BackButton>
             </div>
-            <Suspense fallback={<Loader2 className="animate-spin mx-auto" />}>
+            <Suspense fallback={<Loader2 className="mx-auto animate-spin" />}>
               <div className="my-1 w-full">
                 {sectionList?.map((option) => (
                   <Button

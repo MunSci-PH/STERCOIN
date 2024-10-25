@@ -67,7 +67,7 @@ export default async function Section(props: {
     return (
       <main className="container mx-auto flex flex-1 px-4 text-center">
         <div className="m-auto w-full md:w-4/5">
-          <Suspense fallback={<Loader2 className="animate-spin mx-auto" />}>
+          <Suspense fallback={<Loader2 className="mx-auto animate-spin" />}>
             <div className="my-12 flex flex-col items-center">
               <div className="flex w-full flex-nowrap justify-between">
                 <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
