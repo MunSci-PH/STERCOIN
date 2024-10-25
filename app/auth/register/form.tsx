@@ -45,8 +45,10 @@ import { storageClient } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
+import { on } from "events";
+import Image from "next/image";
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 1; // 1MB
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 50; // 50MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png"];
 
 const formSchema = z
@@ -79,7 +81,20 @@ const formSchema = z
     grade: z.number().min(7).max(12),
     section: z.string(),
     pwd: z.boolean(),
-    idpic: typeof window === "undefined" ? z.any() : z.instanceof(FileList),
+    idpic:
+      typeof window === "undefined"
+        ? z.any()
+        : z
+            .instanceof(FileList)
+            .refine((file) => file?.length == 1, "File is required.")
+            .refine(
+              (file) => ACCEPTED_FILE_TYPES.includes(file?.item(0)!.type),
+              "Invalid file type."
+            )
+            .refine(
+              (file) => file?.item(0)!.size < MAX_UPLOAD_SIZE,
+              "File too large."
+            ),
     birthday: z.date().min(new Date("2000-01-01")).max(new Date("2015-12-31")),
     address: z.string().trim().min(1).max(100),
     e1Name: z.string().trim().min(1).max(50),
@@ -96,13 +111,19 @@ const formSchema = z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-    e3Name: z.string().trim().min(1).max(50),
-    e3FB: z.string().trim().min(1).max(50).url(),
-    e3Res: z.string().trim().min(1, "Must select an option.").max(50),
+    e3Name: z.string().trim().min(1).max(50).optional(),
+    e3FB: z.string().trim().min(1).max(50).url().optional(),
+    e3Res: z
+      .string()
+      .trim()
+      .min(1, "Must select an option.")
+      .max(50)
+      .optional(),
     e3Num: z
       .string()
       .trim()
-      .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+      .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+      .optional(),
   })
   .refine((data) => data.confirmp === data.password, {
     message: "Passwords don't match",
@@ -167,6 +188,7 @@ const RegisterForm = ({
   const [captchaToken, setCaptchaToken] = useState<string>();
   const [captchaLoading, setCaptchaLoading] = useState(true);
   const [error, setError] = useState<string>();
+  const [idpic, setIdpic] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const fileRef = form.register("idpic");
 
@@ -184,6 +206,18 @@ const RegisterForm = ({
 
   const [sectionList, setSectionList] =
     useState<{ label: string; value: string }[]>(sections);
+
+  fileRef.onChange = async (e) => onPictureChange(e);
+
+  const onPictureChange = (e: { target: any; type?: any }) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      if (file) {
+        const idpic = URL.createObjectURL(file);
+        setIdpic(idpic);
+      }
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true);
@@ -209,10 +243,10 @@ const RegisterForm = ({
       ecfb2: data.e2FB.trim(),
       ecres2: data.e2Res.trim(),
       ecnum2: data.e2Num.trim(),
-      ecname3: data.e3Name.trim(),
-      ecfb3: data.e3FB.trim(),
-      ecres3: data.e3Res.trim(),
-      ecnum3: data.e3Num.trim(),
+      ecname3: data.e3Name?.trim(),
+      ecfb3: data.e3FB?.trim(),
+      ecres3: data.e3Res?.trim(),
+      ecnum3: data.e3Num?.trim(),
     };
 
     setLoadingText("Uploading data to database");
@@ -220,8 +254,8 @@ const RegisterForm = ({
     const dataUpload = await supabase.from("studentData").insert(studentData);
 
     if (dataUpload.error) {
-      console.error(dataUpload);
       setLoading(false);
+      setError(dataUpload.error.message);
       return dataUpload.error;
     }
 
@@ -232,8 +266,8 @@ const RegisterForm = ({
       .upload(`${data.lrn}/${data.idpic.item(0)!.name}`, data.idpic[0]);
 
     if (pictureUpload.error) {
-      console.error(pictureUpload);
       setLoading(false);
+      setError(pictureUpload.error.message);
       return pictureUpload.error;
     }
 
@@ -246,8 +280,8 @@ const RegisterForm = ({
     });
 
     if (registerAcc.error) {
-      console.error(registerAcc);
       setLoading(false);
+      setError(registerAcc.error.message);
       return registerAcc.error;
     }
 
@@ -622,11 +656,21 @@ const RegisterForm = ({
                 control={form.control}
                 name="idpic"
                 render={({ field }) => (
-                  <FormItem className="w-full">
+                  <FormItem className="w-full flex flex-col">
                     <FormLabel>ID Picture</FormLabel>
                     <FormDescription>
                       Please upload a valid ID picture.
                     </FormDescription>
+                    <Image
+                      src={
+                        idpic ? idpic : "https://avatar.iran.liara.run/public"
+                      }
+                      alt="ID Picture"
+                      width={200}
+                      height={200}
+                      draggable={false}
+                      className="self-center rounded-full xl:size-60"
+                    />
                     <FormControl>
                       <Input type="file" required {...fileRef} />
                     </FormControl>
@@ -634,7 +678,7 @@ const RegisterForm = ({
                   </FormItem>
                 )}
               />
-              <Separator />
+              <Separator className="xl:hidden" />
             </div>
             <div className="space-y-4">
               <div className="flex flex-1 flex-col gap-2">

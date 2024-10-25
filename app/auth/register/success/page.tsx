@@ -11,9 +11,11 @@ export default function InfoReg() {
     <main className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto">
         <div className="flex flex-col items-center">
-          <p className="mt-12 text-center font-sans text-4xl font-bold">
-            Successfully registered.{" "}
-            <Link href="/auth/login">Login to continue.</Link>
+          <h1 className="mt-12 text-center font-sans text-4xl font-bold">
+            Successfully registered.
+          </h1>
+          <p className="text-center font-semibold">
+            Check your email for your confirmation link.
           </p>
         </div>
       </div>

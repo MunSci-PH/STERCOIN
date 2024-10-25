@@ -7,6 +7,8 @@ import { getStudentByEmail } from "@/queries/getStudentByEmail";
 import Loading from "@/loading";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface IContainerProps {
   user: UserInfo;
@@ -74,13 +76,14 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                 <div className="my-2 flex flex-1 flex-col gap-4 rounded p-5 align-middle">
                   <Image
                     src={await getPicture()}
-                    width={128}
-                    height={128}
-                    alt=""
+                    width={200}
+                    height={200}
+                    alt={`${studentInfo.ecname1}'s picture`}
+                    draggable={false}
                     placeholder={`data:image/svg+xml;base64,${toBase64(
-                      shimmer(128, 128)
+                      shimmer(200, 200)
                     )}`}
-                    className="mx-auto size-32 rounded"
+                    className="mx-auto rounded-full"
                   />
                   <Separator />
                   <div>
@@ -109,7 +112,13 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                   </div>
                   <Separator />
                   <div>
-                    <p className="text-left text-xl">{studentInfo.birthday}</p>
+                    <p className="text-left text-xl">
+                      {new Date(studentInfo.birthday).toLocaleString("en-us", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
                     <p className="text-left font-bold">Date of Birth</p>
                   </div>
                   <Separator />
@@ -132,8 +141,15 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                   <Separator />
                   <div>
                     <p className="text-left text-xl">
-                      {studentInfo.ecname1} ({studentInfo.ecfb1} -{" "}
-                      {studentInfo.ecres1})
+                      <Button variant="link" className="p-0" asChild>
+                        <Link
+                          href={studentInfo.ecfb1}
+                          className="text-left text-xl"
+                        >
+                          {studentInfo.ecname1}
+                        </Link>
+                      </Button>{" "}
+                      - {studentInfo.ecres1}
                     </p>
                     <p className="text-left text-lg">{studentInfo.ecnum1} </p>
                     <p className="text-left font-bold">Emergency Contact 1</p>
@@ -141,8 +157,15 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                   <Separator />
                   <div>
                     <p className="text-left text-xl">
-                      {studentInfo.ecname2} ({studentInfo.ecfb2} -{" "}
-                      {studentInfo.ecres2})
+                      <Button variant="link" className="p-0" asChild>
+                        <Link
+                          href={studentInfo.ecfb2}
+                          className="text-left text-xl"
+                        >
+                          {studentInfo.ecname2}
+                        </Link>
+                      </Button>{" "}
+                      - {studentInfo.ecres2}
                     </p>
                     <p className="text-left text-lg">{studentInfo.ecnum2}</p>
                     <p className="text-left font-bold">Emergency Contact 2</p>
@@ -152,8 +175,15 @@ const UserView: React.FC<IContainerProps> = async (props) => {
                     <>
                       <div>
                         <p className="text-left text-xl">
-                          {studentInfo.ecname3} ({studentInfo.ecfb3} -{" "}
-                          {studentInfo.ecres3})
+                          <Button variant="link" className="p-0" asChild>
+                            <Link
+                              href={studentInfo.ecfb3 ?? ""}
+                              className="text-left text-xl"
+                            >
+                              {studentInfo.ecname3}
+                            </Link>
+                          </Button>{" "}
+                          - {studentInfo.ecres3}
                         </p>
                         <p className="text-left text-lg">
                           {studentInfo.ecnum3}

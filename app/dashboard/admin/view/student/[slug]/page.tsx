@@ -67,7 +67,7 @@ export default async function Section(props: {
     return (
       <main className="container mx-auto flex flex-1 px-4 text-center">
         <div className="m-auto w-full md:w-4/5">
-          <Suspense fallback={<Loader2 className="animate-spin" />}>
+          <Suspense fallback={<Loader2 className="animate-spin mx-auto" />}>
             <div className="my-12 flex flex-col items-center">
               <div className="flex w-full flex-nowrap justify-between">
                 <p className="my-auto inline w-fit text-left font-sans text-4xl font-bold">
@@ -83,18 +83,24 @@ export default async function Section(props: {
                   >
                     <Image
                       src={await getPicture()}
-                      width={128}
-                      height={128}
-                      alt=""
+                      width={200}
+                      height={200}
+                      alt={`${info.ecname1}'s picture`}
+                      draggable={false}
                       placeholder={`data:image/svg+xml;base64,${toBase64(
-                        shimmer(128, 128)
+                        shimmer(200, 200)
                       )}`}
-                      className="size-32 self-center rounded"
+                      className="self-center rounded-full"
                     />
                     <Separator />
                     <div>
                       <p className="text-left text-xl">{info.lrn}</p>
                       <p className="text-left font-bold">LRN</p>
+                    </div>
+                    <Separator />
+                    <div>
+                      <p className="text-left text-xl">{info.email}</p>
+                      <p className="text-left font-bold">Email</p>
                     </div>
                     <Separator />
                     <div>
@@ -117,7 +123,13 @@ export default async function Section(props: {
                     </div>
                     <Separator />
                     <div>
-                      <p className="text-left text-xl">{info.birthday}</p>
+                      <p className="text-left text-xl">
+                        {new Date(info.birthday).toLocaleString("en-us", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </p>
                       <p className="text-left font-bold">Date of Birth</p>
                     </div>
                     <Separator />
@@ -141,12 +153,21 @@ export default async function Section(props: {
                     <Separator />
                     <div>
                       <p className="text-left text-xl">
-                        {info.ecname1} ({info.ecfb1} - {info.ecres1})
+                        <Button variant="link" className="p-0" asChild>
+                          <Link href={info.ecfb1} className="text-left text-xl">
+                            {info.ecname1}
+                          </Link>
+                        </Button>{" "}
+                        - {info.ecres1}
                       </p>
                       <p className="text-left text-lg">
-                        {info.ecnum1}{" "}
-                        <Button asChild className="mx-2">
+                        <Button
+                          variant="link"
+                          className="p-0 text-left text-lg"
+                          asChild
+                        >
                           <Link href={`tel: ${info.ecnum1}`}>
+                            {info.ecnum1}
                             <FaPhone />
                           </Link>
                         </Button>
@@ -156,12 +177,21 @@ export default async function Section(props: {
                     <Separator />
                     <div>
                       <p className="text-left text-xl">
-                        {info.ecname2} ({info.ecfb2} - {info.ecres2})
+                        <Button variant="link" className="p-0" asChild>
+                          <Link href={info.ecfb2} className="text-left text-xl">
+                            {info.ecname2}
+                          </Link>
+                        </Button>{" "}
+                        - {info.ecres2}
                       </p>
                       <p className="text-left text-lg">
-                        {info.ecnum2}
-                        <Button asChild className="mx-2">
+                        <Button
+                          variant="link"
+                          className="p-0 text-left text-lg"
+                          asChild
+                        >
                           <Link href={`tel: ${info.ecnum2}`}>
+                            {info.ecnum2}
                             <FaPhone />
                           </Link>
                         </Button>
@@ -173,12 +203,24 @@ export default async function Section(props: {
                       <>
                         <div>
                           <p className="text-left text-xl">
-                            {info.ecname3} ({info.ecfb3} - {info.ecres3})
+                            <Button variant="link" className="p-0" asChild>
+                              <Link
+                                href={info.ecfb3 ?? ""}
+                                className="text-left text-xl"
+                              >
+                                {info.ecname3}
+                              </Link>
+                            </Button>{" "}
+                            - {info.ecres3}
                           </p>
                           <p className="text-left text-lg">
-                            {info.ecnum3}
-                            <Button asChild className="mx-2">
-                              <Link href={`tel: ${info.ecnum3}`}>
+                            <Button
+                              variant="link"
+                              className="p-0 text-left text-lg"
+                              asChild
+                            >
+                              <Link href={`tel: ${info.ecnum2}`}>
+                                {info.ecnum2}
                                 <FaPhone />
                               </Link>
                             </Button>

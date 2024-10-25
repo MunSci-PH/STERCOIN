@@ -50,7 +50,7 @@ export default async function Section(props: {
               </p>
               <BackButton></BackButton>
             </div>
-            <Suspense fallback={<Loader2 className="animate-spin" />}>
+            <Suspense fallback={<Loader2 className="animate-spin mx-auto" />}>
               <div className="my-1 w-full">
                 {studentList?.map((e, index) => (
                   <Button
