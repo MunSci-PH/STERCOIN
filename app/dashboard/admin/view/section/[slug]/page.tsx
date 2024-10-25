@@ -35,7 +35,7 @@ export default async function Section(props: {
     return data?.map((e) => e.sectionName!).sort((a, b) => a?.localeCompare(b));
   }
 
-  const sectionList: (string | null)[] = await getAllSections();
+  const sectionList = await getAllSections();
 
   if (sectionList?.includes(params.slug)) {
     return (
