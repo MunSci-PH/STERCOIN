@@ -96,22 +96,22 @@ const formSchema = z
             ),
     birthday: z.date().min(new Date("2000-01-01")).max(new Date("2015-12-31")),
     address: z.string().trim().min(1).max(100),
-    e1Name: z.string().trim().min(1).max(50),
-    e1FB: z.string().trim().min(1).max(50).url(),
+    e1Name: z.string().trim().min(1).max(100),
+    e1FB: z.string().trim().min(1).url(),
     e1Res: z.string().trim().min(1, "Must select an option.").max(50),
     e1Num: z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-    e2Name: z.string().trim().min(1).max(50),
-    e2FB: z.string().trim().min(1).max(50).url(),
+    e2Name: z.string().trim().min(1).max(100),
+    e2FB: z.string().trim().min(1).url(),
     e2Res: z.string().trim().min(1, "Must select an option.").max(50),
     e2Num: z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-    e3Name: z.string().trim().min(1).max(50).optional(),
-    e3FB: z.string().trim().min(1).max(50).url().optional(),
+    e3Name: z.string().trim().min(1).max(100).optional(),
+    e3FB: z.string().trim().min(1).url().optional(),
     e3Res: z
       .string()
       .trim()
