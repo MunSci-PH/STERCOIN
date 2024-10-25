@@ -21,7 +21,7 @@ export default function Home() {
                     alt="STERCOIN Mockup"
                     placeholder="blur"
                     draggable={false}
-                    className="hidden my-auto md:block"
+                    className="my-auto hidden md:block"
                   />
                   <Image
                     src={Logo}

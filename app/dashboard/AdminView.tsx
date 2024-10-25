@@ -1,113 +1,72 @@
+"use client";
+
 import Link from "next/link";
 import { UserInfo } from "./types";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+interface GradeInfo {
+  grade: number;
+  color: string;
+  category: "jhs" | "shs";
+}
+
+const grades: GradeInfo[] = [
+  { grade: 7, color: "bg-emerald-600", category: "jhs" },
+  { grade: 8, color: "bg-yellow-600", category: "jhs" },
+  { grade: 9, color: "bg-red-600", category: "jhs" },
+  { grade: 10, color: "bg-blue-600", category: "jhs" },
+  { grade: 11, color: "bg-orange-600", category: "shs" },
+  { grade: 12, color: "bg-purple-600", category: "shs" },
+];
+
+const GradeLink = ({
+  grade,
+  color,
+  isEnabled,
+}: GradeInfo & { isEnabled: boolean }) => {
+  const href = isEnabled ? `/dashboard/admin/view/grade/${grade}` : "#";
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex flex-col items-center justify-center rounded-xl p-6 text-2xl transition-all",
+        color,
+        isEnabled
+          ? "hover:opacity-80"
+          : "pointer-events-none opacity-50 cursor-default"
+      )}
+      aria-disabled={!isEnabled}
+    >
+      <Card className="flex size-full items-center justify-center border-none bg-transparent shadow-none">
+        <CardContent className="p-0 text-center">
+          <span className="block">Grade</span>
+          <span className="block font-bold">{grade}</span>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+};
 
 const AdminView = ({ user }: { user: UserInfo }) => {
+  const hasAccess = (grade: number, category: string) => {
+    return (
+      user?.role === "full" ||
+      user?.role === grade.toString() ||
+      user?.role === category
+    );
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-4 text-white md:grid-cols-3 xl:grid-cols-6">
-      {user?.role == "full" || user?.role == "7" || user?.role == "jhs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/7"
-          className="flex flex-col items-center rounded-xl bg-green-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>7</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-green-600 p-12 text-2xl opacity-50 md:p-10"
-          aria-disabled={true}
-        >
-          <span>Grade</span>
-          <span>7</span>
-        </Link>
-      )}
-      {user?.role == "full" || user?.role == "8" || user?.role == "jhs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/8"
-          className="flex flex-col items-center rounded-xl bg-yellow-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>8</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-yellow-600 p-12 text-2xl opacity-50 md:p-10"
-          aria-disabled={true}
-        >
-          <span>Grade</span>
-          <span>8</span>
-        </Link>
-      )}
-      {user?.role == "full" || user?.role == "9" || user?.role == "jhs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/9"
-          className="flex flex-col items-center rounded-xl bg-red-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>9</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-red-600 p-12 text-2xl opacity-50 md:p-10"
-        >
-          <span>Grade</span>
-          <span>9</span>
-        </Link>
-      )}
-      {user?.role == "full" || user?.role == "10" || user?.role == "jhs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/10"
-          className="flex flex-col items-center rounded-xl bg-cyan-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>10</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-cyan-600 p-12 text-2xl opacity-50 md:p-10"
-        >
-          <span>Grade</span>
-          <span>10</span>
-        </Link>
-      )}
-      {user?.role == "full" || user?.role == "11" || user?.role == "shs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/11"
-          className="flex flex-col items-center rounded-xl bg-blue-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>11</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-blue-600 p-12 text-2xl opacity-50 md:p-10"
-        >
-          <span>Grade</span>
-          <span>11</span>
-        </Link>
-      )}
-      {user?.role == "full" || user?.role == "12" || user?.role == "shs" ? (
-        <Link
-          href="/dashboard/admin/view/grade/12"
-          className="flex flex-col items-center rounded-xl bg-orange-600 p-12 text-2xl md:p-10"
-        >
-          <span>Grade</span>
-          <span>12</span>
-        </Link>
-      ) : (
-        <Link
-          href="#"
-          className="pointer-events-none flex cursor-default flex-col items-center rounded-xl bg-orange-600 p-12 text-2xl opacity-50 md:p-10"
-        >
-          <span>Grade</span>
-          <span>12</span>
-        </Link>
-      )}
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+      {grades.map((gradeInfo) => (
+        <GradeLink
+          key={gradeInfo.grade}
+          {...gradeInfo}
+          isEnabled={hasAccess(gradeInfo.grade, gradeInfo.category)}
+        />
+      ))}
     </div>
   );
 };
