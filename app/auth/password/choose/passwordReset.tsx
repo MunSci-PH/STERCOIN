@@ -61,7 +61,7 @@ const ResetPasswordForm = ({
       password: e.password,
     });
 
-    if (error) window.location.href = `/auth/error?message=${error.message}`;
+    if (error) setError(error.message);
     if (data) {
       window.location.href = "/auth/login";
     }

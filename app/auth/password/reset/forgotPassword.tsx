@@ -24,9 +24,7 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 
-const ForgotPasswordForm = ({
-  searchParams,
-}: {
+const ForgotPasswordForm = ({}: {
   searchParams: { token_hash: string; type: string };
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({

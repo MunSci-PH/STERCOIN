@@ -1,8 +1,5 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { AiOutlineSearch, AiOutlineSetting } from "react-icons/ai";
 import createSupabaseServer from "@/utils/server";
-import { SignOutButton } from "@/components/utils/signOutButton";
 
 import checkRoleServer from "@/hooks/checkRoleServer";
 import AdminView from "./AdminView";

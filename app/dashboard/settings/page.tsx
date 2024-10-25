@@ -10,7 +10,6 @@ import { Metadata } from "next";
 
 import Link from "next/link";
 import { Suspense } from "react";
-import { FaEdit } from "react-icons/fa";
 
 export const metadata: Metadata = {
   title: "Settings | STERCOIN",

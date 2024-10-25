@@ -26,7 +26,7 @@ export default function Section() {
     }
   }, [data]);
 
-  async function handleChange(e: any) {
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.trim();
 
     if (!value) {

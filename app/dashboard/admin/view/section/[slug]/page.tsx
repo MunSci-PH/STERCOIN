@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 import { getStudentsBySection } from "@/queries/getStudentsBySection";
 import { getSections } from "@/queries/getSections";
-import { ArrowRight, Loader, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -26,15 +26,13 @@ export default async function Section(props: {
     return finalStudentList;
   }
 
-  var studentList = await getStudents();
+  const studentList = await getStudents();
 
   async function getAllSections() {
     const { data, error } = await getSections(supabase);
     if (error) console.error(error);
 
-    return data!
-      ?.map((e) => e.sectionName!)
-      .sort((a, b) => a?.localeCompare(b));
+    return data?.map((e) => e.sectionName!).sort((a, b) => a?.localeCompare(b));
   }
 
   const sectionList: (string | null)[] = await getAllSections();

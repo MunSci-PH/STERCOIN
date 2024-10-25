@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Menu } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useState } from "react";
-import { UserInfo } from "@/dashboard/types";
-import { PostgrestError, User } from "@supabase/supabase-js";
 import useSupabaseBrowser from "@/utils/client";
 import Logo from "../../../../public/logo.png";
 import Image from "next/image";

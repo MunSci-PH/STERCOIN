@@ -1,6 +1,5 @@
 "use client";
 import useSupabaseBrowser from "@/utils/client";
-import { AiOutlineLogout } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { LogOut } from "lucide-react";
 

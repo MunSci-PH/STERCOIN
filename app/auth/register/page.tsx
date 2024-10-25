@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/card";
 import RegisterForm from "./form";
 import createSupabaseServer from "@/utils/server";
-import { getAllSections } from "@/queries/getAllSections";
 import { getSectionsByGrade } from "@/queries/getSectionsByGrade";
 
 export const metadata: Metadata = {

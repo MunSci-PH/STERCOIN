@@ -64,9 +64,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="size-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="size-4" />,
-        Dropdown: ({ value, onChange, children, caption, ...props }) => {
+        IconLeft: () => <ChevronLeft className="size-4" />,
+        IconRight: () => <ChevronRight className="size-4" />,
+        Dropdown: ({ value, onChange, children }) => {
           const options = React.Children.toArray(
             children
           ) as React.ReactElement<{

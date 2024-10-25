@@ -44,7 +44,7 @@ export default async function Section(props: {
     return studentList;
   }
 
-  var studentInfo = await getStudent(params.slug);
+  const studentInfo = await getStudent(params.slug);
 
   async function getPicture() {
     const { data } = await supabase.storage

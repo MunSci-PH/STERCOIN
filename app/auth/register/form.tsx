@@ -45,7 +45,6 @@ import { storageClient } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
-import { on } from "events";
 import Image from "next/image";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 50; // 50MB
@@ -58,7 +57,7 @@ const formSchema = z
       .length(12, "Must be 12 characters.")
       .refine(
         (v) => {
-          let n = Number(v);
+          const n = Number(v);
           console.log(v.length, v);
           return !isNaN(n) && v?.length > 0;
         },
@@ -207,9 +206,10 @@ const RegisterForm = ({
   const [sectionList, setSectionList] =
     useState<{ label: string; value: string }[]>(sections);
 
-  fileRef.onChange = async (e) => onPictureChange(e);
+  fileRef.onChange = async (e) =>
+    onPictureChange(e as React.ChangeEvent<HTMLInputElement>);
 
-  const onPictureChange = (e: { target: any; type?: any }) => {
+  const onPictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
       if (file) {
@@ -655,7 +655,7 @@ const RegisterForm = ({
               <FormField
                 control={form.control}
                 name="idpic"
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex w-full flex-col">
                     <FormLabel>ID Picture</FormLabel>
                     <FormDescription>

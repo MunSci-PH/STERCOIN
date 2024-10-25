@@ -19,12 +19,10 @@ export default async function Grade(props: {
     const { data, error } = await getSectionsByGrade(supabase, params.slug);
     if (error) console.error(error);
 
-    return data!
-      ?.map((e) => e.sectionName!)
-      .sort((a, b) => a?.localeCompare(b));
+    return data?.map((e) => e.sectionName!).sort((a, b) => a?.localeCompare(b));
   }
 
-  const sectionList: (string | null)[] = await getSections();
+  const sectionList = await getSections();
 
   if (params.slug >= 7 && params.slug <= 12) {
     return (
