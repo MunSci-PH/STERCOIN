@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export type loginData = {
   email: string;
