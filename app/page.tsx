@@ -6,8 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Mockup from "../public/mockup_with_logo.png";
 import Logo from "../public/logo.png";
+import createSupabaseServer from "./utils/server";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createSupabaseServer();
+
+  const { data } = await supabase.auth.getUser();
+
   return (
     <>
       <main className="grow">
@@ -42,7 +47,11 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:justify-start">
                   <Button size="lg" variant="default" asChild>
-                    <Link href="/auth/login">Get Started</Link>
+                    {data?.user ? (
+                      <Link href="/dashboard">Go to Dashboard</Link>
+                    ) : (
+                      <Link href="/auth/login">Get Started</Link>
+                    )}
                   </Button>
                 </div>
               </div>
