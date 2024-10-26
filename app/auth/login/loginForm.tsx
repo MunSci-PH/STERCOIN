@@ -19,7 +19,8 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export type loginData = {
   email: string;
@@ -59,10 +60,9 @@ const LoginForm = () => {
 
     if (error) {
       if (error.message == "Email not confirmed") {
-        window.location.href = `/auth/login/confirm?email=${e.email}`;
+        redirect(`/auth/login/confirm?email=${e.email}`);
       }
       setError(error.message);
-      console.error(error);
       turnstileRef.current?.reset();
       setCaptchaLoading(true);
       setLoading(false);
@@ -70,7 +70,7 @@ const LoginForm = () => {
       return;
     }
 
-    router.refresh();
+    return (window.location.href = "/dashboard");
   };
 
   return (

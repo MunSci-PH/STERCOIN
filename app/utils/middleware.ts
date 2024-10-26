@@ -38,20 +38,30 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (
+    !user &&
+    !request.nextUrl.pathname.startsWith("/auth/") &&
+    !request.nextUrl.pathname.startsWith("/api/")
+  ) {
     // no user, potentially respond by redirecting the user to the login page
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (user && request.nextUrl.pathname.startsWith("/dashboard/admin/")) {
-    const { data, error } = await getUserById(supabase, user!.id);
+  if (user) {
+    if (request.nextUrl.pathname.startsWith("/auth")) {
+      return NextResponse.redirect(new URL("/dashboard/", request.url));
+    }
 
-    if (error) throw error;
-    if (data) {
-      const isAdmin =
-        data.map((e) => e.role).toString() == "admin" ? true : false;
-      if (!isAdmin) {
-        return NextResponse.redirect(new URL("/dashboard/", request.url));
+    if (request.nextUrl.pathname.startsWith("/dashboard/admin/")) {
+      const { data, error } = await getUserById(supabase, user!.id);
+
+      if (error) throw error;
+      if (data) {
+        const isAdmin =
+          data.map((e) => e.role).toString() == "admin" ? true : false;
+        if (!isAdmin) {
+          return NextResponse.redirect(new URL("/dashboard/", request.url));
+        }
       }
     }
   }
