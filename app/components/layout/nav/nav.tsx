@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu } from "lucide-react";
+import { X, Menu, Loader2 } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useState } from "react";
 import useSupabaseBrowser from "@/utils/client";
@@ -20,9 +20,43 @@ const Nav = () => {
   const userInfo = useQuery({
     queryKey: ["userInfo"],
     queryFn: getUserInfo,
-  }).data;
+  });
 
-  if (userInfo?.data.user) {
+  if (userInfo.isLoading)
+    return (
+      <>
+        <header className="flex h-16 items-center border-b px-4 lg:px-6">
+          <Button variant={"ghost"} asChild>
+            <Link className="flex items-center justify-center" href="/">
+              <Image src={Logo} alt="Logo" className="size-6" />
+              <span className="ml-2 text-lg font-semibold">STERCOIN</span>
+            </Link>
+          </Button>
+          <nav className="ml-auto hidden gap-4 sm:gap-6 md:flex">
+            <Button variant={"outline"} disabled>
+              <Loader2 className="animate-spin" />
+            </Button>
+          </nav>
+          <Button
+            className="ml-auto md:hidden"
+            variant="outline"
+            size="icon"
+            aria-label="Toggle Menu"
+            disabled
+          >
+            <motion.div
+              initial={false}
+              animate={{ rotate: isMenuOpen ? 90 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Loader2 className="size-6 animate-spin" />
+            </motion.div>
+          </Button>
+        </header>
+      </>
+    );
+
+  if (!userInfo.isLoading && userInfo.data?.data.user) {
     return (
       <>
         <header className="flex h-16 items-center border-b px-4 lg:px-6">
@@ -36,7 +70,7 @@ const Nav = () => {
             <Button variant={"outline"} asChild>
               <Link href="/dashboard">Home</Link>
             </Button>
-            {userInfo.data.role?.isAdmin && (
+            {userInfo.data?.data.role?.isAdmin && (
               <Button variant={"outline"} asChild>
                 <Link href="/dashboard/admin/search">Search</Link>
               </Button>
@@ -93,7 +127,7 @@ const Nav = () => {
               >
                 Home
               </Link>
-              {userInfo.data.role?.isAdmin && (
+              {userInfo.data?.data.role?.isAdmin && (
                 <Link
                   className="block py-2 text-sm font-medium underline-offset-4 hover:underline"
                   href="/dashboard/admin/search"
@@ -126,7 +160,8 @@ const Nav = () => {
         </AnimatePresence>
       </>
     );
-  } else {
+  }
+  if (!userInfo.isLoading) {
     return (
       <>
         <header className="flex h-16 items-center border-b px-4 lg:px-6">
