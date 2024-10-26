@@ -20,7 +20,6 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { redirect, useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
 export type loginData = {
   email: string;
@@ -34,7 +33,6 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
