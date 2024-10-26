@@ -942,7 +942,10 @@ const RegisterForm = ({
               </div>
               <Separator />
               <div className="flex flex-1 flex-col gap-2">
-                <Label>Emergency Contact 3</Label>
+                <Label>
+                  Emergency Contact 3{" "}
+                  <span className="text-muted-foreground">(Optional)</span>
+                </Label>
                 <FormField
                   control={form.control}
                   name="e3Name"
