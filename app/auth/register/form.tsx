@@ -110,16 +110,18 @@ const formSchema = z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-    e3Name: z.string().trim().max(100),
-    e3FB: z.string().trim().url(),
+    e3Name: z.string().trim().max(100).optional(),
+    e3FB: z.string().trim().url().optional(),
     e3Res: z
       .string()
       .trim()
-      .max(50),
+      .max(50)
+      .optional(),
     e3Num: z
       .string()
       .trim()
-      .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+      .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+      .optional(),
   })
   .refine((data) => data.confirmp === data.password, {
     message: "Passwords don't match",
