@@ -110,19 +110,16 @@ const formSchema = z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
-    e3Name: z.string().trim().min(1).max(100).optional(),
-    e3FB: z.string().trim().min(1).url().optional(),
+    e3Name: z.string().trim().max(100),
+    e3FB: z.string().trim().url(),
     e3Res: z
       .string()
       .trim()
-      .min(1, "Must select an option.")
-      .max(50)
-      .optional(),
+      .max(50),
     e3Num: z
       .string()
       .trim()
-      .refine(isValidPhoneNumber, { message: "Invalid phone number" })
-      .optional(),
+      .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
   })
   .refine((data) => data.confirmp === data.password, {
     message: "Passwords don't match",
@@ -959,7 +956,6 @@ const RegisterForm = ({
                         <Input
                           type="string"
                           placeholder="Full Name"
-                          required
                           {...field}
                         />
                       </FormControl>
@@ -977,7 +973,7 @@ const RegisterForm = ({
                         The phone number of your emergency contact.
                       </FormDescription>
                       <FormControl>
-                        <PhoneInput defaultCountry="PH" required {...field} />
+                        <PhoneInput defaultCountry="PH" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -997,7 +993,6 @@ const RegisterForm = ({
                         <Input
                           type="url"
                           placeholder="URL"
-                          required
                           {...field}
                         />
                       </FormControl>
