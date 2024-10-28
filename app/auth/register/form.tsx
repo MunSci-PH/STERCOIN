@@ -233,7 +233,7 @@ const RegisterForm = ({
       section: data.section.trim(),
       pwd: data.pwd,
       idpicfile: data.idpic.item(0)?.name,
-      birthday: data.birthday.toLocaleDateString(),
+      birthday: data.birthday.toLocaleDateString("en-us"),
       address: data.address.trim(),
       ecname1: data.e1Name.trim(),
       ecfb1: data.e1FB.trim(),
