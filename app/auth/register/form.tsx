@@ -111,7 +111,7 @@ const formSchema = z
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
     e3Name: z.string().trim().max(100).optional(),
-    e3FB: z.string().trim().url().optional(),
+    e3FB: z.string().trim().url().or(z.literal("")),
     e3Res: z
       .string()
       .trim()
@@ -121,7 +121,8 @@ const formSchema = z
       .string()
       .trim()
       .refine(isValidPhoneNumber, { message: "Invalid phone number" })
-      .optional(),
+      .optional()
+      .or(z.literal("")),
   })
   .refine((data) => data.confirmp === data.password, {
     message: "Passwords don't match",
