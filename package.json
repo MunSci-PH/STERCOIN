@@ -29,6 +29,7 @@
     "@types/validator": "^13.12.2",
     "@vercel/analytics": "^1.3.2",
     "autoprefixer": "^10.4.20",
+    "babel-plugin-react-compiler": "^19.0.0-beta-a7bf2bd-20241110",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
