@@ -83,7 +83,7 @@ const UserView: React.FC<IContainerProps> = async () => {
                     placeholder={`data:image/svg+xml;base64,${toBase64(
                       shimmer(200, 200)
                     )}`}
-                    className="mx-auto rounded-full"
+                    className="mx-auto rounded-full aspect-square"
                   />
                   <Separator />
                   <div>

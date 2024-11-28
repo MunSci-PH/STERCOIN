@@ -90,7 +90,7 @@ export default async function Section(props: {
                       placeholder={`data:image/svg+xml;base64,${toBase64(
                         shimmer(200, 200)
                       )}`}
-                      className="self-center rounded-full"
+                      className="self-center rounded-full aspect-square"
                     />
                     <Separator />
                     <div>

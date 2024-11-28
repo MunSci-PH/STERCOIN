@@ -46,6 +46,13 @@ import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 50; // 50MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png"];
@@ -112,11 +119,7 @@ const formSchema = z
       .refine(isValidPhoneNumber, { message: "Invalid phone number" }),
     e3Name: z.string().trim().max(100).optional(),
     e3FB: z.string().trim().url().or(z.literal("")),
-    e3Res: z
-      .string()
-      .trim()
-      .max(50)
-      .optional(),
+    e3Res: z.string().trim().max(50).optional(),
     e3Num: z
       .string()
       .trim()
@@ -190,9 +193,12 @@ const RegisterForm = ({
   const [idpic, setIdpic] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const fileRef = form.register("idpic");
+  const [sectionList, setSectionList] =
+    useState<{ label: string; value: string }[]>(sections);
 
   const onGradeChange = async (value: number) => {
     const sectionList = await getSectionsByGrade(supabase, value);
+
     if (sectionList) {
       const sections = sectionList.data?.map((e) => {
         return { label: e.sectionName!, value: e.sectionName! };
@@ -202,9 +208,6 @@ const RegisterForm = ({
       }
     }
   };
-
-  const [sectionList, setSectionList] =
-    useState<{ label: string; value: string }[]>(sections);
 
   fileRef.onChange = async (e) =>
     onPictureChange(e as React.ChangeEvent<HTMLInputElement>);
@@ -449,56 +452,30 @@ const RegisterForm = ({
                   render={({ field }) => (
                     <FormItem className="flex w-full flex-col">
                       <FormLabel>Grade</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground"
-                              )}
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange;
+                          onGradeChange(Number(value));
+                        }}
+                        defaultValue={field.value.toString()}
+                        required
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your grade level" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {grades.map((grade) => (
+                            <SelectItem
+                              value={grade.value.toString()}
+                              key={grade.value}
                             >
-                              {field.value
-                                ? grades.find(
-                                    (grade) => grade.value === field.value
-                                  )?.label
-                                : "Grade"}
-                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
-                          <Command shouldFilter={false}>
-                            <CommandList>
-                              <CommandEmpty>No grade level found.</CommandEmpty>
-                              <CommandGroup>
-                                {grades.map((grade) => (
-                                  <CommandItem
-                                    value={grade.label}
-                                    key={grade.value}
-                                    onSelect={() => {
-                                      form.setValue("grade", grade.value);
-                                      onGradeChange(grade.value);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        grade.value === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {grade.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                              {grade.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -509,55 +486,27 @@ const RegisterForm = ({
                   render={({ field }) => (
                     <FormItem className="flex w-full flex-col">
                       <FormLabel>Section</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground"
-                              )}
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        required
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your section." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {sectionList.map((section) => (
+                            <SelectItem
+                              value={section.value}
+                              key={section.value}
                             >
-                              {field.value
-                                ? sectionList.find(
-                                    (section) => section.value === field.value
-                                  )?.label
-                                : "Section"}
-                              <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
-                          <Command>
-                            <CommandList>
-                              <CommandEmpty>No sections found.</CommandEmpty>
-                              <CommandGroup>
-                                {sectionList.map((section) => (
-                                  <CommandItem
-                                    value={section.label}
-                                    key={section.value}
-                                    onSelect={() => {
-                                      form.setValue("section", section.value);
-                                    }}
-                                  >
-                                    <Check
-                                      className={cn(
-                                        "mr-2 h-4 w-4",
-                                        section.value === field.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
-                                      )}
-                                    />
-                                    {section.label}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                              {section.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -635,14 +584,14 @@ const RegisterForm = ({
                   control={form.control}
                   name="pwd"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary">
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary w-full">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <div className="cursor-pointer space-y-1 leading-none">
+                      <div className="cursor-pointer space-y-1 leading-none ">
                         <FormLabel className="cursor-pointer">
                           Are you a person with disability?
                         </FormLabel>
@@ -657,9 +606,10 @@ const RegisterForm = ({
                 name="idpic"
                 render={() => (
                   <FormItem className="flex w-full flex-col">
-                    <FormLabel>ID Picture</FormLabel>
+                    <FormLabel>Picture</FormLabel>
                     <FormDescription>
-                      Please upload a valid ID picture.
+                      Please upload a recent and valid picture of yourself. The
+                      picture must have a plain background.
                     </FormDescription>
                     <Image
                       src={
@@ -993,11 +943,7 @@ const RegisterForm = ({
                         contact.
                       </FormDescription>
                       <FormControl>
-                        <Input
-                          type="url"
-                          placeholder="URL"
-                          {...field}
-                        />
+                        <Input type="url" placeholder="URL" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
