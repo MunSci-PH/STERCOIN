@@ -454,7 +454,7 @@ const RegisterForm = ({
                       <FormLabel>Grade</FormLabel>
                       <Select
                         onValueChange={(value) => {
-                          field.onChange;
+                          field.onChange(value);
                           onGradeChange(Number(value));
                         }}
                         defaultValue={field.value.toString()}
@@ -584,7 +584,7 @@ const RegisterForm = ({
                   control={form.control}
                   name="pwd"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary w-full">
+                    <FormItem className="flex w-full flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
