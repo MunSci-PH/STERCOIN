@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <>
       <main className="grow">
-        <section className="animate-change-color bg-gradient-to-r from-emerald-600 to-green-600 bg-[length:150%_150%] py-24 text-white md:py-32">
+        <section className="animate-change-color bg-linear-to-r from-emerald-600 to-green-600 bg-[length:150%_150%] py-24 text-white md:py-32">
           <div className="container mx-auto px-4 lg:px-24 xl:px-36">
             <div className="flex flex-col items-center md:flex-row md:items-start md:justify-between">
               <div className="mb-8 flex justify-center md:order-2 md:my-auto md:w-2/3 md:justify-end">
