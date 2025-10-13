@@ -454,7 +454,7 @@ const RegisterForm = ({
                       <FormLabel>Grade</FormLabel>
                       <Select
                         onValueChange={(value) => {
-                          field.onChange(value);
+                          field.onChange(Number(value));
                           onGradeChange(Number(value));
                         }}
                         defaultValue={field.value.toString()}
