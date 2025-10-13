@@ -288,7 +288,7 @@ const RegisterForm = ({
       return registerAcc.error;
     }
 
-    router.push("/auth/register/success");
+    router.push("/auth/register/success?message=Please proceed to the login page.");
   };
 
   return (

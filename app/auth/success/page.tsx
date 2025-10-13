@@ -14,7 +14,7 @@ export default async function Success(
   return (
     <div className="container mx-auto flex flex-1 px-4 text-center">
       <div className="m-auto">
-        <p className="ml-2 text-3xl font-bold">Operation Successful!</p>
+        <p className="ml-2 text-3xl font-bold">Successfully Registered!</p>
         <p className="mt-3 text-left text-2xl font-medium">
           {searchParams.message}
         </p>
