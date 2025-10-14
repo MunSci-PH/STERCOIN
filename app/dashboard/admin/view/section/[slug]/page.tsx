@@ -9,13 +9,14 @@ import { getSections } from "@/queries/getSections";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { TypedSupabaseClient } from "@/utils/types";
 
 export default async function Section(props: {
   params: Promise<{ slug: string }>;
 }) {
   const params = await props.params;
 
-  const supabase = await createSupabaseServer();
+  const supabase = await createSupabaseServer() as unknown as TypedSupabaseClient;
 
   async function getStudents() {
     const { data, error } = await getStudentsBySection(supabase, params.slug);

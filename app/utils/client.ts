@@ -1,25 +1,15 @@
+import { Database } from "../../database.types";
 import { createBrowserClient } from "@supabase/ssr";
-import type { Database } from "../../database.types";
-import type { TypedSupabaseClient } from "@/utils/types";
 import { useMemo } from "react";
 
-let client: TypedSupabaseClient | undefined;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
-function getSupabaseBrowserClient() {
-  if (client) {
-    return client;
-  }
-
-  client = createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
-  return client;
-}
+const createClient = () =>
+  createBrowserClient<Database>(supabaseUrl!, supabaseKey!);
 
 function useSupabaseBrowser() {
-  return useMemo(getSupabaseBrowserClient, []);
+  return useMemo(createClient, []);
 }
 
 export default useSupabaseBrowser;
