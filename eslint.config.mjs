@@ -25,5 +25,10 @@ export default defineConfig([
       ...compat.extends("prettier"),
       ...compat.extends("plugin:@tanstack/eslint-plugin-query/recommended"),
     ],
+    settings: {
+      tailwindcss: {
+        cssConfigPath: "./app/globals.css",
+      },
+    },
   },
 ]);

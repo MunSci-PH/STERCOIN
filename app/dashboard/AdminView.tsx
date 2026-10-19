@@ -35,7 +35,7 @@ const GradeLink = ({
         color,
         isEnabled
           ? "hover:opacity-80"
-          : "pointer-events-none opacity-50 cursor-default"
+          : "pointer-events-none cursor-default opacity-50"
       )}
       aria-disabled={!isEnabled}
     >

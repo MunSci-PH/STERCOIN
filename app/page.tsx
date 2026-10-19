@@ -16,11 +16,11 @@ export default async function Home() {
   return (
     <>
       <main className="grow">
-        <section className="animate-change-color bg-linear-to-r from-emerald-600 to-green-600 bg-[length:150%_150%] py-24 text-white md:py-32">
+        <section className="animate-change-color bg-linear-to-r from-emerald-600 to-green-600 bg-size-[150%_150%] py-24 text-white md:py-32">
           <div className="container mx-auto px-4 lg:px-24 xl:px-36">
             <div className="flex flex-col items-center md:flex-row md:items-start md:justify-between">
               <div className="mb-8 flex justify-center md:order-2 md:my-auto md:w-2/3 md:justify-end">
-                <div className="relative size-80 drop-shadow-xl transition-all hover:drop-shadow-2xl md:h-52 md:w-96 lg:h-96 lg:w-[60rem]">
+                <div className="relative size-80 drop-shadow-xl transition-all hover:drop-shadow-2xl md:h-52 md:w-96 lg:h-96 lg:w-240">
                   <Image
                     src={Mockup}
                     alt="STERCOIN Mockup"
@@ -38,14 +38,14 @@ export default async function Home() {
                 </div>
               </div>
               <div className="my-auto text-center md:order-1 md:w-1/2 md:text-left">
-                <h1 className="mb-6 text-5xl font-bold leading-tight md:text-6xl lg:text-7xl">
+                <h1 className="mb-6 text-5xl leading-tight font-bold md:text-6xl lg:text-7xl">
                   Welcome to <span className="font-extrabold">STERCOIN</span>
                 </h1>
                 <p className="mx-auto mb-8 max-w-lg text-xl md:mx-0 md:text-2xl">
                   Student Emergency Release Contact Information System -
                   Ensuring safety through efficient information management.
                 </p>
-                <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:justify-start">
+                <div className="flex flex-col justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:justify-start">
                   <Button size="lg" variant="default" asChild>
                     {data?.user ? (
                       <Link href="/dashboard">Go to Dashboard</Link>

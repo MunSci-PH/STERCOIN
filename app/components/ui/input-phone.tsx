@@ -64,7 +64,7 @@ const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => (
     <Input
       className={cn(
-        "rounded-e-lg rounded-s-none border-r-0 focus:z-10",
+        "rounded-s-none rounded-e-lg border-r-0 focus:z-10",
         className
       )}
       {...props}
@@ -102,19 +102,19 @@ const CountrySelect = ({
         <Button
           type="button"
           variant={"outline"}
-          className={cn("flex gap-1 rounded-e-none rounded-s-lg px-3")}
+          className={cn("flex gap-1 rounded-s-lg rounded-e-none px-3")}
           disabled={disabled}
         >
           <FlagComponent country={value} countryName={value} />
           <ChevronsUpDown
             className={cn(
-              "-mr-2 h-4 w-4 opacity-50",
+              "-mr-2 size-4 opacity-50",
               disabled ? "hidden" : "opacity-100"
             )}
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className="w-75 p-0">
         <Command>
           <CommandList>
             <ScrollArea className="h-72">
@@ -141,7 +141,7 @@ const CountrySelect = ({
                       )}
                       <CheckIcon
                         className={cn(
-                          "ml-auto h-4 w-4",
+                          "ml-auto size-4",
                           option.value === value ? "opacity-100" : "opacity-0"
                         )}
                       />

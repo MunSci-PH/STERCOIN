@@ -585,7 +585,7 @@ const RegisterForm = ({
                   control={form.control}
                   name="pwd"
                   render={({ field }) => (
-                    <FormItem className="flex w-full flex-row items-start space-x-3 space-y-0 rounded-md border p-4 hover:bg-secondary">
+                    <FormItem className="flex w-full flex-row items-start space-y-0 space-x-3 rounded-md border p-4 hover:bg-secondary">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
@@ -723,7 +723,7 @@ const RegisterForm = ({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
+                        <PopoverContent className="w-50 p-0">
                           <Command>
                             <CommandInput placeholder="Search relationship..." />
                             <CommandList>
@@ -742,7 +742,7 @@ const RegisterForm = ({
                                   >
                                     <Check
                                       className={cn(
-                                        "mr-2 h-4 w-4",
+                                        "mr-2 size-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
                                           : "opacity-0",
@@ -853,7 +853,7 @@ const RegisterForm = ({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
+                        <PopoverContent className="w-50 p-0">
                           <Command>
                             <CommandInput placeholder="Search relationship..." />
                             <CommandList>
@@ -872,7 +872,7 @@ const RegisterForm = ({
                                   >
                                     <Check
                                       className={cn(
-                                        "mr-2 h-4 w-4",
+                                        "mr-2 size-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
                                           : "opacity-0",
@@ -980,7 +980,7 @@ const RegisterForm = ({
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
+                        <PopoverContent className="w-50 p-0">
                           <Command>
                             <CommandInput placeholder="Search relationship..." />
                             <CommandList>
@@ -999,7 +999,7 @@ const RegisterForm = ({
                                   >
                                     <Check
                                       className={cn(
-                                        "mr-2 h-4 w-4",
+                                        "mr-2 size-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
                                           : "opacity-0",
