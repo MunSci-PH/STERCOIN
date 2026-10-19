@@ -614,9 +614,7 @@ const RegisterForm = ({
                     </FormDescription>
                     <Image
                       src={
-                        idpic
-                          ? idpic
-                          : "https://https://avatarapi.runflare.run/public"
+                        idpic ? idpic : "https://avatarapi.runflare.run/public"
                       }
                       alt="ID Picture"
                       width={200}

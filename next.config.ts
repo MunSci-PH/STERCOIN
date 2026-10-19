@@ -11,11 +11,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "avatar.iran.liara.run",
+        hostname: "avatarapi.runflare.run",
         port: "",
         pathname: "/**",
       },
     ],
+    dangerouslyAllowLocalIP: true,
   },
 };
 
