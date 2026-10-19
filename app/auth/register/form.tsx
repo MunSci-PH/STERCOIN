@@ -41,7 +41,6 @@ import { Label } from "@/components/ui/label";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { PhoneInput } from "@/components/ui/input-phone";
 import { TablesInsert } from "../../../database.types";
-import { storageClient } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
@@ -68,7 +67,7 @@ const formSchema = z
           console.log(v.length, v);
           return !isNaN(n) && v?.length > 0;
         },
-        { message: "Must be a number" }
+        { message: "Must be a number" },
       ),
     firstname: z.string().trim().min(1).max(50),
     middlename: z.string().trim().max(50).optional(),
@@ -95,11 +94,11 @@ const formSchema = z
             .refine((file) => file?.length == 1, "File is required.")
             .refine(
               (file) => ACCEPTED_FILE_TYPES.includes(file?.item(0)!.type),
-              "Invalid file type."
+              "Invalid file type.",
             )
             .refine(
               (file) => file?.item(0)!.size < MAX_UPLOAD_SIZE,
-              "File too large."
+              "File too large.",
             ),
     birthday: z.date().min(new Date("2000-01-01")).max(new Date("2015-12-31")),
     address: z.string().trim().min(1).max(100),
@@ -264,7 +263,7 @@ const RegisterForm = ({
 
     setLoadingText("Uploading picture");
 
-    const pictureUpload = await storageClient
+    const pictureUpload = await supabase.storage
       .from("idpics")
       .upload(`${data.lrn}/${data.idpic.item(0)!.name}`, data.idpic[0]);
 
@@ -288,7 +287,9 @@ const RegisterForm = ({
       return registerAcc.error;
     }
 
-    router.push("/auth/register/success?message=Please proceed to the login page.");
+    router.push(
+      "/auth/register/success?message=Please proceed to the login page.",
+    );
   };
 
   return (
@@ -527,7 +528,7 @@ const RegisterForm = ({
                               variant={"outline"}
                               className={cn(
                                 "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value ? (
@@ -709,13 +710,13 @@ const RegisterForm = ({
                               role="combobox"
                               className={cn(
                                 "w-full justify-between",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? relationships.find(
                                     (relationship) =>
-                                      relationship.value === field.value
+                                      relationship.value === field.value,
                                   )?.label
                                 : "Select relationship"}
                               <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
@@ -735,7 +736,7 @@ const RegisterForm = ({
                                     onSelect={() => {
                                       form.setValue(
                                         "e1Res",
-                                        relationship.value
+                                        relationship.value,
                                       );
                                     }}
                                   >
@@ -744,7 +745,7 @@ const RegisterForm = ({
                                         "mr-2 h-4 w-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {relationship.label}
@@ -839,13 +840,13 @@ const RegisterForm = ({
                               role="combobox"
                               className={cn(
                                 "w-full justify-between",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? relationships.find(
                                     (relationship) =>
-                                      relationship.value === field.value
+                                      relationship.value === field.value,
                                   )?.label
                                 : "Select relationship"}
                               <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
@@ -865,7 +866,7 @@ const RegisterForm = ({
                                     onSelect={() => {
                                       form.setValue(
                                         "e2Res",
-                                        relationship.value
+                                        relationship.value,
                                       );
                                     }}
                                   >
@@ -874,7 +875,7 @@ const RegisterForm = ({
                                         "mr-2 h-4 w-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {relationship.label}
@@ -966,13 +967,13 @@ const RegisterForm = ({
                               role="combobox"
                               className={cn(
                                 "w-full justify-between",
-                                !field.value && "text-muted-foreground"
+                                !field.value && "text-muted-foreground",
                               )}
                             >
                               {field.value
                                 ? relationships.find(
                                     (relationship) =>
-                                      relationship.value === field.value
+                                      relationship.value === field.value,
                                   )?.label
                                 : "Select relationship"}
                               <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
@@ -992,7 +993,7 @@ const RegisterForm = ({
                                     onSelect={() => {
                                       form.setValue(
                                         "e3Res",
-                                        relationship.value
+                                        relationship.value,
                                       );
                                     }}
                                   >
@@ -1001,7 +1002,7 @@ const RegisterForm = ({
                                         "mr-2 h-4 w-4",
                                         relationship.value === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {relationship.label}
