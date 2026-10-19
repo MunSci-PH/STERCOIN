@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,6 +40,7 @@ const ForgotPasswordForm = ({}: {
   const [error, setError] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const supabase = useSupabaseBrowser();
+  const router = useRouter();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
     setLoading(true);
@@ -55,8 +57,9 @@ const ForgotPasswordForm = ({}: {
       setLoading(false);
     }
     if (data) {
-      window.location.href =
-        "/auth/success?message=Password reset link has been sent to your email address";
+      router.push(
+        "/auth/success?message=Password reset link has been sent to your email address",
+      );
     }
   };
 

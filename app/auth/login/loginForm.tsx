@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export type loginData = {
   email: string;
@@ -46,6 +46,7 @@ const LoginForm = () => {
   const [error, setError] = useState<string>();
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const supabase = useSupabaseBrowser();
+  const router = useRouter();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
     setLoading(true);
@@ -68,7 +69,7 @@ const LoginForm = () => {
       return;
     }
 
-    return (window.location.href = "/dashboard");
+    return router.push("/dashboard");
   };
 
   return (

@@ -13,15 +13,12 @@ import {
 import { Button } from "../ui/button";
 
 const Disclaimer = () => {
-  const [shouldOpen, setShouldOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("disclaimer") === null) {
-      setShouldOpen(true);
-    } else {
-      setShouldOpen(false);
+  const [shouldOpen, setShouldOpen] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("disclaimer") === null;
     }
-  }, []);
+    return false;
+  });
 
   const handleAccept = (acceptedVal: string) => {
     localStorage.setItem("disclaimer", acceptedVal);

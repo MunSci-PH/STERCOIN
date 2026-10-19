@@ -18,13 +18,7 @@ export default function Section() {
   const { data, isLoading } = useQuery(getStudents(supabase), {
     throwOnError: true,
   });
-  const [studentList, setStudentList] = useState<typeof data>();
-
-  useEffect(() => {
-    if (data) {
-      setStudentList(data);
-    }
-  }, [data]);
+  const [studentList, setStudentList] = useState<typeof data>(data);
 
   async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value.trim();
