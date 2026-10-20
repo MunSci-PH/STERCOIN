@@ -59,7 +59,7 @@ const ConfirmForm = ({ email }: { email: string }) => {
       return;
     }
 
-    router.push("/auth/login");
+    return router.push("/auth/login");
   };
 
   return (

@@ -20,6 +20,7 @@ import { CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { redirect, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type loginData = {
   email: string;
@@ -47,6 +48,7 @@ const LoginForm = () => {
   const turnstileRef = useRef<TurnstileInstance>(undefined);
   const supabase = useSupabaseBrowser();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
     setLoading(true);
@@ -68,6 +70,8 @@ const LoginForm = () => {
 
       return;
     }
+
+    await queryClient.invalidateQueries({ queryKey: ["userInfo"] });
 
     return router.push("/dashboard");
   };
