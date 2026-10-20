@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import getUserInfo from "./getuserinfo";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
   const supabase = useSupabaseBrowser();
@@ -21,6 +22,7 @@ const Nav = () => {
     queryKey: ["userInfo"],
     queryFn: getUserInfo,
   });
+  const router = useRouter();
 
   if (userInfo.isLoading)
     return (
@@ -85,7 +87,7 @@ const Nav = () => {
                   scope: "local",
                 });
                 if (error) throw error;
-                return window.location.reload();
+                return router.refresh();
               }}
               type="button"
             >
@@ -148,7 +150,7 @@ const Nav = () => {
                     scope: "local",
                   });
                   if (error) throw error;
-                  return window.location.reload();
+                  return router.refresh();
                 }}
                 type="button"
                 className="my-2 w-full"

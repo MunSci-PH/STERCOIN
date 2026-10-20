@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useSupabaseBrowser from "@/utils/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -37,6 +38,7 @@ const ChangePassword = () => {
   });
   const [error, setError] = useState<string>();
   const supabase = useSupabaseBrowser();
+  const router = useRouter();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
     const { data, error } = await supabase.auth.updateUser({
@@ -47,7 +49,7 @@ const ChangePassword = () => {
     if (data.user) {
       const { error } = await supabase.auth.signOut({ scope: "global" });
       if (error) setError(error.message);
-      return window.location.reload();
+      return router.refresh();
     }
   };
 
