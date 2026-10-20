@@ -159,7 +159,7 @@ export default function StudentSearch() {
             state.grade === undefined || section.grade === state.grade,
         )
         .map((section) => section.sectionName)
-        .sort((a, b) => a.localeCompare(b))
+        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
         .map((name) => ({ value: name, label: name })),
     [sections, state.grade],
   );
