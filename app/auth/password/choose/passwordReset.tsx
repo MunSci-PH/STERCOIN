@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import useSupabaseBrowser from "@/utils/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,6 +44,7 @@ const ResetPasswordForm = ({
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const supabase = useSupabaseBrowser();
+  const router = useRouter();
 
   const tryLogin = async (e: z.infer<typeof formSchema>) => {
     setLoading(true);
@@ -53,7 +55,8 @@ const ResetPasswordForm = ({
       );
 
       if (error) {
-        window.location.href = `/auth/error?message=${error.message}`;
+        router.push(`/auth/error?message=${encodeURIComponent(error.message)}`);
+        return;
       }
     }
 
@@ -63,7 +66,7 @@ const ResetPasswordForm = ({
 
     if (error) setError(error.message);
     if (data) {
-      window.location.href = "/auth/login";
+      router.push("/auth/login");
     }
   };
 

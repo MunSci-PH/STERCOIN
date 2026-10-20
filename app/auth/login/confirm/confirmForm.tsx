@@ -64,6 +64,7 @@ const ConfirmForm = ({ email }: { email: string }) => {
 
   return (
     <Form {...form} control={form.control}>
+      {/* eslint-disable-next-line react-hooks/refs */}
       <form onSubmit={form.handleSubmit(tryLogin)} className="space-y-4">
         <CardContent className="space-y-4">
           {error && (

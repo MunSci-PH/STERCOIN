@@ -74,6 +74,7 @@ const LoginForm = () => {
 
   return (
     <Form {...form} control={form.control}>
+      {/* eslint-disable-next-line react-hooks/refs */}
       <form onSubmit={form.handleSubmit(tryLogin)}>
         <CardContent className="space-y-4">
           {error && (

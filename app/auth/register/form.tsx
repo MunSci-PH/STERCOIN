@@ -543,8 +543,8 @@ const RegisterForm = ({
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            fromYear={2000}
-                            toYear={2015}
+                            startMonth={new Date(2000, 0)}
+                            endMonth={new Date(2015, 11)}
                             captionLayout="dropdown"
                             selected={field.value}
                             onSelect={field.onChange}
@@ -552,7 +552,7 @@ const RegisterForm = ({
                               date > new Date("2015-12-31") ||
                               date < new Date("2000-01-01")
                             }
-                            initialFocus
+                            autoFocus
                             defaultMonth={field.value}
                           />
                         </PopoverContent>

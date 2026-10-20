@@ -2,7 +2,7 @@
 import BackButton from "@/components/utils/backButton";
 import Loading from "@/loading";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import useSupabaseBrowser from "@/utils/client";
 import { getStudents } from "@/queries/getStudents";
